@@ -198,3 +198,8 @@ form span:hover {
 .toggle-left img {
     height: 100vh;
 }
+
+.error {
+    color: red;
+    font-size: 0.8em;
+}

@@ -1,11 +1,11 @@
 //Sign Up validation
 function signupValidation() {
-    var username = document.getElementById('username').value;
-    var password = document.getElementById('password').value;
+    var username = document.getElementById('email_signup').value;
+    var password = document.getElementById('password_signup').value;
     var confirm_password = document.getElementById('confirm_password').value;
-    var username_error = document.getElementById('username_error');
-    var password_error = document.getElementById('password_error');
-    var confirm_password_error = document.getElementById('confirm_password_error');
+    var username_error = document.getElementById('username_error_signup');
+    var password_error = document.getElementById('password_error_signup');
+    var confirm_password_error = document.getElementById('confirm_password_error_signup');
     var isValid = true;
 
     username_error.textContent = '';
@@ -48,7 +48,7 @@ function signupValidation() {
 
 //Log in Validation
 function loginValidation(){
-    var username_login = document.getElementById('username_login').value;
+    var username_login = document.getElementById('email_login').value;
     var password_login = document.getElementById('password_login').value;
     var username_login_error = document.getElementById('username_login_error');
 

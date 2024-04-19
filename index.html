@@ -83,23 +83,52 @@
 <body>
     <div class="container" id="Container">
         <div class="form-container login">
-            <form>
+            <form action="fuse.php" method="post">
                 <p class="title">CLASSROOM SCHEDULING SYSTEM</p>
-                <input type="email" placeholder="Email">
-                <input type="password" placeholder="Password">
+                <div>
+                    <input id="email_login" name="email_login" type="email" placeholder="Email" required>
+                    <!-- <span id="password_login_error" name="password_login_error" class="error"></span> -->
+                </div>
+                <div>
+                    <input id="password_login" name="password_login" type="password" placeholder="Password" required>
+
+                </div>
                 <a href="#">Forgot password?</a>
-                <button>Log In</button>
+                <button type="submit" name="login_submit">Log In</button>
 
                 <p class="text">Don't have an account? <span id="Register">Sign Up</span></p>
             </form>
         </div>
+
         <div class="form-container sign-up">
-            <form>
+            <form action="fuse.php" method="post">
                 <p class="title">CLASSROOM SCHEDULING SYSTEM</p>
-                <input type="text" placeholder="Name">
-                <input type="email" placeholder="Email">
-                <input type="password" placeholder="Password">
-                <button>Sign Up</button>
+
+                <input name="username" type="text" placeholder="Name" required>
+                <div>
+                    <input id="email_signup" name="email_signup" type="email" placeholder="Email" required>
+                    <!-- <span id="username_error" class="error"></span> -->
+                </div>
+                <div>
+                    <input id="password_signup" name="password_signup" type="password" placeholder="Password"
+                        title="Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character (!@#$%^&*). Minimum length: 8 characters"
+                        required>
+                    <!-- <span id="password_error" class="error"></span> -->
+
+                </div>
+                <div>
+                    <input name="confirm_password" id="confirm_password" type="password" placeholder="Confirm Password" required>
+                    <!-- <span id="confirm_password_error" class="error"></span> -->
+                </div>
+                <div>
+                    <select name="type" id="type" required>
+                        <option value="" selected disabled></option>
+                        <option value="Teacher">Teacher</option>
+                        <option value="Technical">Technical</option>
+                    </select>
+                </div>
+
+                <button type="submit" name="signup_submit">Sign Up</button>
 
                 <p class="text">Already have an account? <span id="Login">Log in</span></p>
             </form>
@@ -117,6 +146,7 @@
             </div>
         </div>
     </div>
+
 
     <script>
         const container = document.getElementById('Container');
