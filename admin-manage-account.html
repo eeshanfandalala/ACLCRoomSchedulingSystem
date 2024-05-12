@@ -10,70 +10,79 @@
 </head>
 
 <body>
-    <div class="sidebar">
-        <div class="top">
-            <i class='bx bx-menu' id="btn"></i>
-            <div class="logo">
-                <img src="media/ACLC-logo.png">
-                <span>SchedSystem</span>
-            </div>
+    <div class="sidebar close">
+        <div class="logo-details">
+            <img src="media/ACLC-logo.png">
+            <span class="logo-name">SchedSystem</span>
         </div>
-        <div class="user">
-            <img src="media/user-50.png">
-            <div>
-                <p class="bold">NameOfUser</p>
-            </div>
-        </div>
-        <ul>
+        <ul class="nav-links">
             <li>
                 <a href="#">
-                    <i class='bx bxs-dashboard'></i>
-                    <span class="nav-item">Dashboard</span>
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="link-name">Dashboard</span>
                 </a>
-                <span class="tooltip">Dashboard</span>
+                <ul class="sub-menu blank">
+                    <li><a class="link-name" href="#">Dashboard</a></li>
+                </ul>
             </li>
             <li>
-                <a href="#">
-                    <i class='bx bxs-calendar'></i>
-                    <span class="nav-item">Schedule</span>
-                </a>
-                <span class="tooltip">Schedule</span>
+                <div class="icon-link">
+                    <a href="#">
+                        <i class='bx bx-collection'></i>
+                        <span class="link-name">Schedule</span>
+                    </a>
+                    <i class='bx bxs-chevron-down arrow'></i>
+                </div>
+                <ul class="sub-menu">
+                    <li><a class="link-name">Schedule</a></li>
+                    <li><a href="#">Create</a></li>
+                    <li><a href="#">View</a></li>
+                </ul>
             </li>
-            <li id="active-page">
+            <li>
                 <a href="#">
                     <i class='bx bxs-cog'></i>
-                    <span class="nav-item">Manage Account</span>
+                    <span class="link-name">Manage Account</span>
                 </a>
-                <span class="tooltip">Manage Account</span>
+                <ul class="sub-menu blank">
+                    <li><a class="link-name" href="#">Manage Account</a></li>
+                </ul>
             </li>
-
-            <hr>
-
             <li>
-                <a href="#">
-                    <i class='bx bx-log-out'></i>
-                    <span class="nav-item">Logout</span>
-                </a>
-                <span class="tooltip">Logout</span>
+                <div class="profile-details">
+                    <div class="profile-content">
+                        <i class='bx bxs-user-circle' id="profile-img"></i>
+                    </div>
+                    <div class="name-job">
+                        <div class="profile-name">NameOfUser</div>
+                    </div>
+                    <i class='bx bx-log-out' id="logout"></i>
+                </div>
             </li>
         </ul>
-
     </div>
-
-    <div class="main-content">
-        <div class="container">
-            <h1>Nyenyenye</h1>
+    <section class="home-section">
+        <div class="home-content">
+            <i class='bx bx-menu'></i> <!-- button -->
+            <span class="text">Manage Account</span>
         </div>
-    </div>
+    </section>
 </body>
 
 <script>
-    let btn = document.querySelector('#btn');
-    let sidebar = document.querySelector('.sidebar');
-
-    btn.onclick = function () {
-        sidebar.classList.toggle('active');
-    };
+    let arrow = document.querySelectorAll(".arrow");
+    for (var i = 0; i < arrow.length; i++) {
+        arrow[i].addEventListener("click", (e) => {
+            let arrowParent = e.target.parentElement.parentElement;
+            arrowParent.classList.toggle("showMenu");
+        });
+    }
+    let sidebar = document.querySelector(".sidebar");
+    let sidebarBtn = document.querySelector(".bx-menu");
+    console.log(sidebarBtn);
+    sidebarBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("close");
+    });
 </script>
 
 </html>
