@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 include 'config.php';
 
 // Sign Up validation
@@ -75,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['signup_submit'])) {
         $signup_result = signupValidation();
         if (!$signup_result['isValid']) {
-            echo "<script>alert('".$signup_result['username_error'], $signup_result['password_error'], $signup_result['confirm_password_error']."!'); window.location.href = 'index.html';</script>";
+            echo "<script>alert('" . $signup_result['username_error'], $signup_result['password_error'], $signup_result['confirm_password_error'] . "!'); window.location.href = 'index.html';</script>";
             // echo $signup_result['username_error'], $signup_result['password_error'], $signup_result['confirm_password_error'];
         } else {
             $name = $_POST['username'];
@@ -99,6 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $sqlInsert->bind_param("sss", $name, $password, $email);
                     $sqlInsert->execute();
                     echo "<script>alert('Success')</script>";
+                    echo "<script> window.location.href = 'index.html'; </script>";
                     $sqlInsert->close();
                 }
                 $sql->close();
@@ -115,66 +118,78 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $sql2Insert->bind_param("sss", $name, $password, $email);
                     $sql2Insert->execute();
                     echo "<script>alert('Success')</script>";
+                    echo "<script> window.location.href = 'index.html'; </script>";
+
                     $sql2Insert->close();
                 }
                 $sql2->close();
             }
         }
-
-    } elseif (isset($_POST['login_submit'])) {
+    } else if (isset($_POST['login_submit'])) {
         $login_result = loginValidation();
         if (!$login_result['isValid']) {
-            
+
             echo $login_result['username_login_error'], $login_result['password_login_error'];
         } else {
-            if (isset($_POST['login_submit'])) { 
-                echo 'hi';
+            if (isset($_POST['login_submit'])) {
+
 
                 $email = $_POST['email_login'];
                 $pass = $_POST['password_login'];
 
-                //for teacher
-                $sql = $con->prepare("SELECT `status`, `teacher_password` FROM teacher_tb WHERE `teacher_email` = ?"); // Change the sql statement according to the database
-                $sql->bind_param("s", $email);
+                $sql = $con->prepare("SELECT 'teacher' AS user_type, `teacher_id`, `status`, `teacher_password` 
+                        FROM teacher_tb 
+                        WHERE `teacher_email` = ? 
+                        UNION 
+                        SELECT 'technical' AS user_type, `technical_id`, `status`, `technical_password` 
+                        FROM technical_tb 
+                        WHERE `technical_email` = ?");
+                $sql->bind_param("ss", $email, $email);
                 $sql->execute();
                 $sql->store_result();
 
-                //for technical
-                $sql2 = $con->prepare("SELECT `status`, `technical_password` FROM technical_tb WHERE `technical_email` = ?"); // Change the sql statement according to the database
-                $sql2->bind_param("s", $email);
-                $sql2->execute();
-                $sql2->store_result();
-
                 if ($sql->num_rows > 0) {
-                    $sql->bind_result($status, $password);
+                    $sql->bind_result($user_type, $user_id, $status, $password);
                     if ($sql->fetch()) {
                         if ($status == 1) {
-                            if (password_verify($password, $pass)) {
-                                echo "<script> window.location.href = 'profile_teacher.html';</script>"; // Change location //
-
+                            if (password_verify($pass, $password)) {
+                                if ($user_type === 'teacher') {
+                                    $_SESSION['teacher_id'] = $user_id;
+                                    header('Location: ./teacher pages/profile.php');
+                                } else if ($user_type === 'technical') {
+                                    $_SESSION['technical_id'] = $user_id;
+                                    header('Location: ./technical pages/profile.php');
+                                }
+                                exit; // Always exit after a header redirect
                             } else {
                                 echo "<script>alert('Incorrect Password!'); window.location.href = 'index.html';</script>"; // Change location
                             }
                         } else {
                             echo "<script>alert('Account is pending for validation!'); window.location.href = 'index.html';</script>"; // Change location
-
                         }
                     } else {
                         echo "<script>alert('Incorrect Email!'); window.location.href = 'index.html';</script>"; // Change location
                     }
-                } else if ($sql2->num_rows > 0) {
-                    $sql2->bind_result($status, $password);
-                    if ($sql2->fetch()) {
-                        if ($status == 1) {
-                            if (password_verify($password, $pass)) {
-                                echo "<script> window.location.href = 'profile_technical.html';</script>"; // Change location //
+                } else {
+                    // If user is not found in teacher or technical roles, check SD role
+                    $sql = $con->prepare("SELECT `SD_id`, `SD_password` 
+                            FROM sd_tb 
+                            WHERE `SD_email` = ?");
+                    $sql->bind_param("s", $email);
+                    $sql->execute();
+                    $sql->store_result();
 
+                    if ($sql->num_rows > 0) {
+                        $sql->bind_result($sd_id, $sd_password);
+                        if ($sql->fetch()) {
+
+                            if (password_verify($pass, $sd_password)) {
+                                $_SESSION['sd_id'] = $sd_id;
+                                header('Location: admin-manage-account.php');
+                                exit; // Always exit after a header redirect
                             } else {
                                 echo "<script>alert('Incorrect Password!'); window.location.href = 'index.html';</script>"; // Change location
                             }
-                        } else {
-                            echo "<script>alert('Account is pending for validation!'); window.location.href = 'index.html';</script>"; // Change location
-
                         }
                     } else {
                         echo "<script>alert('Incorrect Email!'); window.location.href = 'index.html';</script>"; // Change location
