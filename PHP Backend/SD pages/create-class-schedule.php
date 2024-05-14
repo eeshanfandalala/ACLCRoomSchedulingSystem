@@ -16,7 +16,7 @@ $fetchclass = $fetchclass->get_result();
 
     <select name="class" id="">
         <?php
-        while ($row = mysqli_fetch_array($fetchclass)) {
+        while ($row = mysqli_fetch_array($fetchclass)) { 
             $classID = $row['class_id'];
             $courseStrand = $row['class_courseStrand'];
             $year = $row['class_year'];
