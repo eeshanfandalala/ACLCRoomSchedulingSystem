@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../config.php';
+include './config.php';
 
 if (!isset($_SESSION['teacher_id'])) {
     header("Location: ../index.html");

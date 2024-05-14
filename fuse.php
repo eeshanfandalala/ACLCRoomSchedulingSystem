@@ -85,45 +85,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $email = $_POST['email_signup'];
             $password = password_hash($password, PASSWORD_DEFAULT);
 
-            $type = $_POST['type'];
 
+            $sql = $con->prepare("SELECT `teacher_email` FROM teacher_tb WHERE `teacher_email` = ?");
+            $sql->bind_param("s", $email);
+            $sql->execute();
+            $sql->store_result();
 
-            if ($type === "Teacher") {
-                $sql = $con->prepare("SELECT `teacher_email` FROM teacher_tb WHERE `teacher_email` = ?"); // Change the sql statement according to the database
-                $sql->bind_param("s", $email);
-                $sql->execute();
-                $sql->store_result();
-
-                if ($sql->num_rows > 0) {
-                    echo "<script>alert('Email already exists!'); window.location.href = 'index.html';</script>"; // Change location
-                } else {
-                    $sqlInsert = $con->prepare("INSERT INTO `teacher_tb`(`teacher_name`, `teacher_password`, `teacher_email`, `status`) VALUES (?,?,?, 0)"); // Change the sql statement according to the database
-                    $sqlInsert->bind_param("sss", $name, $password, $email);
-                    $sqlInsert->execute();
-                    echo "<script>alert('Success')</script>";
-                    echo "<script> window.location.href = 'index.html'; </script>";
-                    $sqlInsert->close();
-                }
-                $sql->close();
-            } else if ($type === "Technical") {
-                $sql2 = $con->prepare("SELECT `technical_email` FROM technical_tb WHERE `technical_email` = ?"); // Change the sql2 statement according to the database
-                $sql2->bind_param("s", $email);
-                $sql2->execute();
-                $sql2->store_result();
-
-                if ($sql2->num_rows > 0) {
-                    echo "<script>alert('Email already exists!'); window.location.href = 'index.html';</script>"; // Change location
-                } else {
-                    $sql2Insert = $con->prepare("INSERT INTO `technical_tb`(`technical_name`, `technical_password`, `technical_email`, `status`) VALUES (?,?,?, 0)"); // Change the sql2 statement according to the database
-                    $sql2Insert->bind_param("sss", $name, $password, $email);
-                    $sql2Insert->execute();
-                    echo "<script>alert('Success')</script>";
-                    echo "<script> window.location.href = 'index.html'; </script>";
-
-                    $sql2Insert->close();
-                }
-                $sql2->close();
+            if ($sql->num_rows > 0) {
+                echo "<script>alert('Email already exists!'); window.location.href = 'index.html';</script>";
+            } else {
+                $sqlInsert = $con->prepare("INSERT INTO `teacher_tb`(`teacher_name`, `teacher_password`, `teacher_email`, `status`) VALUES (?,?,?, 0)");
+                $sqlInsert->bind_param("sss", $name, $password, $email);
+                $sqlInsert->execute();
+                echo "<script>alert('Success')</script>";
+                echo "<script>window.location.href = 'index.html';</script>";
+                $sqlInsert->close();
             }
+            $sql->close();
         }
     } else if (isset($_POST['login_submit'])) {
         $login_result = loginValidation();
@@ -139,12 +117,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 $sql = $con->prepare("SELECT 'teacher' AS user_type, `teacher_id`, `status`, `teacher_password` 
                         FROM teacher_tb 
-                        WHERE `teacher_email` = ? 
-                        UNION 
-                        SELECT 'technical' AS user_type, `technical_id`, `status`, `technical_password` 
-                        FROM technical_tb 
-                        WHERE `technical_email` = ?");
-                $sql->bind_param("ss", $email, $email);
+                        WHERE `teacher_email` = ?");
+                $sql->bind_param("s", $email);
                 $sql->execute();
                 $sql->store_result();
 
@@ -155,12 +129,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             if (password_verify($pass, $password)) {
                                 if ($user_type === 'teacher') {
                                     $_SESSION['teacher_id'] = $user_id;
-                                    header('Location: ./teacher pages/profile.php');
-                                } else if ($user_type === 'technical') {
-                                    $_SESSION['technical_id'] = $user_id;
-                                    header('Location: ./technical pages/profile.php');
+                                    header('Location: ./PHP Backend/teacher pages/profile.php');
+                                    exit; // Always exit after a header redirect
+                                } else {
+                                    echo "<script>alert('Invalid User Type!'); window.location.href = 'index.html';</script>"; // Change location
                                 }
-                                exit; // Always exit after a header redirect
                             } else {
                                 echo "<script>alert('Incorrect Password!'); window.location.href = 'index.html';</script>"; // Change location
                             }
@@ -171,7 +144,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         echo "<script>alert('Incorrect Email!'); window.location.href = 'index.html';</script>"; // Change location
                     }
                 } else {
-                    // If user is not found in teacher or technical roles, check SD role
+                    // If user is not found in teacher roles, check SD role
                     $sql = $con->prepare("SELECT `SD_id`, `SD_password` 
                             FROM sd_tb 
                             WHERE `SD_email` = ?");
