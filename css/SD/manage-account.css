@@ -1,0 +1,56 @@
+main {
+    /*display: flex;
+    flex-direction: column;
+    align-items: center;*/
+}
+
+/* edit & reset button */
+#edit_btn,
+form button {
+    background-color: #007bff;
+    color: white;
+    width: 80px;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all .5s ease;
+}
+
+#edit_btn:hover,
+form button:hover {
+    background-color: #0056b3;
+}
+
+form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+div {
+    margin-bottom: 15px;
+}
+
+form img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"] {
+    width: calc(100% - 10px);
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.text {
+    margin-right: 30px;
+}

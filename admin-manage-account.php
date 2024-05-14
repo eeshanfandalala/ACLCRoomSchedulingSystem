@@ -12,7 +12,7 @@ if (!isset($_SESSION['sd_id'])) {
     while ($row = mysqli_fetch_array($sql)) {
         $SD_name = $row['SD_firstname'] . " " . $row['SD_lastname'];
 
-?>
+        ?>
         <!DOCTYPE html>
         <html lang="en">
 
@@ -21,7 +21,8 @@ if (!isset($_SESSION['sd_id'])) {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Manage Account</title>
             <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-            <link rel="stylesheet" href="css/admin-sidebar.css">
+            <link rel="stylesheet" href="css/SD/sidebar.css">
+            <link rel="stylesheet" href="css/SD/manage-account.css">
         </head>
 
         <body>
@@ -80,11 +81,12 @@ if (!isset($_SESSION['sd_id'])) {
                 <div class="home-content">
                     <i class='bx bx-menu'></i> <!-- button -->
                     <span class="text">Manage Account</span>
+                    <button id="edit_btn">Edit</button>
                 </div>
                 <?php include './PHP Backend/SD pages/profile.php' ?>
             </section>
         </body>
-<?php
+        <?php
     }
 }
 ?>
@@ -104,4 +106,4 @@ if (!isset($_SESSION['sd_id'])) {
     });
 </script>
 
-        </html>
+</html>
