@@ -16,7 +16,7 @@ $fetchclass = $fetchclass->get_result();
 
     <select name="class" id="">
         <?php
-        while ($row = mysqli_fetch_array($fetchclass)) { 
+        while ($row = mysqli_fetch_array($fetchclass)) {
             $classID = $row['class_id'];
             $courseStrand = $row['class_courseStrand'];
             $year = $row['class_year'];
@@ -749,7 +749,28 @@ if (isset($_POST['subprocs'])) {
             </tfoot>
         </form>
     </table>
-
+    <body>
+            <script>
+                function generateYearOptions() {
+                    // Get current year
+                    var currentYear = new Date().getFullYear();
+        
+                    // Select the dropdown
+                    var select = document.getElementById("yearSelect");
+        
+                    // Generate options for the next 5 years
+                    for (var i = 0; i < 5; i++) {
+                        var option = document.createElement("option");
+                        option.value = currentYear + i + "-" + (currentYear + i + 1);
+                        option.text = option.value;
+                        select.appendChild(option);
+                    }
+                }
+        
+                // Call the function to generate year options
+                generateYearOptions();
+            </script>
+        </body>
 
 <?php
 }
@@ -828,11 +849,13 @@ for ($i = 2; $i <= 10; $i++) {
         $insertSched['schedule_subject'] = $_POST['schedule_subject' . $i];
         $insertSched['schedule_teacher'] = $_POST['schedule_teacher' . $i];
         $insertSched['schedule_room'] = $_POST['schedule_room' . $i];
-
+        
         processSchedule($insertSched, $con);
     }
 }
 if (isset($_POST['suball'])) {
-    echo "<script>alert('Schedule added Successfuly'); window.location.href = '../../admin-create-class-schedule.php';";
+    echo "<script>alert('Schedule added Successfuly'); window.location.href = '../../admin-create-class-schedule.php';</script>";
 }
 ?>
+
+       
