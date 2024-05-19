@@ -129,7 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             if (password_verify($pass, $password)) {
                                 if ($user_type === 'teacher') {
                                     $_SESSION['teacher_id'] = $user_id;
-                                    header('Location: ./PHP Backend/teacher pages/profile.php');
+                                    header('Location: user-manage-account.php');
                                     exit; // Always exit after a header redirect
                                 } else {
                                     echo "<script>alert('Invalid User Type!'); window.location.href = 'index.html';</script>"; // Change location

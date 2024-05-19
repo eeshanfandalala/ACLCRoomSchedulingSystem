@@ -1,6 +1,6 @@
 <?php
-session_start();
-include './config.php';
+
+include 'config.php';
 
 if (!isset($_SESSION['teacher_id'])) {
     header("Location: ../index.html");
@@ -17,7 +17,7 @@ if (!isset($_SESSION['teacher_id'])) {
             <div>
                 <form method="post" enctype="multipart/form-data">
                     <div>
-                        <img src="../profile_pictures/<?php echo $row['teacher_pic']; $profpic = $row['teacher_pic']; ?>" alt="profile picture">
+                        <img src="./profile_pictures/<?php echo $row['teacher_pic']; $profpic = $row['teacher_pic']; ?>" alt="profile picture">
 
                         <input type="file" name="profile_pic" id="profile_pic">
                     </div>
@@ -73,7 +73,7 @@ if (isset($_POST['update_btn'])) {
 
 <script>
     document.getElementById('edit_btn').addEventListener('click', function() {
-        var inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="number"], input[type="password"]');
+        var inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="number"], input[type="password"], input[type="file"]');
         var updateBtn = document.getElementById('update_btn');
         for (var i = 0; i < inputs.length; i++) {
             inputs[i].disabled = !inputs[i].disabled;

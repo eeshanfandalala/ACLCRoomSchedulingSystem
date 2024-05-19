@@ -52,7 +52,7 @@ if (!isset($_SESSION['sd_id'])) {
                         <ul class="sub-menu">
                             <li><a class="link-name">Schedule</a></li>
                             <li><a href="admin-create-class-schedule.php">Create</a></li>
-                            <li><a href="#">View</a></li>
+                            <li><a href="admin-view-class-schedule.php">View</a></li>
                         </ul>
                     </li>
                     <li>
@@ -61,7 +61,7 @@ if (!isset($_SESSION['sd_id'])) {
                             <span class="link-name">Manage Account</span>
                         </a>
                         <ul class="sub-menu blank">
-                            <li><a class="link-name" href="#">Manage Account</a></li>
+                            <li><a class="link-name" href="admin-manage-account.php">Manage Account</a></li>
                         </ul>
                     </li>
                     <li>

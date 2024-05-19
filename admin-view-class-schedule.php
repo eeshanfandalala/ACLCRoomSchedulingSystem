@@ -12,7 +12,7 @@ if (!isset($_SESSION['sd_id'])) {
     while ($row = mysqli_fetch_array($sql)) {
         $SD_name = $row['SD_firstname'] . " " . $row['SD_lastname'];
 
-?>
+        ?>
         <!DOCTYPE html>
         <html lang="en">
 
@@ -22,7 +22,10 @@ if (!isset($_SESSION['sd_id'])) {
             <title>Manage Account</title>
             <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
             <link rel="stylesheet" href="css/SD/sidebar.css">
+            <link rel="stylesheet" href="css/SD/manage-account.css">
             <link rel="stylesheet" href="css/table.css">
+
+            
         </head>
 
         <body>
@@ -56,7 +59,7 @@ if (!isset($_SESSION['sd_id'])) {
                         </ul>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="admin-manage-account.php">
                             <i class='bx bxs-cog'></i>
                             <span class="link-name">Manage Account</span>
                         </a>
@@ -80,15 +83,13 @@ if (!isset($_SESSION['sd_id'])) {
             <section class="home-section">
                 <div class="home-content">
                     <i class='bx bx-menu'></i> <!-- button -->
-                    <span class="text">Create Class Schedule</span>
+                    <span class="text">Manage Account</span>
+                    <button id="edit_btn">Edit</button>
                 </div>
-                <div>
-                    <?php include'./PHP Backend/SD pages/create-class-schedule.php'?>
-
-                </div>
+                <?php include './PHP Backend/SD pages/view-room-schedule.php' ?>
             </section>
         </body>
-<?php
+        <?php
     }
 }
 ?>
@@ -106,25 +107,6 @@ if (!isset($_SESSION['sd_id'])) {
     sidebarBtn.addEventListener("click", () => {
         sidebar.classList.toggle("close");
     });
-
-    function generateYearOptions() {
-        // Get current year
-        var currentYear = new Date().getFullYear();
-
-        // Select the dropdown
-        var select = document.getElementById("yearSelect");
-
-        // Generate options for the next 5 years
-        for (var i = 0; i < 5; i++) {
-            var option = document.createElement("option");
-            option.value = currentYear + i + "-" + (currentYear + i + 1);
-            option.text = option.value;
-            select.appendChild(option);
-        }
-    }
-
-    // Call the function to generate year options
-    generateYearOptions();
 </script>
 
-        </html>
+</html>
