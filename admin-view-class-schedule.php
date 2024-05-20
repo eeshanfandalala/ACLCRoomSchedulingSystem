@@ -38,10 +38,10 @@ if (!isset($_SESSION['sd_id'])) {
                     <li>
                         <a href="#">
                             <i class='bx bx-grid-alt'></i>
-                            <span class="link-name">Dashboard</span>
+                            <span class="link-name">Manage</span>
                         </a>
                         <ul class="sub-menu blank">
-                            <li><a class="link-name" href="#">Dashboard</a></li>
+                            <li><a class="link-name" href="#">Manage</a></li>
                         </ul>
                     </li>
                     <li>
@@ -61,10 +61,10 @@ if (!isset($_SESSION['sd_id'])) {
                     <li>
                         <a href="admin-manage-account.php">
                             <i class='bx bxs-cog'></i>
-                            <span class="link-name">Manage Account</span>
+                            <span class="link-name">Account</span>
                         </a>
                         <ul class="sub-menu blank">
-                            <li><a class="link-name" href="admin-manage-account.php">Manage Account</a></li>
+                            <li><a class="link-name" href="admin-manage-account.php">Account</a></li>
                         </ul>
                     </li>
                     <li>
@@ -83,8 +83,7 @@ if (!isset($_SESSION['sd_id'])) {
             <section class="home-section">
                 <div class="home-content">
                     <i class='bx bx-menu'></i> <!-- button -->
-                    <span class="text">Manage Account</span>
-                    <button id="edit_btn">Edit</button>
+                    <span class="text">View Class Schedule</span>
                 </div>
                 <?php include './PHP Backend/SD pages/view-room-schedule.php' ?>
             </section>
