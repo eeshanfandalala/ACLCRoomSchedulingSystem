@@ -77,14 +77,14 @@ if (!isset($_SESSION['sd_id'])) {
                     </li>
                 </ul>
             </div>
-            
+
             <section class="home-section">
                 <div class="home-content">
                     <i class='bx bx-menu'></i> <!-- button -->
                     <span class="text">Create Class Schedule</span>
                 </div>
                 <div>
-                    <?php include'./PHP Backend/SD pages/create-class-schedule.php'?>
+                    <?php include './PHP Backend/SD pages/create-class-schedule.php' ?>
 
                 </div>
             </section>

@@ -13,7 +13,7 @@ if (!isset($_SESSION['sd_id'])) {
         $SD_name = $row['SD_firstname'] . " " . $row['SD_lastname'];
 
         ?>
-        <!DOCTYPE html> 
+        <!DOCTYPE html>
         <html lang="en">
 
         <head>
@@ -38,7 +38,7 @@ if (!isset($_SESSION['sd_id'])) {
                             <span class="link-name">Manage</span>
                         </a>
                         <ul class="sub-menu blank">
-                            <li><a class="link-name" href="#">Manage</a></li>
+                            <li><a class="link-name" href="admin-manage.php">Manage</a></li>
                         </ul>
                     </li>
                     <li>

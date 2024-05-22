@@ -12,7 +12,7 @@ if (!isset($_SESSION['sd_id'])) {
     while ($row = mysqli_fetch_array($sql)) {
         $SD_name = $row['SD_firstname'] . " " . $row['SD_lastname'];
 
-?>
+        ?>
         <!DOCTYPE html>
         <html lang="en">
 
@@ -41,7 +41,7 @@ if (!isset($_SESSION['sd_id'])) {
                             <span class="link-name">Manage</span>
                         </a>
                         <ul class="sub-menu blank">
-                            <li><a class="link-name" href="#">Dashboard</a></li>
+                            <li><a class="link-name" href="admin-manage.php">Manage</a></li>
                         </ul>
                     </li>
                     <li>
@@ -88,7 +88,7 @@ if (!isset($_SESSION['sd_id'])) {
                 <?php include './PHP Backend/SD pages/view-room-schedule.php' ?>
             </section>
         </body>
-<?php
+        <?php
     }
 }
 ?>
@@ -108,4 +108,4 @@ if (!isset($_SESSION['sd_id'])) {
     });
 </script>
 
-        </html>
+</html>
