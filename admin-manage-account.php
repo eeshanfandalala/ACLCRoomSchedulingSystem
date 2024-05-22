@@ -56,12 +56,12 @@ if (!isset($_SESSION['sd_id'])) {
                         </ul>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="admin-manage-account.php">
                             <i class='bx bxs-cog'></i>
-                            <span class="link-name">Account</span>
+                            <span class="link-name">Manage Account</span>
                         </a>
                         <ul class="sub-menu blank">
-                            <li><a class="link-name" href="admin-manage-account.php">Account</a></li>
+                            <li><a class="link-name" href="admin-manage-account.php">Manage Account</a></li>
                         </ul>
                     </li>
                     <li>

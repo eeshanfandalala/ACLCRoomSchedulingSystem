@@ -56,7 +56,7 @@ if (!isset($_SESSION['sd_id'])) {
                         </ul>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="admin-manage-account.php">
                             <i class='bx bxs-cog'></i>
                             <span class="link-name">Manage Account</span>
                         </a>
@@ -80,7 +80,7 @@ if (!isset($_SESSION['sd_id'])) {
             <section class="home-section">
                 <div class="home-content">
                     <i class='bx bx-menu'></i> <!-- button -->
-                    <span class="text">Manage Account</span>
+                    <span class="text">Manage</span>
                     <button id="edit_btn">Edit</button>
                 </div>
                 <?php include './PHP Backend/SD pages/manage.php' ?>
