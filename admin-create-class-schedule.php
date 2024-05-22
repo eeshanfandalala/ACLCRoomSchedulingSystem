@@ -38,7 +38,7 @@ if (!isset($_SESSION['sd_id'])) {
                             <span class="link-name">Manage</span>
                         </a>
                         <ul class="sub-menu blank">
-                            <li><a class="link-name" href="#">Dashboard</a></li>
+                            <li><a class="link-name" href="#">Manage</a></li>
                         </ul>
                     </li>
                     <li>
