@@ -33,25 +33,26 @@
 <body>
     <section class="side-by-side">
         <main>
-            <span class="college-or-shs">Choose if College or SHS</span>
             <form action="?action=form1" method="post">
-                <div class="radio-selection">
-                    <input type="radio" name="standing" value="College" <?php if (isset($_POST['sub2']) || isset($_POST['sub1']) || isset($_POST['sub3']) || isset($_POST['sub4'])) {
-                        echo ($_POST['standing'] == 'College') ? "checked" : "";
-                    } ?>>
-                    <label">College</label>
-                </div>
+                <div class="side-by-side">
+                    <div class="selection">
+                        <input type="radio" name="standing" value="College" <?php if (isset($_POST['sub2']) || isset($_POST['sub1']) || isset($_POST['sub3']) || isset($_POST['sub4'])) {
+                            echo ($_POST['standing'] == 'College') ? "checked" : "";
+                        } ?> required>
+                        <label">College</label>
+                    </div>
 
-                <div class="radio-selection">
-                    <input type="radio" name="standing" value="SHS" <?php if (isset($_POST['sub2']) || isset($_POST['sub1']) || isset($_POST['sub3']) || isset($_POST['sub4'])) {
-                        echo ($_POST['standing'] == 'SHS') ? "checked" : "";
-                    } ?>>
-                    <label>SHS</label>
+                    <div class="selection">
+                        <input type="radio" name="standing" value="SHS" <?php if (isset($_POST['sub2']) || isset($_POST['sub1']) || isset($_POST['sub3']) || isset($_POST['sub4'])) {
+                            echo ($_POST['standing'] == 'SHS') ? "checked" : "";
+                        } ?> required>
+                        <label>SHS</label>
+                    </div>
+                    <input type="submit" name="sub1">
                 </div>
-
-                <input type="submit" name="sub1">
             </form>
         </main>
+
 
         <?php
         if (isset($_GET['action']) && ($_GET['action'] == "form1" || $_GET['action'] == 'form2' || $_GET['action'] == "form3" || $_GET['action'] == 'form4')) {
@@ -59,68 +60,72 @@
             $result = findStandingForClass($con);
             ?>
 
-            <main class="form-2">
+            <main>
                 <form action="?action=form2" method="post">
-                    <input type="hidden" value="<?php echo $_POST['standing']; ?>" name="standing">
-                    <div class="selection">
-                        <select name="AY" id="yearSelect">
-                            <?php
-                            $currentYear = date("Y");
-                            for ($i = -1; $i < 4; $i++) {
-                                $year = $currentYear + $i;
-                                $nextYear = $year + 1;
-                                $optionValue = $year . "-" . $nextYear;
-                                ?>
-                                <option value=<?php echo $optionValue ?>         <?php if (isset($_POST['sub2']) || isset($_POST['sub3']) || isset($_POST['sub4'])) {
-                                                echo ($_POST['AY'] == "$optionValue") ? "selected" : "";
-                                            } ?> required><?php echo $optionValue ?></option>
+                    <div class="side-by-side">
+                        <input type="hidden" value="<?php echo $_POST['standing']; ?>" name="standing">
+
+                        <div class="selection">
+                            <select name="AY" id="yearSelect">
                                 <?php
-                            }
-                            ?>
-                        </select>
+                                $currentYear = date("Y");
+                                for ($i = -1; $i < 4; $i++) {
+                                    $year = $currentYear + $i;
+                                    $nextYear = $year + 1;
+                                    $optionValue = $year . "-" . $nextYear;
+                                    ?>
+                                    <option value=<?php echo $optionValue ?>         <?php if (isset($_POST['sub2']) || isset($_POST['sub3']) || isset($_POST['sub4'])) {
+                                                    echo ($_POST['AY'] == "$optionValue") ? "selected" : "";
+                                                } ?> required><?php echo $optionValue ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+
+                        <div class="selection">
+                            <div>
+                                <input type="radio" name="SetSem" id="firstSemester" value="1st" <?php if (isset($_POST['sub2']) || isset($_POST['sub3']) || isset($_POST['sub4'])) {
+                                    echo ($_POST['SetSem'] == '1st') ? "checked" : "";
+                                } ?> required>
+                                <label for="firstSemester">1st Semester</label>
+
+                                <input type="radio" name="SetSem" id="secondSemester" value="2nd" <?php if (isset($_POST['sub2']) || isset($_POST['sub3']) || isset($_POST['sub4'])) {
+                                    echo ($_POST['SetSem'] == '2nd') ? "checked" : "";
+                                } ?> required>
+                                <label for="second-semester">2nd Semester</label>
+                            </div>
+                        </div>
+
+                        <div class="selection">
+                            <select name="class" id="">
+                                <?php
+                                while ($row = mysqli_fetch_array($result)) {
+                                    $classID = $row['class_id'];
+                                    $courseStrand = $row['class_courseStrand'];
+                                    $year = $row['class_year'];
+                                    $section = $row['class_section'];
+                                    $departmentUnder = $row['class_department'];
+
+                                    $className = $courseStrand . $year . '-' . $section;
+                                    $classID_name = $classID . '|' . $className;
+                                    $classID_name = htmlspecialchars($classID_name);
+                                    ?>
+                                    <option value='<?php echo $classID_name; ?>' <?php if (isset($_POST['sub2']) || isset($_POST['sub3']) || isset($_POST['sub4'])) {
+                                           echo ($_POST['class'] == "$classID_name") ? "selected" : "";
+                                       } ?>><?php echo $className; ?></option>
+
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <input type="submit" name="sub2" id="">
                     </div>
-
-                    <label for="firstSemester">Set Semester:</label>
-                    <div class="radio-selection">
-                        <input type="radio" name="SetSem" id="firstSemester" value="1st" <?php if (isset($_POST['sub2']) || isset($_POST['sub3']) || isset($_POST['sub4'])) {
-                            echo ($_POST['SetSem'] == '1st') ? "checked" : "";
-                        } ?> required>
-                        <label for="firstSemester">1st</label>
-                    </div>
-
-                    <div class="radio-selection">
-                        <input type="radio" name="SetSem" id="se     </div>condSemester" value="2nd" <?php if (isset($_POST['sub2']) || isset($_POST['sub3']) || isset($_POST['sub4'])) {
-                            echo ($_POST['SetSem'] == '2nd') ? "checked" : "";
-                        } ?> required>
-                        <label for="secondSemester">2nd</label>
-                    </div>
-
-                    <select name="class" id="">
-                        <?php
-                        while ($row = mysqli_fetch_array($result)) {
-                            $classID = $row['class_id'];
-                            $courseStrand = $row['class_courseStrand'];
-                            $year = $row['class_year'];
-                            $section = $row['class_section'];
-                            $departmentUnder = $row['class_department'];
-
-                            $className = $courseStrand . $year . '-' . $section;
-                            $classID_name = $classID . '|' . $className;
-                            $classID_name = htmlspecialchars($classID_name);
-                            ?>
-                            <option value='<?php echo $classID_name; ?>' <?php if (isset($_POST['sub2']) || isset($_POST['sub3']) || isset($_POST['sub4'])) {
-                                   echo ($_POST['class'] == "$classID_name") ? "selected" : "";
-                               } ?>><?php echo $className; ?></option>
-
-                            <?php
-                        }
-                        ?>
-                    </select>
-
-                    <input type="submit" name="sub2" id="">
                 </form>
             </main>
         </section>
+
 
         <?php
         if (isset($_POST['sub2']) || $_GET['action'] == "form3" || $_GET['action'] == 'form4') {
