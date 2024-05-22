@@ -178,9 +178,9 @@
 
                 $returnExistingSubjectForClass = ExistingSubjectForClass($con); // returns as array [className, subjectID, subjectName, true || false] boolean is if class already have the subject inputed
     
-                if ($returnExistingSubjectForClass['exist']) {
-                    echo "<script>alert('Class already have this subject!')</script>";
-                } else {
+                // if ($returnExistingSubjectForClass['exist']) {
+                //     echo "<script>alert('Class already have this subject!')</script>";
+                // } else {
                     ?>
                     <form action="?action=form4" method="post">
                         <input type="hidden" value="<?php echo $_POST['standing']; ?>" name="standing">
@@ -310,7 +310,7 @@
                             $insertSchedule->execute();
                         }
                     }
-                }
+                // }
             }
             $returnValOfClassExistiongSubjectOfTheSYandSem = ClassExistiongSubjectOfTheSYandSem($con);
             ?>
