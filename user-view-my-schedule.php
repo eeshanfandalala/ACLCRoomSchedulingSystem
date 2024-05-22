@@ -32,15 +32,7 @@ if (!isset($_SESSION['teacher_id'])) {
                     <span class="logo-name">SchedSystem</span>
                 </div>
                 <ul class="nav-links">
-                    <li>
-                        <a href="#">
-                            <i class='bx bx-grid-alt'></i>
-                            <span class="link-name">Dashboard</span>
-                        </a>
-                        <ul class="sub-menu blank">
-                            <li><a class="link-name" href="#">Dashboard</a></li>
-                        </ul>
-                    </li>
+                   
                     <li>
                         <div class="icon-link">
                             <a href="#">
@@ -56,7 +48,7 @@ if (!isset($_SESSION['teacher_id'])) {
                         </ul>
                     </li>
                     <li>
-                        <a href="user-manage-account.php">
+                        <a href="">
                             <i class='bx bxs-cog'></i>
                             <span class="link-name">Manage Account</span>
                         </a>

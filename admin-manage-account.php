@@ -33,12 +33,12 @@ if (!isset($_SESSION['sd_id'])) {
                 </div>
                 <ul class="nav-links">
                     <li>
-                        <a href="#">
+                        <a href="admin-manage.php">
                             <i class='bx bx-grid-alt'></i>
-                            <span class="link-name">Dashboard</span>
+                            <span class="link-name">Manage</span>
                         </a>
                         <ul class="sub-menu blank">
-                            <li><a class="link-name" href="#">Dashboard</a></li>
+                            <li><a class="link-name" href="admin-manage.php">Manage</a></li>
                         </ul>
                     </li>
                     <li>

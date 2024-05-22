@@ -48,7 +48,7 @@ if (!isset($_SESSION['sd_id'])) {
 
         <script>
             document.getElementById('edit_btn').addEventListener('click', function() {
-                var inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="number"], input[type="password"], input[type="file"]');
+                var inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="number"], input[type="password"]');
                 var updateBtn = document.getElementById('update_btn');
                 for (var i = 0; i < inputs.length; i++) {
                     inputs[i].disabled = !inputs[i].disabled;
