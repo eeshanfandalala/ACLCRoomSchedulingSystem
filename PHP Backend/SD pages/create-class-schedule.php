@@ -32,7 +32,7 @@
 
 <body>
     <section class="side-by-side">
-        <main>
+        <main class="form-1">
             <form action="?action=form1" method="post">
                 <div class="side-by-side">
                     <div class="selection">
@@ -60,7 +60,7 @@
             $result = findStandingForClass($con);
             ?>
 
-            <main>
+            <main class="form-2">
                 <form action="?action=form2" method="post">
                     <div class="side-by-side">
                         <input type="hidden" value="<?php echo $_POST['standing']; ?>" name="standing">
@@ -130,63 +130,68 @@
         <?php
         if (isset($_POST['sub2']) || $_GET['action'] == "form3" || $_GET['action'] == 'form4') {
             ?>
+            <main class="form-3">
+                <form action="?action=form3" method="post">
+                    <input type="hidden" value="<?php echo $_POST['standing']; ?>" name="standing">
+                    <input type="hidden" name="AY" value="<?php echo $_POST['AY'] ?>">
+                    <input type="hidden" name="SetSem" value="<?php echo $_POST['SetSem'] ?>">
+                    <input type="hidden" name="class" value="<?php echo $_POST['class'] ?>">
 
-            <form action="?action=form3" method="post">
-                <input type="hidden" value="<?php echo $_POST['standing']; ?>" name="standing">
-                <input type="hidden" name="AY" value="<?php echo $_POST['AY'] ?>">
-                <input type="hidden" name="SetSem" value="<?php echo $_POST['SetSem'] ?>">
-                <input type="hidden" name="class" value="<?php echo $_POST['class'] ?>">
-
-                <datalist id="subject-list">
-                    <?php
-                    $findsubjects = $con->prepare("SELECT * FROM subject_tb");
-                    $findsubjects->execute();
-                    $resultSubjects = $findsubjects->get_result();
-                    while ($rowsubjects = $resultSubjects->fetch_assoc()) {
-                        ?>
-                        <option value="<?php echo $rowsubjects['subject_id'] . '|' . $rowsubjects['subject_name']; ?>">
-                            <?php echo $rowsubjects['subject_name']; ?>
-                        </option>
+                    <datalist id="subject-list">
                         <?php
-                    }
-                    $findsubjects->free_result();
-                    ?>
-                </datalist>
-                <input type="text" name="subject" id="selected-subject" list="subject-list" placeholder="Choose a subject..."
-                    value="<?php if (isset($_POST['sub3'])):
-                        echo $_POST['subject'];
-                    endif; ?>" required>
-
-                <datalist id="teacher-list">
-                    <?php
-                    $findTechers = $con->prepare("SELECT * FROM teacher_tb WHERE `status` = 1");
-                    $findTechers->execute();
-                    $resultTeachers = $findTechers->get_result();
-                    while ($rowTeacher = $resultTeachers->fetch_assoc()) {
+                        $findsubjects = $con->prepare("SELECT * FROM subject_tb");
+                        $findsubjects->execute();
+                        $resultSubjects = $findsubjects->get_result();
+                        while ($rowsubjects = $resultSubjects->fetch_assoc()) {
+                            ?>
+                            <option value="<?php echo $rowsubjects['subject_id'] . '|' . $rowsubjects['subject_name']; ?>">
+                                <?php echo $rowsubjects['subject_name']; ?>
+                            </option>
+                            <?php
+                        }
+                        $findsubjects->free_result();
                         ?>
-                        <option value="<?php echo $rowTeacher['teacher_id'] . '|' . $rowTeacher['teacher_name']; ?>">
-                            <?php echo $rowTeacher['teacher_name']; ?>
-                        </option>
+                    </datalist>
+
+                    <input type="text" name="subject" id="selected-subject" list="subject-list"
+                        placeholder="Choose a subject..." value="<?php if (isset($_POST['sub3'])):
+                            echo $_POST['subject'];
+                        endif; ?>" required>
+
+                    <datalist id="teacher-list">
                         <?php
-                    }
-                    ?>
-                </datalist>
-                <input type="text" name="teacher" id="selected-teacher" list="teacher-list" placeholder="Choose a teacher..."
-                    value="<?php if (isset($_POST['sub3']) || isset($_POST['sub4'])):
-                        echo $_POST['teacher'];
-                    endif; ?>" required>
-                <input type="submit" name="sub3">
-            </form>
+                        $findTechers = $con->prepare("SELECT * FROM teacher_tb WHERE `status` = 1");
+                        $findTechers->execute();
+                        $resultTeachers = $findTechers->get_result();
+                        while ($rowTeacher = $resultTeachers->fetch_assoc()) {
+                            ?>
+                            <option value="<?php echo $rowTeacher['teacher_id'] . '|' . $rowTeacher['teacher_name']; ?>">
+                                <?php echo $rowTeacher['teacher_name']; ?>
+                            </option>
+                            <?php
+                        }
+                        ?>
+                    </datalist>
+
+                    <input type="text" name="teacher" id="selected-teacher" list="teacher-list"
+                        placeholder="Choose a teacher..." value="<?php if (isset($_POST['sub3']) || isset($_POST['sub4'])):
+                            echo $_POST['teacher'];
+                        endif; ?>" required>
+                    <input type="submit" name="sub3">
+                </form>
+            </main>
+
 
             <?php
             if (isset($_POST['sub3']) || $_GET['action'] == 'form4') {
-
                 $returnExistingSubjectForClass = ExistingSubjectForClass($con); // returns as array [className, subjectID, subjectName, true || false] boolean is if class already have the subject inputed
     
                 // if ($returnExistingSubjectForClass['exist']) {
                 //     echo "<script>alert('Class already have this subject!')</script>";
                 // } else {
-                    ?>
+                ?>
+
+                <main class="form-4">
                     <form action="?action=form4" method="post">
                         <input type="hidden" value="<?php echo $_POST['standing']; ?>" name="standing">
                         <input type="hidden" name="AY" value="<?php echo $_POST['AY'] ?>">
@@ -229,10 +234,13 @@
                                             placeholder="Select a room..." class="<?php echo htmlspecialchars($roomType); ?>">
                                     </td>
                                     <td>
-                                        <label for="">Start: </label><input type="time" name="schedule_time[start]" id="startTime"
+                                        <div class="time">
+                                            <label for="">Start: </label><input type="time" name="schedule_time[start]" id="startTime"
                                             min="07:00" max="22:00"><br>
-                                        <label for="">End: </label><input type="time" name="schedule_time[end]" id="endTime" min="07:00"
-                                            max="22:00">
+                                        <label for="">End: </label><input type="time" name="schedule_time[end]" id="endTime"
+                                            min="07:00" max="22:00">
+                                        </div>
+                                        
                                     </td>
                                     <td>
                                         <input type="checkbox" name="days[]" value="Monday">Monday<br>
@@ -247,78 +255,83 @@
                             </tbody>
                         </table>
                     </form>
-                    <?php
-                    if (isset($_POST['sub4']) || $_GET['action'] == 'form4') {
-                        // Sanitize and validate inputs
-                        if (!isset($_POST['room'], $_POST['AY'], $_POST['SetSem'], $_POST['schedule_time'], $_POST['days'], $_POST['class'], $_POST['teacher'], $_POST['subject'])) {
-                            echo "<script>alert('Missing required fields.');</script>";
-                            exit;
-                        }
+                </main>
 
-                        $roomID_name = htmlspecialchars($_POST['room']);
-                        list($roomID, $roomName) = explode('|', $roomID_name);
-                        $roomID = htmlspecialchars($roomID);
-                        $roomName = htmlspecialchars($roomName);
 
-                        $findOccupiedRoom = $con->prepare("SELECT * FROM schedule_tb WHERE room_id = ? AND schedule_SY = ? AND schedule_semester = ?");
-                        $findOccupiedRoom->bind_param("iss", $roomID, $_POST['AY'], $_POST['SetSem']);
-                        $findOccupiedRoom->execute();
-                        $resultfindOccupiedRoom = $findOccupiedRoom->get_result();
+                <?php
+                if (isset($_POST['sub4']) || $_GET['action'] == 'form4') {
+                    // Sanitize and validate inputs
+                    if (!isset($_POST['room'], $_POST['AY'], $_POST['SetSem'], $_POST['schedule_time'], $_POST['days'], $_POST['class'], $_POST['teacher'], $_POST['subject'])) {
+                        echo "<script>alert('Missing required fields.');</script>";
+                        exit;
+                    }
 
-                        $submittedTimeStart = strtotime(htmlspecialchars($_POST['schedule_time']['start']));
-                        $submittedTimeEnd = strtotime(htmlspecialchars($_POST['schedule_time']['end']));
-                        $submittedDays = isset($_POST['days']) && is_array($_POST['days']) ? $_POST['days'] : [];
+                    $roomID_name = htmlspecialchars($_POST['room']);
+                    list($roomID, $roomName) = explode('|', $roomID_name);
+                    $roomID = htmlspecialchars($roomID);
+                    $roomName = htmlspecialchars($roomName);
 
-                        $isConflict = false;
+                    $findOccupiedRoom = $con->prepare("SELECT * FROM schedule_tb WHERE room_id = ? AND schedule_SY = ? AND schedule_semester = ?");
+                    $findOccupiedRoom->bind_param("iss", $roomID, $_POST['AY'], $_POST['SetSem']);
+                    $findOccupiedRoom->execute();
+                    $resultfindOccupiedRoom = $findOccupiedRoom->get_result();
 
-                        while ($rowfindOccupiedRoom = $resultfindOccupiedRoom->fetch_assoc()) {
-                            $occupiedRoomTime = json_decode($rowfindOccupiedRoom['schedule_time'], true);
-                            $occupiedRoomDays = json_decode($rowfindOccupiedRoom['schedule_day'], true);
+                    $submittedTimeStart = strtotime(htmlspecialchars($_POST['schedule_time']['start']));
+                    $submittedTimeEnd = strtotime(htmlspecialchars($_POST['schedule_time']['end']));
+                    $submittedDays = isset($_POST['days']) && is_array($_POST['days']) ? $_POST['days'] : [];
 
-                            $occupiedTimeStart = strtotime($occupiedRoomTime['start']);
-                            $occupiedTimeEnd = strtotime($occupiedRoomTime['end']);
+                    $isConflict = false;
 
-                            // Check for overlapping days
-                            $overlappingDays = array_intersect($submittedDays, $occupiedRoomDays);
-                            if (!empty($overlappingDays)) {
-                                // Check for overlapping times within those overlapping days
-                                if (($submittedTimeStart < $occupiedTimeEnd) && ($submittedTimeEnd > $occupiedTimeStart)) {
-                                    $isConflict = true;
-                                    break;
-                                }
+                    while ($rowfindOccupiedRoom = $resultfindOccupiedRoom->fetch_assoc()) {
+                        $occupiedRoomTime = json_decode($rowfindOccupiedRoom['schedule_time'], true);
+                        $occupiedRoomDays = json_decode($rowfindOccupiedRoom['schedule_day'], true);
+
+                        $occupiedTimeStart = strtotime($occupiedRoomTime['start']);
+                        $occupiedTimeEnd = strtotime($occupiedRoomTime['end']);
+
+                        // Check for overlapping days
+                        $overlappingDays = array_intersect($submittedDays, $occupiedRoomDays);
+                        if (!empty($overlappingDays)) {
+                            // Check for overlapping times within those overlapping days
+                            if (($submittedTimeStart < $occupiedTimeEnd) && ($submittedTimeEnd > $occupiedTimeStart)) {
+                                $isConflict = true;
+                                break;
                             }
                         }
-
-                        if ($isConflict) {
-                            echo "<script>alert('The submitted schedule conflicts with an existing schedule.');</script>";
-                        } else {
-                            $jsontime = json_encode($_POST['schedule_time']);
-                            $jsonday = json_encode($submittedDays);
-
-                            $classID_name = htmlspecialchars($_POST['class']);
-                            list($classID, $className) = explode('|', $classID_name);
-                            $classID = htmlspecialchars($classID);
-                            $className = htmlspecialchars($className);
-
-                            $teacherID_name = htmlspecialchars($_POST['teacher']);
-                            list($teacherID, $teacherName) = explode('|', $teacherID_name);
-                            $teacherID = htmlspecialchars($teacherID);
-                            $teacherName = htmlspecialchars($teacherName);
-
-                            $subjectID_name = htmlspecialchars($_POST['subject']);
-                            list($subjectID, $subjectName) = explode('|', $subjectID_name);
-                            $subjectID = htmlspecialchars($subjectID);
-                            $subjectName = htmlspecialchars($subjectName);
-
-                            $insertSchedule = $con->prepare("INSERT INTO schedule_tb (schedule_time, schedule_day, schedule_semester, schedule_SY, teacher_id, class_id, subject_id, room_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-                            $insertSchedule->bind_param("ssssiiii", $jsontime, $jsonday, $_POST['SetSem'], $_POST['AY'], $teacherID, $classID, $subjectID, $roomID);
-                            $insertSchedule->execute();
-                        }
                     }
+
+                    if ($isConflict) {
+                        echo "<script>alert('The submitted schedule conflicts with an existing schedule.');</script>";
+                    } else {
+                        $jsontime = json_encode($_POST['schedule_time']);
+                        $jsonday = json_encode($submittedDays);
+
+                        $classID_name = htmlspecialchars($_POST['class']);
+                        list($classID, $className) = explode('|', $classID_name);
+                        $classID = htmlspecialchars($classID);
+                        $className = htmlspecialchars($className);
+
+                        $teacherID_name = htmlspecialchars($_POST['teacher']);
+                        list($teacherID, $teacherName) = explode('|', $teacherID_name);
+                        $teacherID = htmlspecialchars($teacherID);
+                        $teacherName = htmlspecialchars($teacherName);
+
+                        $subjectID_name = htmlspecialchars($_POST['subject']);
+                        list($subjectID, $subjectName) = explode('|', $subjectID_name);
+                        $subjectID = htmlspecialchars($subjectID);
+                        $subjectName = htmlspecialchars($subjectName);
+
+                        $insertSchedule = $con->prepare("INSERT INTO schedule_tb (schedule_time, schedule_day, schedule_semester, schedule_SY, teacher_id, class_id, subject_id, room_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                        $insertSchedule->bind_param("ssssiiii", $jsontime, $jsonday, $_POST['SetSem'], $_POST['AY'], $teacherID, $classID, $subjectID, $roomID);
+                        $insertSchedule->execute();
+                    }
+                }
                 // }
             }
             $returnValOfClassExistiongSubjectOfTheSYandSem = ClassExistiongSubjectOfTheSYandSem($con);
             ?>
+
+
             <table>
                 <thead>
                     <tr>

@@ -2,20 +2,18 @@
     display: flex;
 }
 
-main {
+.form-1,
+.form-2,
+.form-3 {
     background: linear-gradient(to bottom right, #3d4479, #172278);
     color: white;
     display: inline-block;
     height: auto;
-    margin: 0 0 0 20px;
+    margin: 0 0 20px 20px;
     padding: 15px 30px;
     border-radius: 15px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
-
-/*form {
-    margin-top: 10px;
-}*/
 
 .selection {
     display: flex;
@@ -27,8 +25,8 @@ main {
     margin-right: 10px;
 }
 
-
-select {
+select,
+input[type="text"] {
     width: auto;
     padding: 10px;
     margin-right: 15px;
@@ -49,38 +47,108 @@ input[type="submit"] {
     transition: all .5s ease;
 }
 
-/* form validation */
+/* Form Validation */
 .error {
     color: rgb(251, 78, 78);
     font-size: 10pt;
     display: none;
 }
 
-/* table */
-table {
-    width: 100%;
-    border-collapse: collapse;
+.time {
+    display: flex;
 }
 
-thead {
-    background-color: #f2f2f2;
+.form-4 {
+    background: linear-gradient(to bottom right, #3d4479, #172278);
+    color: white;
+    height: auto;
+    margin: 0 20px;
+    padding: 15px 30px;
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+table {
+    width: 100%;
+    margin: 20px 0;
+    font-size: 1em;
+    min-width: 300px;
+    overflow: hidden;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 15px;
 }
 
 th,
 td {
-    padding: 8px;
-    text-align: left;
+    padding: 10px;
+    border: 1px solid white;
+    text-align: center;
+    vertical-align: middle;
+}
+
+thead {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+tbody tr {
     border-bottom: 1px solid #ddd;
 }
 
-tr:nth-child(even) {
-    background-color: #f2f2f2;
+tbody tr:nth-of-type(even) {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
-td select {
-    width: 100%;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+label {
+    display: inline-block;
+    margin-top: 8px;
+}
+
+input[type="time"] {
+    display: block;
+    margin-bottom: 8px;
+}
+
+input[type="checkbox"] {
+    margin-bottom: 5px;
+}
+
+@media (max-width: 600px) {
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+        display: block;
+        width: 100%;
+    }
+
+    thead {
+        display: none;
+    }
+
+    tr {
+        margin-bottom: 15px;
+    }
+
+    td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+    }
+
+    td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 50%;
+        padding-left: 15px;
+        font-weight: bold;
+        text-align: left;
+    }
 }
