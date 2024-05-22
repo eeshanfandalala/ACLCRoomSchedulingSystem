@@ -12,7 +12,7 @@ if (!isset($_SESSION['sd_id'])) {
     while ($row = mysqli_fetch_array($sql)) {
         $SD_name = $row['SD_firstname'] . " " . $row['SD_lastname'];
 
-?>
+        ?>
         <!DOCTYPE html>
         <html lang="en">
 
@@ -22,7 +22,7 @@ if (!isset($_SESSION['sd_id'])) {
             <title>Manage Account</title>
             <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
             <link rel="stylesheet" href="css/SD/sidebar.css">
-            <link rel="stylesheet" href="css/table.css">
+            <link rel="stylesheet" href="css/SD/create-class-schedule.css">
         </head>
 
         <body>
@@ -77,18 +77,19 @@ if (!isset($_SESSION['sd_id'])) {
                     </li>
                 </ul>
             </div>
+            
             <section class="home-section">
                 <div class="home-content">
                     <i class='bx bx-menu'></i> <!-- button -->
                     <span class="text">Create Class Schedule</span>
                 </div>
                 <div>
-                    <?php include './PHP Backend/SD pages/create-class-schedule.php' ?>
+                    <?php include'./PHP Backend/SD pages/create-class-schedule.php'?>
 
                 </div>
             </section>
         </body>
-<?php
+        <?php
     }
 }
 ?>
@@ -127,4 +128,4 @@ if (!isset($_SESSION['sd_id'])) {
     generateYearOptions();
 </script>
 
-        </html>
+</html>

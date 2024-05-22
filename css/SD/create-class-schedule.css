@@ -1,0 +1,77 @@
+.side-by-side {
+    display: flex;
+}
+
+main {
+    background: #161f5f;
+    color: white;
+    width: 30%;
+    height: 135px;
+    margin: 0 0 30px 20px;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* forms */
+form {
+    margin-top: 10px;
+    display: flex;
+}
+
+.form-2 {
+    
+}
+
+.radio-selection,
+.selection {
+    padding: 10px 0;
+    margin-right: 20px;
+}
+
+input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    width: 80px;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all .5s ease;
+}
+
+/* form validation */
+.error {
+    color: rgb(251, 78, 78);
+    font-size: 10pt;
+    display: none;
+}
+
+/* table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: #f2f2f2;
+}
+
+th,
+td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+td select {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}

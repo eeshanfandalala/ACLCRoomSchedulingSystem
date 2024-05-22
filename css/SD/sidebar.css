@@ -13,7 +13,7 @@
     left: 0;
     height: 100%;
     width: 260px;
-    background: #000C6D;
+    background: #0d1a7d;
     z-index: 100;
     transition: all 0.5s ease;
 }
@@ -196,7 +196,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #110f29;
+    background: #0679E2;
     padding: 12px 0;
     transition: all 0.5s ease;
 }
@@ -219,10 +219,6 @@
     font-size: 2rem;
 }
 
-.sidebar.close .profile-details #logout {
-    color: #110f29;
-}
-
 .sidebar .profile-details #logout {
     color: white;
 }
@@ -238,8 +234,8 @@
 }
 
 .home-section {
+    background: #010945;
     position: relative;
-    background: #E4E9F7;
     height: 100vh;
     left: 260px;
     width: calc(100% - 260px);
@@ -259,7 +255,7 @@
 
 .home-section .home-content .bx-menu,
 .home-section .home-content .text {
-    color: #110f29;
+    color: white;
     font-size: 35px;
 }
 
