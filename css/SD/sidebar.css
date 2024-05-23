@@ -236,7 +236,7 @@
 .home-section {
     background: #010945;
     position: relative;
-    height: 100vh;
+    min-height: 100vh;
     left: 260px;
     width: calc(100% - 260px);
     transition: all 0.5s ease;
