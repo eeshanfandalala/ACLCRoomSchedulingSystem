@@ -19,7 +19,7 @@ if (!isset($_SESSION['sd_id'])) {
                         <img src="./profile_pictures/<?php echo $row['SD_pic'];
                         $profpic = $row['SD_pic']; ?>" alt="profile picture">
 
-                        <input type="file" name="profile_pic" id="profile_pic">
+                        <input type="file" name="profile_pic" id="profile_pic" disabled>
                     </div>
                     <div>
                         <input type="text" name="SD_lastname" id="SD_lastname" value="<?php echo $row['SD_lastname']; ?>"
@@ -52,7 +52,7 @@ if (!isset($_SESSION['sd_id'])) {
 
         <script>
             document.getElementById('edit_btn').addEventListener('click', function () {
-                var inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="number"], input[type="password"]');
+                var inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="number"], input[type="password"], input[type="file"]');
                 var updateBtn = document.getElementById('update_btn');
                 for (var i = 0; i < inputs.length; i++) {
                     inputs[i].disabled = !inputs[i].disabled;
