@@ -11,7 +11,7 @@ if (!isset($_SESSION['teacher_id'])) {
 ?>
     <div>
         <form action="" method="post">
-            <select name="AY" id="yearSelect">
+            <select name="AY" id="yearSelect" onchange="this.form.submit()">
                 <?php
                 // Get current year
                 $currentYear = date("Y");
@@ -22,7 +22,7 @@ if (!isset($_SESSION['teacher_id'])) {
                     $nextYear = $year + 1;
                     $optionValue = $year . "-" . $nextYear;
                 ?>
-                    <option value=<?php echo $optionValue ?> <?php if (isset($_POST['sub'])) {
+                    <option value=<?php echo $optionValue ?> <?php if (isset($_POST['AY'])) {
                                                                     echo ($_POST['AY'] == "$optionValue") ? "selected" : "";
                                                                 } ?> required><?php echo $optionValue ?></option>
 
@@ -31,19 +31,20 @@ if (!isset($_SESSION['teacher_id'])) {
                 ?>
             </select>
             <label for="firstSemester">Set Semester:</label>
-            <input type="radio" name="SetSem" id="firstSemester" value="1st" <?php if (isset($_POST['sub'])) {
+            <input type="radio" name="SetSem" id="firstSemester" value="1st" <?php if (isset($_POST['SetSem'])) {
                                                                                     echo ($_POST['SetSem'] == '1st') ? "checked" : "";
-                                                                                } ?> required>
+                                                                                } ?> required onchange="this.form.submit()">
             <label for="firstSemester">1st</label>
-            <input type="radio" name="SetSem" id="secondSemester" value="2nd" <?php if (isset($_POST['sub'])) {
+            <input type="radio" name="SetSem" id="secondSemester" value="2nd" <?php if (isset($_POST['SetSem'])) {
                                                                                     echo ($_POST['SetSem'] == '2nd') ? "checked" : "";
-                                                                                } ?> required>
+                                                                                } ?> required onchange="this.form.submit()">
             <label for="secondSemester">2nd</label>
-            <input type="submit" name="sub">
+            <!-- <input type="submit" name="sub"> -->
         </form>
     </div>
     <?php
-    if (isset($_POST['sub'])) {
+    // if (isset($_POST['sub'])) {
+    if (isset($_POST['AY']) && isset($_POST['SetSem'])) {
         $AY = $_POST['AY'];
         $SetSem = $_POST['SetSem'];
 

@@ -1,14 +1,17 @@
 <?php
-include '../ACLC-College-of-Ormoc-Classroom-Scheduling-System/config.php';
+include 'config.php';
 if (!isset($_SESSION['sd_id'])) {
     header("Location: ../index.html");
     exit;
 } else {
     $user_id = $_SESSION['sd_id'];
     $sql = mysqli_query($con, "SELECT * FROM `sd_tb` WHERE `SD_id` = '$user_id'");
+    if (!$sql) {
+        die('Error: ' . mysqli_error($con));
+    }
     while ($row = mysqli_fetch_array($sql)) {
         $sd_id = $row['SD_id'];
-        ?>
+?>
 
         <body>
 
@@ -16,29 +19,33 @@ if (!isset($_SESSION['sd_id'])) {
             <div>
                 <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data">
                     <div>
-                        <img src="./profile_pictures/<?php echo $row['SD_pic'];
-                        $profpic = $row['SD_pic']; ?>" alt="profile picture">
+                        <div>
+                            <img src="./profile_pictures/<?php echo $row['SD_pic'];
+                                                            $profpic = $row['SD_pic']; ?>" alt="profile picture">
 
-                        <input type="file" name="profile_pic" id="profile_pic" disabled>
+                            <input type="file" name="profile_pic" id="profile_pic" disabled>
+                        </div>
+
+                        <div>
+                            <div>
+                                <input type="text" name="SD_lastname" id="SD_lastname" value="<?php echo $row['SD_lastname']; ?>" disabled placeholder="Last Name" required>
+                                <input type="text" name="SD_firstname" id="SD_firstname" value="<?php echo $row['SD_firstname']; ?>" disabled placeholder="First Name" required>
+                            </div>
+                        </div>
+                        <div>
+
+                            <div>
+                                <input type="email" name="SD_email" id="SD_email" value="<?php echo $row['SD_email']; ?>" disabled placeholder="email" required>
+                                <input type="number" name="SD_number" id="SD_number" value="<?php echo $row['SD_number']; ?>" disabled placeholder="Contact Number">
+
+                            </div>
+                        </div>
+
+                        <button type="submit" name="update_btn" id="update_btn" style="display: none;">Update</button>
                     </div>
-                    <div>
-                        <input type="text" name="SD_lastname" id="SD_lastname" value="<?php echo $row['SD_lastname']; ?>"
-                            disabled placeholder="Last Name">
-                        <input type="text" name="SD_firstname" id="SD_firstname" value="<?php echo $row['SD_firstname']; ?>"
-                            disabled placeholder="First Name">
-                    </div>
-                    <div>
-                        <input type="email" name="SD_email" id="SD_email" value="<?php echo $row['SD_email']; ?>" disabled
-                            placeholder="email">
-                        <input type="number" name="SD_number" id="SD_number" value="<?php echo $row['SD_number']; ?>" disabled
-                            placeholder="number">
-                        <!-- <input type="text" name="teacher_password" id="teacher_password" disabled value="<?php //echo $row['teacher_password']; 
-                                ?>"> -->
-                    </div>
-                    <button type="submit" name="update_btn" id="update_btn" style="display: none;">Update</button>
                 </form>
-            </div>
 
+            </div>
 
             <!-- FOR ACCOUNT RESIGNATION-->
             <link rel="stylesheet" href="/css/modal.css">
@@ -51,14 +58,14 @@ if (!isset($_SESSION['sd_id'])) {
 
 
         <script>
-            document.getElementById('edit_btn').addEventListener('click', function () {
+            document.getElementById('edit_btn').addEventListener('click', function() {
                 var inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="number"], input[type="password"], input[type="file"]');
                 var updateBtn = document.getElementById('update_btn');
                 for (var i = 0; i < inputs.length; i++) {
                     inputs[i].disabled = !inputs[i].disabled;
                 }
                 // Check if any input is disabled
-                var anyInputDisabled = Array.from(inputs).some(function (input) {
+                var anyInputDisabled = Array.from(inputs).some(function(input) {
                     return input.disabled;
                 });
 
@@ -66,7 +73,7 @@ if (!isset($_SESSION['sd_id'])) {
                 updateBtn.style.display = anyInputDisabled ? 'none' : 'block';
             });
         </script>
-        <?php
+<?php
     }
 }
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
@@ -83,20 +90,23 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             $profile_pic = $profpic;
         }
 
-        $SD_lastname = $_POST['SD_lastname'];
-        $SD_firstname = $_POST['SD_firstname'];
-        $SD_email = $_POST['SD_email'];
-        $SD_number = $_POST['SD_number'];
+        if (!empty($_POST['SD_lastname']) || !empty($_POST['SD_firstname']) || !empty($_POST['SD_email']) || !empty($_POST['SD_lastname']) || !empty($_POST['SD_number'])) {
 
-        $updateProfileInfo = $con->prepare("UPDATE sd_tb SET SD_pic =?, SD_lastname=?, SD_firstname=?, SD_email=?, SD_number=?");
-        $updateProfileInfo->bind_param("ssssi", $profile_pic, $SD_lastname, $SD_firstname, $SD_email, $SD_number);
-        if ($updateProfileInfo->execute()) {
-            echo "<script>alert('Profile updated successfully');
-            window.location.replace('admin-manage-account.php');</script>";
+            $SD_lastname = $_POST['SD_lastname'];
+            $SD_firstname = $_POST['SD_firstname'];
+            $SD_email = $_POST['SD_email'];
+            $SD_number = $_POST['SD_number'];
+
+            $updateProfileInfo = $con->prepare("UPDATE sd_tb SET SD_pic =?, SD_lastname=?, SD_firstname=?, SD_email=?, SD_number=?");
+            $updateProfileInfo->bind_param("ssssi", $profile_pic, $SD_lastname, $SD_firstname, $SD_email, $SD_number);
+            if ($updateProfileInfo->execute()) {
+                echo "<script>alert('Profile updated successfully');
+                window.location.replace('admin-manage-account.php');</script>";
+            }
+            $updateProfileInfo->close();
+            $_POST['update_btn'] == false;
+            exit;
         }
-        $updateProfileInfo->close();
-        $_POST['update_btn'] == false;
-        exit;
     } elseif (isset($_POST['btnsub'])) {
         // echo 'hi';
         $deafaultSDValues = array(

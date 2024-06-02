@@ -12,7 +12,7 @@ if (!isset($_SESSION['sd_id'])) {
     while ($row = mysqli_fetch_array($sql)) {
         $SD_name = $row['SD_firstname'] . " " . $row['SD_lastname'];
 
-        ?>
+?>
         <!DOCTYPE html>
         <html lang="en">
 
@@ -33,12 +33,19 @@ if (!isset($_SESSION['sd_id'])) {
                 </div>
                 <ul class="nav-links">
                     <li>
-                        <a href="admin-manage.php">
-                            <i class='bx bx-grid-alt'></i>
-                            <span class="link-name">Manage</span>
-                        </a>
-                        <ul class="sub-menu blank">
-                            <li><a class="link-name" href="admin-manage.php">Manage</a></li>
+                        <div class="icon-link">
+                            <a href="#">
+                                <i class='bx bx-collection'></i>
+                                <span class="link-name">Manage</span>
+                            </a>
+                            <i class='bx bxs-chevron-down arrow'></i>
+                        </div>
+                        <ul class="sub-menu">
+                            <li><a href="admin-manage-activate-teachers.php">Teacher List</a></li>
+                            <li><a href="admin-manage-class-list.php">Class List</a></li>
+                            <li><a href="admin-manage-department-list.php">Department List</a></li>
+                            <li><a href="admin-manage-room-list.php">Room List</a></li>
+                            <li><a href="admin-manage-subject-list.php">Subject List</a></li>
                         </ul>
                     </li>
                     <li>
@@ -62,6 +69,15 @@ if (!isset($_SESSION['sd_id'])) {
                         </a>
                         <ul class="sub-menu blank">
                             <li><a class="link-name" href="admin-manage-account.php">Manage Account</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="admin-report.php">
+                            <i class='bx bxs-cog'></i>
+                            <span class="link-name">Report</span>
+                        </a>
+                        <ul class="sub-menu blank">
+                            <li><a class="link-name" href="admin-report.php">Report</a></li>
                         </ul>
                     </li>
                     <li>
@@ -89,7 +105,7 @@ if (!isset($_SESSION['sd_id'])) {
                 </div>
             </section>
         </body>
-        <?php
+<?php
     }
 }
 ?>
@@ -128,4 +144,4 @@ if (!isset($_SESSION['sd_id'])) {
     generateYearOptions();
 </script>
 
-</html>
+        </html>

@@ -12,7 +12,7 @@ if (!isset($_SESSION['sd_id'])) {
     while ($row = mysqli_fetch_array($sql)) {
         $SD_name = $row['SD_firstname'] . " " . $row['SD_lastname'];
 
-        ?>
+?>
         <!DOCTYPE html>
         <html lang="en">
 
@@ -33,12 +33,19 @@ if (!isset($_SESSION['sd_id'])) {
                 </div>
                 <ul class="nav-links">
                     <li>
-                        <a href="admin-manage.php">
-                            <i class='bx bx-grid-alt'></i>
-                            <span class="link-name">Manage</span>
-                        </a>
-                        <ul class="sub-menu blank">
-                            <li><a class="link-name" href="admin-manage.php">Manage</a></li>
+                        <div class="icon-link">
+                            <a href="#">
+                                <i class='bx bx-collection'></i>
+                                <span class="link-name">Manage</span>
+                            </a>
+                            <i class='bx bxs-chevron-down arrow'></i>
+                        </div>
+                        <ul class="sub-menu">
+                            <li><a href="admin-manage-activate-teachers.php">Teacher List</a></li>
+                            <li><a href="admin-manage-class-list.php">Class List</a></li>
+                            <li><a href="admin-manage-department-list.php">Department List</a></li>
+                            <li><a href="admin-manage-room-list.php">Room List</a></li>
+                            <li><a href="admin-manage-subject-list.php">Subject List</a></li>
                         </ul>
                     </li>
                     <li>
@@ -65,6 +72,15 @@ if (!isset($_SESSION['sd_id'])) {
                         </ul>
                     </li>
                     <li>
+                        <a href="admin-report.php">
+                            <i class='bx bxs-cog'></i>
+                            <span class="link-name">Report</span>
+                        </a>
+                        <ul class="sub-menu blank">
+                            <li><a class="link-name" href="admin-report.php">Report</a></li>
+                        </ul>
+                    </li>
+                    <li>
                         <div class="profile-details">
                             <div class="profile-content">
                                 <i class='bx bxs-user-circle' id="profile-img"></i>
@@ -81,16 +97,40 @@ if (!isset($_SESSION['sd_id'])) {
                 <div class="home-content">
                     <i class='bx bx-menu'></i> <!-- button -->
                     <span class="text">Manage</span>
-                    <button id="edit_btn">Edit</button>
                 </div>
-                <?php include './PHP Backend/SD pages/manage.php' ?>
+                <?php include './PHP Backend/SD pages/manage/createClass.php'; ?>
+
+
             </section>
         </body>
-        <?php
+<?php
     }
 }
 ?>
+<script src="./PHP Backend/SD pages/manage/searchtable.js"></script>
+
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebarItems = document.querySelectorAll('.sidebar-item');
+        const mainContent = document.getElementById('main-content');
+
+        sidebarItems.forEach(item => {
+            item.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent the default link behavior
+                const page = this.getAttribute('href');
+                fetch(page)
+                    .then(response => response.text())
+                    .then(html => {
+                        mainContent.innerHTML = html;
+                    })
+                    .catch(error => {
+                        mainContent.innerHTML = '<p>Error loading content. Please try again later.</p>';
+                        console.error('Error:', error);
+                    });
+            });
+        });
+    });
+
     let arrow = document.querySelectorAll(".arrow");
     for (var i = 0; i < arrow.length; i++) {
         arrow[i].addEventListener("click", (e) => {
@@ -106,4 +146,4 @@ if (!isset($_SESSION['sd_id'])) {
     });
 </script>
 
-</html>
+        </html>

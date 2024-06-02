@@ -37,7 +37,8 @@ form img {
 
 input[type="text"],
 input[type="email"],
-input[type="number"] {
+input[type="number"],
+input[type="password"] {
     width: calc(100% - 10px);
     padding: 10px;
     margin-bottom: 10px;
@@ -48,4 +49,8 @@ input[type="number"] {
 
 .text {
     margin-right: 30px;
+}
+
+#password-fields{
+    display: none;
 }

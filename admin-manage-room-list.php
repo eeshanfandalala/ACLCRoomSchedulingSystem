@@ -8,15 +8,6 @@ if (!isset($_SESSION['sd_id'])) {
 } else {
     $user_id = $_SESSION['sd_id'];
 
-    if (isset($_POST['changepasspage'])) {
-        $_SESSION['page'] = $_POST['changepasspage'];
-    }
-
-    // Set default page state
-    if (!isset($_SESSION['page'])) {
-        $_SESSION['page'] = 'off';
-    }
-
     $sql = mysqli_query($con, "SELECT * FROM `sd_tb` WHERE `SD_id` = '$user_id'");
     while ($row = mysqli_fetch_array($sql)) {
         $SD_name = $row['SD_firstname'] . " " . $row['SD_lastname'];
@@ -105,29 +96,40 @@ if (!isset($_SESSION['sd_id'])) {
             <section class="home-section">
                 <div class="home-content">
                     <i class='bx bx-menu'></i> <!-- button -->
-                    <span class="text">Manage Account</span>
-                    <button id="edit_btn" value="editAccount">Edit</button>
-
-                    <form action="" method="post">
-                        <input type="hidden" name="changepasspage" value="on">
-                        <button type="submit">Change Password</button>
-                    </form>
+                    <span class="text">Manage</span>
                 </div>
+                <?php include './PHP Backend/SD pages/manage/createRoom.php'; ?>
 
-                <?php
-                if ($_SESSION['page'] === 'on') {
-                    include './PHP Backend/SD pages/changePassword.php';
-                } else {
-                    include './PHP Backend/SD pages/profile.php';
-                }
-                ?>
             </section>
         </body>
 <?php
     }
 }
 ?>
+<script src="./PHP Backend/SD pages/manage/searchtable.js"></script>
+
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebarItems = document.querySelectorAll('.sidebar-item');
+        const mainContent = document.getElementById('main-content');
+
+        sidebarItems.forEach(item => {
+            item.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent the default link behavior
+                const page = this.getAttribute('href');
+                fetch(page)
+                    .then(response => response.text())
+                    .then(html => {
+                        mainContent.innerHTML = html;
+                    })
+                    .catch(error => {
+                        mainContent.innerHTML = '<p>Error loading content. Please try again later.</p>';
+                        console.error('Error:', error);
+                    });
+            });
+        });
+    });
+
     let arrow = document.querySelectorAll(".arrow");
     for (var i = 0; i < arrow.length; i++) {
         arrow[i].addEventListener("click", (e) => {

@@ -32,13 +32,20 @@ if (!isset($_SESSION['sd_id'])) {
                     <span class="logo-name">SchedSystem</span>
                 </div>
                 <ul class="nav-links">
-                    <li>
-                        <a href="admin-manage.php">
-                            <i class='bx bx-grid-alt'></i>
-                            <span class="link-name">Manage</span>
-                        </a>
-                        <ul class="sub-menu blank">
-                            <li><a class="link-name" href="admin-manage.php">Manage</a></li>
+                <li>
+                        <div class="icon-link">
+                            <a href="#">
+                                <i class='bx bx-collection'></i>
+                                <span class="link-name">Manage</span>
+                            </a>
+                            <i class='bx bxs-chevron-down arrow'></i>
+                        </div>
+                        <ul class="sub-menu">
+                            <li><a href="admin-manage-activate-teachers.php">Teacher List</a></li>
+                            <li><a href="admin-manage-class-list.php">Class List</a></li>
+                            <li><a href="admin-manage-department-list.php">Department List</a></li>
+                            <li><a href="admin-manage-room-list.php">Room List</a></li>
+                            <li><a href="admin-manage-subject-list.php">Subject List</a></li>
                         </ul>
                     </li>
                     <li>

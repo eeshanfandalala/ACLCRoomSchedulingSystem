@@ -8,11 +8,20 @@ if (!isset($_SESSION['teacher_id'])) {
 } else {
     $user_id = $_SESSION['teacher_id'];
 
+    if (isset($_POST['changepasspage'])) {
+        $_SESSION['page'] = $_POST['changepasspage'];
+    }
+
+    // Set default page state
+    if (!isset($_SESSION['page'])) {
+        $_SESSION['page'] = 'off';
+    }
+
     $sql = mysqli_query($con, "SELECT * FROM `teacher_tb` WHERE `teacher_id` = '$user_id'");
     while ($row = mysqli_fetch_array($sql)) {
         $user_name = $row['teacher_name'];
 
-        ?>
+?>
         <!DOCTYPE html>
         <html lang="en">
 
@@ -32,7 +41,7 @@ if (!isset($_SESSION['teacher_id'])) {
                     <span class="logo-name">SchedSystem</span>
                 </div>
                 <ul class="nav-links">
-                   
+
                     <li>
                         <div class="icon-link">
                             <a href="#">
@@ -74,11 +83,24 @@ if (!isset($_SESSION['teacher_id'])) {
                     <i class='bx bx-menu'></i> <!-- button -->
                     <span class="text">Manage Account</span>
                     <button id="edit_btn">Edit</button>
+                    <form action="" method="post">
+                        <input type="hidden" name="changepasspage" value="on">
+                        <button type="submit">Change Password</button>
+                    </form>
                 </div>
-                <?php include './PHP Backend/teacher pages/profile.php' ?>
+                <?php 
+                
+             
+                if ($_SESSION['page'] === 'on') {
+                    include './PHP Backend/teacher pages/changePassword.php';
+                } else {
+                    include './PHP Backend/teacher pages/profile.php';
+                }
+                
+                ?>
             </section>
         </body>
-        <?php
+<?php
     }
 }
 ?>
@@ -98,4 +120,4 @@ if (!isset($_SESSION['teacher_id'])) {
     });
 </script>
 
-</html>
+        </html>

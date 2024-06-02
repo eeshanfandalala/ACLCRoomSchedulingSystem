@@ -45,7 +45,9 @@
             text-decoration: none;
         }
     </style>
-
+<?php
+include 'config.php';
+?>
     <div>
         <form action="" method="post">
             <select name="AY" id="yearSelect" onchange="this.form.submit()">
