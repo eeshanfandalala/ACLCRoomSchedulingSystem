@@ -79,23 +79,40 @@ if (isset($_POST['backtoeditprofile'])) {
 }
 ?>
 
-<form action="" method="post">
-    <input type="hidden" name="back" value="off">
-    <button type="submit" name="backtoeditprofile">Back</button>
-</form>
+<main>
+    <div class="nav-container">
+        <form action="" method="post">
+            <input type="hidden" name="back" value="off">
+            <button type="submit" name="backtoeditprofile" class="nav-button">My Profile</button>
+        </form>
 
+        <form action="" method="post">
+            <input type="hidden" name="changepasspage" value="on">
+            <button type="submit" class="nav-button active">Change Password</button>
+        </form>
 
-
-<form action="" method="post">
-    <div>
-        <input type="password" name="currentPass" id="currentPass" placeholder="Enter Current Password" required value="<?php if (isset($_POST['currentPass'])) echo $_POST['currentPass']; ?>" />
-        <div>
-            <!-- <input type="hidden" name="changepasspage" value="on"> -->
-            <input type="password" name="newPass" id="newPass" placeholder="Enter New Password" required>
-
-            <input type="password" name="confirmPass" id="confirmPass" placeholder="Confirm New Password" required>
-
-        </div>
-        <button type="submit" name="subNewPass">Submit</button>
+        <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" onsubmit="return confirm('Are you sure?')">
+            <button type="submit" name="btnsub" class="nav-button">Reset Account</button>
+        </form>
     </div>
-</form>
+
+    <div class="change-password-container">
+        <form action="" method="post">
+            <div>
+                <label>Enter Current Password</label><br>
+                <input type="password" name="currentPass" id="currentPass" required value="<?php if (isset($_POST['currentPass']))
+                    echo $_POST['currentPass']; ?>" />
+                <!-- <input type="hidden" name="changepasspage" value="on"> -->
+                <label>Enter New Password</label><br>
+                <input type="password" name="newPass" id="newPass" required>
+
+                <label>Confirm New Password</label><br>
+                <input type="password" name="confirmPass" id="confirmPass" required>
+
+                <button type="submit" name="subNewPass">Submit</button>
+            </div>
+    </div>
+    </form>
+    </div>
+
+</main>

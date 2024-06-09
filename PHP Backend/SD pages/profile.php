@@ -28,8 +28,6 @@ if (!isset($_SESSION['sd_id'])) {
                     </form>
                 </div>
 
-
-
                 <!-- FOR PROFILE UPDATE-->
                 <div class="profile-update">
                     <button id="edit_btn" value="editAccount">Edit Profile</button><br><br>
