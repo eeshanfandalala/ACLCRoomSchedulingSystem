@@ -35,37 +35,41 @@ if (!isset($_SESSION['sd_id'])) {
                 <!-- FOR PROFILE UPDATE-->
                 <div class="profile-update">
                     <button id="edit_btn" value="editAccount">Edit Profile</button><br><br>
-                    <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data">
-                        <label>First Name</label><br>
-                        <input type="text" name="SD_firstname" id="SD_firstname" value="<?php echo $row['SD_firstname']; ?>"
-                            disabled placeholder="First Name" required><br>
+                    <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data"
+                        class="form-profile">
+                        <div>
+                            <label>First Name</label><br>
+                            <input type="text" name="SD_firstname" id="SD_firstname" value="<?php echo $row['SD_firstname']; ?>"
+                                disabled placeholder="First Name" required><br>
 
-                        <label>Last Name</label><br>
-                        <input type="text" name="SD_lastname" id="SD_lastname" value="<?php echo $row['SD_lastname']; ?>"
-                            disabled placeholder="Last Name" required><br>
+                            <label>Last Name</label><br>
+                            <input type="text" name="SD_lastname" id="SD_lastname" value="<?php echo $row['SD_lastname']; ?>"
+                                disabled placeholder="Last Name" required><br>
 
-                        <label>Email</label><br>
-                        <input type="email" name="SD_email" id="SD_email" value="<?php echo $row['SD_email']; ?>" disabled
-                            placeholder="email" required><br>
+                            <label>Email</label><br>
+                            <input type="email" name="SD_email" id="SD_email" value="<?php echo $row['SD_email']; ?>" disabled
+                                placeholder="email" required><br>
 
-                        <label>Contact Number</label><br>
-                        <input type="number" name="SD_number" id="SD_number" value="<?php echo $row['SD_number']; ?>" disabled
-                            placeholder="Contact Number"><br>
+                            <label>Contact Number</label><br>
+                            <input type="number" name="SD_number" id="SD_number" value="<?php echo $row['SD_number']; ?>"
+                                disabled placeholder="Contact Number"><br>
 
-                        <button type="submit" name="update_btn" id="update_btn" style="display: none;">Save Changes</button>
+                            <button type="submit" name="update_btn" id="update_btn" style="display: none;">Save Changes</button>
+                        </div>
+
+                        <!-- PROFILE PICTURE -->
+                        <div class="profile-picture-container">
+                            <div class="file-input-wrapper">
+                                <img src="./profile_pictures/<?php echo $row['SD_pic'];
+                                $profpic = $row['SD_pic']; ?>" alt="profile picture"><br>
+                                <input type="file" name="profile_pic" id="profile_pic" disabled>
+                                <label for="profile_pic" class="custom-file-input">Change Photo</label>
+                            </div>
+                        </div>
                     </form>
                 </div>
 
-                <!-- PROFILE PICTURE -->
-                <div class="profile-picture-container">
-                    <div class="file-input-wrapper">
-                        <img src="./profile_pictures/<?php echo $row['SD_pic'];
-                        $profpic = $row['SD_pic']; ?>"
-                            alt="profile picture"><br>
-                        <input type="file" name="profile_pic" id="profile_pic" disabled>
-                        <label for="profile_pic" class="custom-file-input">Change Photo</label>
-                    </div>
-                </div>
+
             </main>
         </body>
 

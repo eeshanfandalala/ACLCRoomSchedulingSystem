@@ -9,13 +9,20 @@ main {
 .profile-update {
     background: linear-gradient(to bottom right, #3d4479, #172278);
     color: white;
-    width: 50%;
+    width: 100%;
     margin: 0 20px;
     padding: 20px;
     border-radius: 15px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.form-profile {
+    display: flex;
+}
+
+.form-profile div{
+    width: 60%;
+}
 #edit_btn,
 #update_btn {
     background-color: #007bff;
@@ -57,14 +64,13 @@ input[type="password"] {
 
 /* profile picture */
 .profile-picture-container {
-    width: 30%;
     text-align: center;
 }
 
 .profile-picture-container img {
     background-color: #8e93c5;
     width: 100%;
-    height: auto;
+    height: 100%;
     border-radius: 15px;
 }
 
