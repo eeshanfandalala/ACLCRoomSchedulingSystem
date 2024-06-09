@@ -12,7 +12,7 @@ if (!isset($_SESSION['sd_id'])) {
     while ($row = mysqli_fetch_array($sql)) {
         $SD_name = $row['SD_firstname'] . " " . $row['SD_lastname'];
 
-?>
+        ?>
         <!DOCTYPE html>
         <html lang="en">
 
@@ -51,7 +51,7 @@ if (!isset($_SESSION['sd_id'])) {
                     <li>
                         <div class="icon-link">
                             <a href="#">
-                                <i class='bx bx-collection'></i>
+                                <i class='bx bx-calendar'></i>
                                 <span class="link-name">Schedule</span>
                             </a>
                             <i class='bx bxs-chevron-down arrow'></i>
@@ -73,7 +73,7 @@ if (!isset($_SESSION['sd_id'])) {
                     </li>
                     <li>
                         <a href="admin-report.php">
-                            <i class='bx bxs-cog'></i>
+                            <i class='bx bxs-report'></i>
                             <span class="link-name">Report</span>
                         </a>
                         <ul class="sub-menu blank">
@@ -93,29 +93,27 @@ if (!isset($_SESSION['sd_id'])) {
                     </li>
                 </ul>
             </div>
+
             <section class="home-section">
                 <div class="home-content">
                     <i class='bx bx-menu'></i> <!-- button -->
                     <span class="text">Manage</span>
                 </div>
                 <?php include './PHP Backend/SD pages/manage/activateTeacher.php'; ?> <!-- activate teacher page -->
-
-
             </section>
-           
         </body>
-<?php
+        <?php
     }
 }
 ?>
 <script src="./PHP Backend/SD pages/manage/searchtable.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const sidebarItems = document.querySelectorAll('.sidebar-item');
         const mainContent = document.getElementById('main-content');
 
         sidebarItems.forEach(item => {
-            item.addEventListener('click', function(event) {
+            item.addEventListener('click', function (event) {
                 event.preventDefault(); // Prevent the default link behavior
                 const page = this.getAttribute('href');
                 fetch(page)
@@ -146,4 +144,4 @@ if (!isset($_SESSION['sd_id'])) {
     });
 </script>
 
-        </html>
+</html>

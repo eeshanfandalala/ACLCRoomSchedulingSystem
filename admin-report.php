@@ -32,7 +32,7 @@ if (!isset($_SESSION['sd_id'])) {
                     <span class="logo-name">SchedSystem</span>
                 </div>
                 <ul class="nav-links">
-                <li>
+                    <li>
                         <div class="icon-link">
                             <a href="#">
                                 <i class='bx bx-collection'></i>
@@ -51,7 +51,7 @@ if (!isset($_SESSION['sd_id'])) {
                     <li>
                         <div class="icon-link">
                             <a href="#">
-                                <i class='bx bx-collection'></i>
+                                <i class='bx bx-calendar'></i>
                                 <span class="link-name">Schedule</span>
                             </a>
                             <i class='bx bxs-chevron-down arrow'></i>
@@ -73,7 +73,7 @@ if (!isset($_SESSION['sd_id'])) {
                     </li>
                     <li>
                         <a href="admin-report.php">
-                            <i class='bx bxs-cog'></i>
+                            <i class='bx bxs-report'></i>
                             <span class="link-name">Report</span>
                         </a>
                         <ul class="sub-menu blank">
@@ -93,6 +93,7 @@ if (!isset($_SESSION['sd_id'])) {
                     </li>
                 </ul>
             </div>
+
             <section class="home-section">
                 <div class="home-content">
                     <i class='bx bx-menu'></i> <!-- button -->
