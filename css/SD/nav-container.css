@@ -1,0 +1,31 @@
+.nav-container {
+    background: linear-gradient(to bottom right, #3d4479, #172278);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: white;
+    width: 300px;
+    padding: 20px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all .5s ease;
+}
+
+.nav-item {
+    display: block;
+    padding: 10px 0;
+    text-decoration: none;
+    color: white;
+}
+
+.nav-item:hover {
+    color: #007bff;
+}
+
+.nav-button {
+    background-color: transparent;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all .5s ease;
+}

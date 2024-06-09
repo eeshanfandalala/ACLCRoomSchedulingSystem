@@ -11,61 +11,74 @@ if (!isset($_SESSION['sd_id'])) {
     }
     while ($row = mysqli_fetch_array($sql)) {
         $sd_id = $row['SD_id'];
-?>
+        ?>
 
         <body>
+            <main>
+                <div class="nav-container">
+                    <a href="admin-manage-account.php" class="nav-item">My Profile</a><br>
 
-            <!-- FOR PROFILE UPDATE-->
-            <div>
-                <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data">
-                    <div>
-                        <div>
-                            <img src="./profile_pictures/<?php echo $row['SD_pic'];
-                                                            $profpic = $row['SD_pic']; ?>" alt="profile picture">
-
-                            <input type="file" name="profile_pic" id="profile_pic" disabled>
-                        </div>
-
-                        <div>
-                            <div>
-                                <input type="text" name="SD_lastname" id="SD_lastname" value="<?php echo $row['SD_lastname']; ?>" disabled placeholder="Last Name" required>
-                                <input type="text" name="SD_firstname" id="SD_firstname" value="<?php echo $row['SD_firstname']; ?>" disabled placeholder="First Name" required>
-                            </div>
-                        </div>
-                        <div>
-
-                            <div>
-                                <input type="email" name="SD_email" id="SD_email" value="<?php echo $row['SD_email']; ?>" disabled placeholder="email" required>
-                                <input type="number" name="SD_number" id="SD_number" value="<?php echo $row['SD_number']; ?>" disabled placeholder="Contact Number">
-
-                            </div>
-                        </div>
-
-                        <button type="submit" name="update_btn" id="update_btn" style="display: none;">Update</button>
+                    <div class="nav-item">
+                        <form action="" method="post">
+                            <input type="hidden" name="changepasspage" value="on">
+                            <button type="submit" class="nav-button">Change Password</button>
+                        </form>
                     </div>
-                </form>
 
-            </div>
+                    <div class="nav-item">
+                        <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" onsubmit="return confirm('sure ka?!')">
+                            <button type="submit" name="btnsub" class="nav-button">Reset Account</button>
+                        </form>
+                    </div>
+                </div>
 
-            <!-- FOR ACCOUNT RESIGNATION-->
-            <link rel="stylesheet" href="/css/modal.css">
-            <div>
-                <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" onsubmit="return confirm('sure ka?!')">
-                    <button type="submit" name="btnsub">Reset</button>
-                </form>
-            </div>
+                <!-- FOR PROFILE UPDATE-->
+                <div class="profile-update">
+                    <button id="edit_btn" value="editAccount">Edit</button><br><br>
+                    <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data">
+                        <label>First Name</label><br>
+                        <input type="text" name="SD_firstname" id="SD_firstname" value="<?php echo $row['SD_firstname']; ?>"
+                            disabled placeholder="First Name" required><br>
+
+                        <label>Last Name</label><br>
+                        <input type="text" name="SD_lastname" id="SD_lastname" value="<?php echo $row['SD_lastname']; ?>"
+                            disabled placeholder="Last Name" required><br>
+
+                        <label>Email</label><br>
+                        <input type="email" name="SD_email" id="SD_email" value="<?php echo $row['SD_email']; ?>" disabled
+                            placeholder="email" required><br>
+
+                        <label>Contact Number</label><br>
+                        <input type="number" name="SD_number" id="SD_number" value="<?php echo $row['SD_number']; ?>" disabled
+                            placeholder="Contact Number"><br>
+
+                        <button type="submit" name="update_btn" id="update_btn" style="display: none;">Save Changes</button>
+                    </form>
+                </div>
+
+
+                <!-- PROFILE PICTURE -->
+                <div class="profile-picture-container">
+                    <img src="./profile_pictures/<?php echo $row['SD_pic'];
+                    $profpic = $row['SD_pic']; ?>" alt="profile picture"><br>
+
+                    <div class="file-input-wrapper">
+                        <input type="file" name="profile_pic" id="profile_pic" disabled>
+                        <span class="custom-file-input">Change Photo</span>
+                    </div>
+                </div>
+            </main>
         </body>
 
-
         <script>
-            document.getElementById('edit_btn').addEventListener('click', function() {
+            document.getElementById('edit_btn').addEventListener('click', function () {
                 var inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="number"], input[type="password"], input[type="file"]');
                 var updateBtn = document.getElementById('update_btn');
                 for (var i = 0; i < inputs.length; i++) {
                     inputs[i].disabled = !inputs[i].disabled;
                 }
                 // Check if any input is disabled
-                var anyInputDisabled = Array.from(inputs).some(function(input) {
+                var anyInputDisabled = Array.from(inputs).some(function (input) {
                     return input.disabled;
                 });
 
@@ -73,7 +86,7 @@ if (!isset($_SESSION['sd_id'])) {
                 updateBtn.style.display = anyInputDisabled ? 'none' : 'block';
             });
         </script>
-<?php
+        <?php
     }
 }
 if ($_SERVER['REQUEST_METHOD'] === "POST") {

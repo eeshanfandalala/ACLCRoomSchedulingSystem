@@ -21,7 +21,7 @@ if (!isset($_SESSION['sd_id'])) {
     while ($row = mysqli_fetch_array($sql)) {
         $SD_name = $row['SD_firstname'] . " " . $row['SD_lastname'];
 
-?>
+        ?>
         <!DOCTYPE html>
         <html lang="en">
 
@@ -31,6 +31,7 @@ if (!isset($_SESSION['sd_id'])) {
             <title>Manage Account</title>
             <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
             <link rel="stylesheet" href="css/SD/sidebar.css">
+            <link rel="stylesheet" href="css/SD/nav-container.css">
             <link rel="stylesheet" href="css/SD/manage-account.css">
         </head>
 
@@ -106,12 +107,6 @@ if (!isset($_SESSION['sd_id'])) {
                 <div class="home-content">
                     <i class='bx bx-menu'></i> <!-- button -->
                     <span class="text">Manage Account</span>
-                    <button id="edit_btn" value="editAccount">Edit</button>
-
-                    <form action="" method="post">
-                        <input type="hidden" name="changepasspage" value="on">
-                        <button type="submit">Change Password</button>
-                    </form>
                 </div>
 
                 <?php
@@ -123,7 +118,7 @@ if (!isset($_SESSION['sd_id'])) {
                 ?>
             </section>
         </body>
-<?php
+        <?php
     }
 }
 ?>
@@ -143,4 +138,4 @@ if (!isset($_SESSION['sd_id'])) {
     });
 </script>
 
-        </html>
+</html>
