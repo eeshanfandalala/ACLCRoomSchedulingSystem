@@ -28,6 +28,7 @@ main {
 }
 
 #update_btn {
+    margin-top: 10px;
     width: 100%;
 }
 
@@ -36,18 +37,35 @@ main {
     background-color: #007bff;
 }
 
+label {
+    font-size: 12px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="password"] {
+    background-color: #5c6295;
+    color: white;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 10px;
+    box-sizing: border;
+}
+
 /* profile picture */
 .profile-picture-container {
-    padding: 20px;
-    display: grid;
-    place-items: center;
+    width: 30%;
+    text-align: center;
 }
 
 .profile-picture-container img {
-    background-color: white;
-    width: 70%;
+    background-color: #8e93c5;
+    width: 100%;
     height: auto;
-    border-radius: 10px;
+    border-radius: 15px;
 }
 
 .file-input-wrapper {
@@ -56,39 +74,29 @@ main {
     display: inline-block;
 }
 
-.custom-file-input {
-    display: inline-block;
-    padding: 8px 12px;
-    cursor: pointer;
-    background-color: #007bff;
-    color: white;
-    border-radius: 4px;
-    font-size: 16px;
-    text-align: center;
-    white-space: nowrap;
+.file-input-wrapper input[type="file"] {
+    display: none;
 }
 
-.file-input-wrapper input[type="file"] {
-    font-size: 100px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    opacity: 0;
+.custom-file-input {
+    background-color: #007bff;
+    color: white;
+    margin-top: 15px;
+    width: 100%;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    text-align: center;
+    white-space: nowrap;
+    transition: all 0.5s ease;
+    display: inline-block;
 }
 
 .file-input-wrapper input[type="file"]:disabled+.custom-file-input {
+    background-color: #004c9e;
     cursor: not-allowed;
-    opacity: 0.6;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="number"],
-input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: none;
-    border-radius: 10px;
-    box-sizing: border-box;
+.custom-file-input:hover:not([disabled]) {
+    background-color: #004c9e;
 }

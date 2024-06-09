@@ -34,7 +34,7 @@ if (!isset($_SESSION['sd_id'])) {
 
                 <!-- FOR PROFILE UPDATE-->
                 <div class="profile-update">
-                    <button id="edit_btn" value="editAccount">Edit</button><br><br>
+                    <button id="edit_btn" value="editAccount">Edit Profile</button><br><br>
                     <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data">
                         <label>First Name</label><br>
                         <input type="text" name="SD_firstname" id="SD_firstname" value="<?php echo $row['SD_firstname']; ?>"
@@ -56,15 +56,14 @@ if (!isset($_SESSION['sd_id'])) {
                     </form>
                 </div>
 
-
                 <!-- PROFILE PICTURE -->
                 <div class="profile-picture-container">
-                    <img src="./profile_pictures/<?php echo $row['SD_pic'];
-                    $profpic = $row['SD_pic']; ?>" alt="profile picture"><br>
-
                     <div class="file-input-wrapper">
+                        <img src="./profile_pictures/<?php echo $row['SD_pic'];
+                        $profpic = $row['SD_pic']; ?>"
+                            alt="profile picture"><br>
                         <input type="file" name="profile_pic" id="profile_pic" disabled>
-                        <span class="custom-file-input">Change Photo</span>
+                        <label for="profile_pic" class="custom-file-input">Change Photo</label>
                     </div>
                 </div>
             </main>
