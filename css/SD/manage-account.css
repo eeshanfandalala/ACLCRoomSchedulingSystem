@@ -20,12 +20,13 @@ main {
     display: flex;
 }
 
-.form-profile div{
+.form-profile div {
     width: 60%;
 }
+
 #edit_btn,
 #update_btn {
-    background-color: #007bff;
+    background-color: #0679E2;
     color: white;
     padding: 10px;
     border: none;
@@ -41,7 +42,7 @@ main {
 
 #edit_btn:hover,
 #update_btn:hover {
-    background-color: #007bff;
+    background-color: #0056b3;
 }
 
 label {

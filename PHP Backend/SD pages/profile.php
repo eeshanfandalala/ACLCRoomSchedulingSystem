@@ -16,21 +16,19 @@ if (!isset($_SESSION['sd_id'])) {
         <body>
             <main>
                 <div class="nav-container">
-                    <a href="admin-manage-account.php" class="nav-item">My Profile</a><br>
+                    <button onclick="window.location.href='admin-manage-account.php'" class="nav-button active">My Profile</button>
 
-                    <div class="nav-item">
-                        <form action="" method="post">
-                            <input type="hidden" name="changepasspage" value="on">
-                            <button type="submit" class="nav-button">Change Password</button>
-                        </form>
-                    </div>
+                    <form action="" method="post">
+                        <input type="hidden" name="changepasspage" value="on">
+                        <button type="submit" class="nav-button">Change Password</button>
+                    </form>
 
-                    <div class="nav-item">
-                        <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" onsubmit="return confirm('sure ka?!')">
-                            <button type="submit" name="btnsub" class="nav-button">Reset Account</button>
-                        </form>
-                    </div>
+                    <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" onsubmit="return confirm('Are you sure?')">
+                        <button type="submit" name="btnsub" class="nav-button">Reset Account</button>
+                    </form>
                 </div>
+
+
 
                 <!-- FOR PROFILE UPDATE-->
                 <div class="profile-update">
