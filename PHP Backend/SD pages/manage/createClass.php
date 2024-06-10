@@ -2,39 +2,6 @@
 // include '../../config.php'; 
 ?>
 <div class="main-flex">
-    <div class="list">
-        <div class="text">
-            <span>Class List</span>
-        </div>
-        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for classes...">
-        <table id="roomTable">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Program</th>
-                    <th>Year level</th>
-                    <th>Section</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $getClasses = $con->query("SELECT `class_courseStrand`, `class_year`, `class_section` FROM `class_tb`;");
-                $i = 1;
-                while ($row = $getClasses->fetch_assoc()) {
-                    ?>
-                    <tr>
-                        <td><?php echo $i ?></td>
-                        <td><?php echo $row['class_courseStrand'] ?></td>
-                        <td><?php echo $row['class_year'] ?></td>
-                        <td><?php echo $row['class_section'] ?></td>
-                    </tr>
-                    <?php
-                    $i++;
-                }
-                ?>
-            </tbody>
-        </table>
-    </div>
 
     <div class="create-new-form">
         <div class="text">
@@ -83,6 +50,40 @@
                 <button type="submit" name="sub2">Add</button>
             </form>
         </div>
+    </div>
+    
+    <div class="list">
+        <div class="text">
+            <span>Class List</span>
+        </div>
+        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for classes...">
+        <table id="roomTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Program</th>
+                    <th>Year level</th>
+                    <th>Section</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $getClasses = $con->query("SELECT `class_courseStrand`, `class_year`, `class_section` FROM `class_tb`;");
+                $i = 1;
+                while ($row = $getClasses->fetch_assoc()) {
+                    ?>
+                    <tr>
+                        <td><?php echo $i ?></td>
+                        <td><?php echo $row['class_courseStrand'] ?></td>
+                        <td><?php echo $row['class_year'] ?></td>
+                        <td><?php echo $row['class_section'] ?></td>
+                    </tr>
+                    <?php
+                    $i++;
+                }
+                ?>
+            </tbody>
+        </table>
     </div>
 </div>
 

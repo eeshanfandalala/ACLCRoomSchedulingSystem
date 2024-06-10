@@ -1,4 +1,15 @@
 <div class="main-flex">
+    <div class="create-new-form">
+        <div class="text">
+            <span>Create New Department</span>
+        </div>
+        <form action="?action=createDepartment" method="post">
+            <label">Department Name</label><br>
+                <input type="text" name="deptName" required>
+                <input type="submit" value="Add">
+        </form>
+    </div>
+    
     <div class="list">
         <div class="text">
             <span>Department List</span>
@@ -30,17 +41,6 @@
                 ?>
             </tbody>
         </table>
-    </div>
-
-    <div class="create-new-form">
-        <div class="text">
-            <span>Create New Department</span>
-        </div>
-        <form action="?action=createDepartment" method="post">
-            <label">Department Name</label><br>
-            <input type="text" name="deptName" required>
-            <input type="submit" value="Add">
-        </form>
     </div>
 </div>
 

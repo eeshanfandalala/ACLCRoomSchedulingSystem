@@ -23,6 +23,7 @@ if (!isset($_SESSION['sd_id'])) {
             <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
             <link rel="stylesheet" href="css/SD/sidebar.css">
             <link rel="stylesheet" href="css/SD/manage-account.css">
+            <link rel="stylesheet" href="css/SD/manage-room-list.css">
         </head>
 
         <body>

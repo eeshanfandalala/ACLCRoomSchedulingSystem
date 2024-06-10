@@ -3,10 +3,6 @@
     display: flex;
 }
 
-.list {
-    margin-right: 20px;
-}
-
 .list .text,
 .create-new-form .text {
     color: white;
@@ -70,6 +66,7 @@ tr:nth-child(even) {
     color: white;
     width: 40%;
     height: auto;
+    margin-right: 20px;
     padding: 20px;
     border-radius: 15px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
