@@ -1,7 +1,7 @@
 <?php
 // include '../../config.php'; 
 ?>
-<div class="main">
+<div class="main-flex">
     <div class="list">
         <div class="text">
             <span>Class List</span>
@@ -80,7 +80,7 @@
                     ?>
                 </datalist>
                 <input type="text" name="SubDept" id="department-list" list="department-list" required><br>
-                <button type="submit" name="sub2">Create</button>
+                <button type="submit" name="sub2">Add</button>
             </form>
         </div>
     </div>

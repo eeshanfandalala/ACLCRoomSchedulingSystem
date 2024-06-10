@@ -1,27 +1,52 @@
-<style>
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
+<div class="main">
+    <div class="create-new-room">
+        <div class="text">
+            <span>Create New Room</span>
+        </div>
+        <form action="" method="post" class="side-by-side">
+            <div>
+                <label>Room Name</label><br>
+                <input type="text" name="RoomName" required><br>
+            </div>
 
-    th,
-    td {
-        border: 1px solid black;
-        padding: 8px;
-        text-align: left;
-    }
+            <div>
+                <label>Room Type</label><br>
+                <select name="RoomType">
+                    <option value="Lecture">Lecture</option>
+                    <option value="Laboratory">Laboratory</option>
+                </select><br>
+            </div>
 
-    th {
-        background-color: #f2f2f2;
-    }
-</style>
+            <div>
+                <label>Room Floor</label><br>
+                <select name="RoomFloor" id="">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                </select>
+                <!-- <input type="text" name="RoomFloor" id=""> -->
+            </div>
 
+            <div>
+                <label>Room Building</label><br>
+                <select name="RoomBuilding" id="">
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                </select>
+                <!-- <input type="text" name="RoomBuilding" id=""> -->
+                <input type="submit" name="sub" value="Add" class="submit-room">
+            </div>
+        </form>
+    </div>
 
-<div style="display: flex;">
-    <div>
-        <h2>Room List</h2>
+    <div class="list">
+        <div class="text">
+            <span>Room List</span>
+        </div>
         <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for rooms..">
-        <br><br>
         <table id="roomTable">
             <thead>
                 <tr>
@@ -38,7 +63,7 @@
                 $getRooms = $con->query("SELECT * FROM room_tb");
                 $i = 1;
                 while ($row = $getRooms->fetch_assoc()) {
-                ?>
+                    ?>
                     <tr>
                         <td><?php echo $i; ?></td>
                         <td><?php echo $row['room_name']; ?></td>
@@ -46,57 +71,18 @@
                         <td><?php echo $row['room_floor']; ?></td>
                         <td><?php echo $row['room_type']; ?></td>
                     </tr>
-                <?php
+                    <?php
                     $i++;
                 }
                 ?>
             </tbody>
         </table>
-
         <script src="searchtable.js"></script>
     </div>
-
-    <fieldset>
-        <legend>Create Room</legend>
-        <form action="" method="post">
-            <label for="">Room name</label>
-            <input type="text" name="RoomName" id="">
-
-            <label for="">Room type</label>
-            <select name="RoomType" id="">
-                <option value="Lecture">Lecture</option>
-                <option value="Laboratory">Laboratory</option>
-            </select>
-
-            <label for="">Room floor</label>
-            <select name="RoomFloor" id="">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-            </select>
-            <!-- <input type="text" name="RoomFloor" id=""> -->
-
-            <label for="">Room building</label>
-            <select name="RoomBuilding" id="">
-                <option value="A">A</option>
-                <option value="B">B</option>
-            </select>
-            <!-- <input type="text" name="RoomBuilding" id=""> -->
-
-            <input type="submit" name="sub">
-        </form>
-    </fieldset>
 </div>
 
 
-
 <?php
-
-
-
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $RoomName = $_POST['RoomName'];
     $RoomType = $_POST['RoomType'];

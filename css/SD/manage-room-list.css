@@ -1,14 +1,15 @@
-.main-flex {
+.main {
+    width: 100%;
     padding: 0 20px;
-    display: flex;
 }
 
-.list {
-    margin-right: 20px;
+.side-by-side {
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .list .text,
-.create-new-form .text {
+.create-new-room .text {
     color: white;
     margin-bottom: 10px;
 }
@@ -64,31 +65,44 @@ tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
-/* create new form */
-.create-new-form {
+/* create new room */
+.create-new-room {
     background: linear-gradient(to bottom right, #3d4479, #172278);
     color: white;
-    width: 40%;
-    height: auto;
+    width: auto;
     padding: 20px;
+    margin-bottom: 20px;
     border-radius: 15px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+}
+
+.create-new-room div {
+    margin: 0 10px;
+    display: inline-block;
 }
 
 label {
     font-size: 12px;
 }
 
-.create-new-form input[type="text"],
-input[type="number"] {
-    width: 50%;
+.create-new-room div select,
+.create-new-room div input[type="text"] {
+    background-color: #5c6295;
+    color: white;
+    width: auto;
+    min-width: 150px;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all .5s ease;
 }
 
-button,
-input[type="submit"] {
+.submit-room {
     background-color: #0679E2;
     color: white;
-    width: 30%;
+    margin-left: 10px;
     padding: 10px;
     border: none;
     border-radius: 10px;

@@ -1,4 +1,4 @@
-<div class="main">
+<div class="main-flex">
     <div class="list">
         <div class="text">
             <span>Department List</span>
@@ -39,7 +39,7 @@
         <form action="?action=createDepartment" method="post">
             <label">Department Name</label><br>
             <input type="text" name="deptName" required>
-            <input type="submit" name="">
+            <input type="submit" value="Add">
         </form>
     </div>
 </div>
