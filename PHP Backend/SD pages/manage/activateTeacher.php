@@ -1,6 +1,6 @@
 <div class="main">
     <div class="top">
-        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for rooms..">
+        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for teachers..">
     </div>
 
     <div class="bottom">

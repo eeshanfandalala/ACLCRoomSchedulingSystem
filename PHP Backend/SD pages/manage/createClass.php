@@ -1,41 +1,12 @@
-<style>
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    thead {
-        background-color: #f2f2f2;
-    }
-
-    th,
-    td {
-        padding: 8px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-
-    tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-
-    select {
-        width: 100%;
-        padding: 5px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
-    }
-</style>
 <?php
 // include '../../config.php'; 
 ?>
-
-<h1>Class List</h1>
-<div style="display: flex;">
-    <div>
-        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for rooms..">
-        <br><br>
+<div class="main">
+    <div class="class-list">
+        <div class="text">
+            <span>Class List</span>
+        </div>
+        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for classes..">
         <table id="roomTable">
             <thead>
                 <tr>
@@ -50,76 +21,75 @@
                 $getClasses = $con->query("SELECT `class_courseStrand`, `class_year`, `class_section` FROM `class_tb`;");
                 $i = 1;
                 while ($row = $getClasses->fetch_assoc()) {
-                ?>
+                    ?>
                     <tr>
                         <td><?php echo $i ?></td>
                         <td><?php echo $row['class_courseStrand'] ?></td>
                         <td><?php echo $row['class_year'] ?></td>
                         <td><?php echo $row['class_section'] ?></td>
                     </tr>
-                <?php
+                    <?php
                     $i++;
                 }
                 ?>
             </tbody>
         </table>
     </div>
-    <fieldset>
-        <legend>Create Class</legend>
 
-        <div>
-            <div id="form1">
-                <form action="?action=createClass" method="post">
-                    <input type="radio" name="standing" value="College" <?php if (isset($_POST['standing']) || isset($_POST['sub1']) || isset($_POST['sub2'])) {
-                                                                            echo ($_POST['standing'] == 'College') ? "checked" : "";
-                                                                        } ?> onchange="this.form.submit()" required><label for="">College</label>
-                    <input type="radio" name="standing" value="SHS" <?php if (isset($_POST['standing']) || isset($_POST['sub1']) || isset($_POST['sub2'])) {
-                                                                        echo ($_POST['standing'] == 'SHS') ? "checked" : "";
-                                                                    } ?> onchange="this.form.submit()" required><label for="">SHS</label>
+    <div class="create-class-form">
+        <div class="text">
+            <span>Create Another Class</span>
+        </div>
+        <div id="form1">
+            <form action="?action=createClass" method="post">
+                <input type="radio" name="standing" value="College" <?php if (isset($_POST['standing']) || isset($_POST['sub1']) || isset($_POST['sub2'])) {
+                    echo ($_POST['standing'] == 'College') ? "checked" : "";
+                } ?> onchange="this.form.submit()" required><label for="">College</label>
+                <input type="radio" name="standing" value="SHS" <?php if (isset($_POST['standing']) || isset($_POST['sub1']) || isset($_POST['sub2'])) {
+                    echo ($_POST['standing'] == 'SHS') ? "checked" : "";
+                } ?> onchange="this.form.submit()" required><label for="">SHS</label><br>
 
-            </div>
-            <div>
-                <label for="">Course / Strand:</label>
-                <input type="text" name="CorS" id="" required value="<?php if (isset($_POST['CorS'])) echo $_POST['CorS']; ?>">
+                <label>Course / Strand</label><br>
+                <input type="text" name="CorS" id="" required value="<?php if (isset($_POST['CorS']))
+                    echo $_POST['CorS']; ?>"><br>
 
-                <label for="">Year level:</label>
-                <input type="number" name="YrLvl" id="level" required value="<?php if (isset($_POST['YrLvl'])) echo $_POST['YrLvl']; ?>">
+                <label>Year Level</label><br>
+                <input type="number" name="YrLvl" id="level" required value="<?php if (isset($_POST['YrLvl']))
+                    echo $_POST['YrLvl']; ?>"><br>
 
-                <button type="submit" name="sub1">Next</button>
+                <button type="submit" name="sub1">Next</button><br><br>
 
-            </div>
-            <div>
 
-                <label for="">Section Name:</label>
-                <input type="text" name="section" id="" required value="<?php if (isset($_POST['section'])) echo $_POST['section']; ?>">
+                <label>Section Name</label><br>
+                <input type="text" name="section" id="" required value="<?php if (isset($_POST['section']))
+                    echo $_POST['section']; ?>"><br>
 
-                <label for="department-list">Department:</label>
+                <label>Department</label><br>
                 <datalist id="department-list">
                     <?php
-
                     $fetchdept = $con->prepare("SELECT `department_name` FROM `department_tb`");
                     $fetchdept->execute();
                     $result = $fetchdept->get_result();
                     while ($row = $result->fetch_assoc()) {
-                    ?>
-                        <option value="<?php echo $row['department_name'] ?>"><?php echo $row['department_name'] ?></option>
-                    <?php
+                        ?>
+                        <option value="<?php echo $row['department_name'] ?>"><?php echo $row['department_name'] ?>
+                        </option>
+                        <?php
                     }
                     $fetchdept->free_result();
                     ?>
                 </datalist>
-                <input type="text" name="SubDept" id="department-list" list="department-list" required>
-                <button type="submit" name="sub2">Submit</button>
-                </form>
-            </div>
+                <input type="text" name="SubDept" id="department-list" list="department-list" required><br>
+                <button type="submit" name="sub2">Create</button>
+            </form>
         </div>
-    </fieldset>
+    </div>
 </div>
+
+
 <script src="searchtable.js"></script>
 
 <?php
-
-
 if (isset($_GET['action']) && $_GET['action'] == 'createClass') {
     $CorS = $_POST['CorS'];
     $year = $_POST['YrLvl'];

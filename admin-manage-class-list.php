@@ -23,6 +23,7 @@ if (!isset($_SESSION['sd_id'])) {
             <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
             <link rel="stylesheet" href="css/SD/sidebar.css">
             <link rel="stylesheet" href="css/SD/manage-account.css">
+            <link rel="stylesheet" href="css/SD/manage-class-list.css">
         </head>
 
         <body>
@@ -93,15 +94,13 @@ if (!isset($_SESSION['sd_id'])) {
                     </li>
                 </ul>
             </div>
-            
+
             <section class="home-section">
                 <div class="home-content">
                     <i class='bx bx-menu'></i> <!-- button -->
                     <span class="text">Manage</span>
                 </div>
                 <?php include './PHP Backend/SD pages/manage/createClass.php'; ?>
-
-
             </section>
         </body>
         <?php
