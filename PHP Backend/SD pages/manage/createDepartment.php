@@ -4,12 +4,12 @@
             <span>Create New Department</span>
         </div>
         <form action="?action=createDepartment" method="post">
-            <label">Department Name</label><br>
-                <input type="text" name="deptName" required>
-                <input type="submit" value="Add">
+            <label>Department Name</label><br>
+            <input type="text" name="deptName" required>
+            <input type="submit" value="Add">
         </form>
     </div>
-    
+
     <div class="list">
         <div class="text">
             <span>Department List</span>
@@ -33,7 +33,6 @@
                     <tr>
                         <td><?php echo $i ?></td>
                         <td><?php echo $row['department_name'] ?></td>
-
                     </tr>
                     <?php
                     $i++;
@@ -43,6 +42,7 @@
         </table>
     </div>
 </div>
+
 
 <script src="searchtable.js"></script>
 

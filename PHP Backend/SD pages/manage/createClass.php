@@ -2,7 +2,6 @@
 // include '../../config.php'; 
 ?>
 <div class="main-flex">
-
     <div class="create-new-form">
         <div class="text">
             <span>Create New Class</span>
