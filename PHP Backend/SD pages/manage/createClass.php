@@ -2,11 +2,11 @@
 // include '../../config.php'; 
 ?>
 <div class="main">
-    <div class="class-list">
+    <div class="list">
         <div class="text">
             <span>Class List</span>
         </div>
-        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for classes..">
+        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for classes...">
         <table id="roomTable">
             <thead>
                 <tr>
@@ -36,9 +36,9 @@
         </table>
     </div>
 
-    <div class="create-class-form">
+    <div class="create-new-form">
         <div class="text">
-            <span>Create Another Class</span>
+            <span>Create New Class</span>
         </div>
         <div id="form1">
             <form action="?action=createClass" method="post">

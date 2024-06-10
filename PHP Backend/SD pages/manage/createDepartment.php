@@ -1,8 +1,9 @@
-<div style="display:flex;">
-    <div>
-        <h2>Department List</h2>
-        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for rooms..">
-        <br><br>
+<div class="main">
+    <div class="list">
+        <div class="text">
+            <span>Department List</span>
+        </div>
+        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for department...">
         <table id="roomTable">
             <thead>
                 <tr>
@@ -13,31 +14,34 @@
             <tbody>
                 <?php
                 // include('../../config.php');
-
+                
                 $getDepartment = $con->query("SELECT * FROM department_tb");
                 $i = 1;
                 while ($row = $getDepartment->fetch_assoc()) {
-                ?>
+                    ?>
                     <tr>
                         <td><?php echo $i ?></td>
                         <td><?php echo $row['department_name'] ?></td>
 
                     </tr>
-                <?php
+                    <?php
                     $i++;
                 }
                 ?>
             </tbody>
         </table>
     </div>
-    <fieldset>
-        <legend>Create New Department</legend>
+
+    <div class="create-new-form">
+        <div class="text">
+            <span>Create New Department</span>
+        </div>
         <form action="?action=createDepartment" method="post">
-            <label for="">Department name</label>
-            <input type="text" name="deptName" id="" required>
-            <input type="submit" name="" id="">
+            <label">Department Name</label><br>
+            <input type="text" name="deptName" required>
+            <input type="submit" name="">
         </form>
-    </fieldset>
+    </div>
 </div>
 
 <script src="searchtable.js"></script>
