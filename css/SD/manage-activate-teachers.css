@@ -1,0 +1,82 @@
+.main {
+    padding: 0 20px;
+}
+
+.top {
+    border-radius: 15px;
+}
+
+#searchInput {
+    background-color: #5c6295;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+input::placeholder {
+    color: white;
+}
+
+.bottom {
+    margin-top: 10px;
+}
+
+.bottom .text {
+    color: white;
+    margin-bottom: 10px;
+}
+
+span {
+    font-weight: bold;
+}
+
+table {
+    background: linear-gradient(to bottom right, #3d4479, #172278);
+    width: 100%;
+    color: white;
+    padding: 20px;
+    border-collapse: collapse;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+thead tr th {
+    background-color: #7d84b9;
+    color: white;
+}
+
+th,
+td {
+    padding: 12px;
+    border: 1px solid transparent;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+    color: black;
+}
+
+tbody tr:nth-child(even) {
+    background-color: rgba(137, 143, 190, 0.212);
+}
+
+select {
+    background-color: #0679E2;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all .5s ease;
+}
+
+select:hover {
+    background-color: #0056b3;
+}
+
+form {
+    margin: 0;
+}
