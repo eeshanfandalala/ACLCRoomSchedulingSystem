@@ -12,7 +12,7 @@ if (!isset($_SESSION['teacher_id'])) {
     while ($row = mysqli_fetch_array($sql)) {
         $user_name = $row['teacher_name'];
 
-        ?>
+?>
         <!DOCTYPE html>
         <html lang="en">
 
@@ -32,7 +32,7 @@ if (!isset($_SESSION['teacher_id'])) {
                     <span class="logo-name">SchedSystem</span>
                 </div>
                 <ul class="nav-links">
-                 
+
                     <li>
                         <div class="icon-link">
                             <a href="#">
@@ -58,13 +58,18 @@ if (!isset($_SESSION['teacher_id'])) {
                     </li>
                     <li>
                         <div class="profile-details">
-                            <div class="profile-content">
-                                <i class='bx bxs-user-circle' id="profile-img"></i>
-                            </div>
-                            <div class="name-job">
-                                <div class="profile-name"><?php echo $user_name ?></div>
-                            </div>
-                            <a href="./logout.php"><i class='bx bx-log-out' id="logout"></i></a>
+                            <a href="user-manage-account.php">
+                                <div class="profile-content">
+                                    <i class='bx bxs-user-circle' id="profile-img"></i>
+                                </div>
+                                <div class="name-job">
+                                    <div class="profile-name"><?php echo $user_name ?></div>
+                                </div>
+                            </a>
+                            <a class="link-name" href="./logout.php"><i class='bx bx-log-out' id="logout"></i></a>
+                            <ul class="sub-menu blank">
+                                <li><a class="link-name" href="./logout.php"><i class='bx bx-log-out' id="logout"></i>Logout</a></li>
+                            </ul>
                         </div>
                     </li>
                 </ul>
@@ -77,7 +82,7 @@ if (!isset($_SESSION['teacher_id'])) {
                 <?php include './PHP Backend/teacher pages/mySchedule.php' ?>
             </section>
         </body>
-        <?php
+<?php
     }
 }
 ?>
@@ -97,4 +102,4 @@ if (!isset($_SESSION['teacher_id'])) {
     });
 </script>
 
-</html>
+        </html>

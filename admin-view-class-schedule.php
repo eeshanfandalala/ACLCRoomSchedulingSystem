@@ -12,7 +12,7 @@ if (!isset($_SESSION['sd_id'])) {
     while ($row = mysqli_fetch_array($sql)) {
         $SD_name = $row['SD_firstname'] . " " . $row['SD_lastname'];
 
-        ?>
+?>
         <!DOCTYPE html>
         <html lang="en">
 
@@ -24,8 +24,6 @@ if (!isset($_SESSION['sd_id'])) {
             <link rel="stylesheet" href="css/SD/sidebar.css">
             <link rel="stylesheet" href="css/SD/manage-account.css">
             <link rel="stylesheet" href="css/table.css">
-
-
         </head>
 
         <body>
@@ -85,18 +83,23 @@ if (!isset($_SESSION['sd_id'])) {
                     </li>
                     <li>
                         <div class="profile-details">
-                            <div class="profile-content">
-                                <i class='bx bxs-user-circle' id="profile-img"></i>
-                            </div>
-                            <div class="name-job">
-                                <div class="profile-name"><?php echo $SD_name ?></div>
-                            </div>
-                            <a href="./logout.php"><i class='bx bx-log-out' id="logout"></i></a>
+                            <a href="admin-manage-account.php">
+                                <div class="profile-content">
+                                    <i class='bx bxs-user-circle' id="profile-img"></i>
+                                </div>
+                                <div class="name-job">
+                                    <div class="profile-name"><?php echo $SD_name ?></div>
+                                </div>
+                            </a>
+                            <a class="link-name" href="./logout.php"><i class='bx bx-log-out' id="logout"></i></a>
+                            <ul class="sub-menu blank">
+                                <li><a class="link-name" href="./logout.php"><i class='bx bx-log-out' id="logout"></i>Logout</a></li>
+                            </ul>
                         </div>
                     </li>
                 </ul>
             </div>
-            
+
             <section class="home-section">
                 <div class="home-content">
                     <i class='bx bx-menu'></i> <!-- button -->
@@ -105,7 +108,7 @@ if (!isset($_SESSION['sd_id'])) {
                 <?php include './PHP Backend/SD pages/view-room-schedule.php' ?>
             </section>
         </body>
-        <?php
+<?php
     }
 }
 ?>
@@ -125,4 +128,4 @@ if (!isset($_SESSION['sd_id'])) {
     });
 </script>
 
-</html>
+        </html>

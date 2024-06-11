@@ -202,6 +202,18 @@
     transition: all 0.5s ease;
 }
 
+.sidebar.close .profile-details:hover {
+    background-color: #0679E2;
+}
+
+.sidebar #logout{
+    font-size: 2rem;
+}
+
+.sidebar.close #logout{
+    display: none;
+}
+
 .sidebar.close .profile-details {
     background: none;
 }
@@ -215,19 +227,21 @@
     align-items: center;
 }
 
-.sidebar .profile-details #profile-img,
-.sidebar .profile-details #logout {
+.sidebar .profile-details #profile-img {
     font-size: 2rem;
-}
-
-.sidebar .profile-details #logout {
-    color: white;
 }
 
 .sidebar .profile-details .profile-name {
     color: white;
     font-weight: 500;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 110px;
+}
+
+.profile-name:hover{
+    text-decoration: underline;
 }
 
 .sidebar.close .profile-details .profile-name {
