@@ -1,7 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .disabled-link {
+            pointer-events: none;
+            color: grey;
+            text-decoration: none;
+            cursor: default;
+        }
+    </style>
+</head>
+<body>
+
 <div>
     <div>
-        <button>Edit</button>
-        <button>Delete</button>
+        <button id="editButton">Enable Edit</button>
+        <button id="deleteButton">Enable Delete</button>
         <button>Print</button>
     </div>
     <div>
@@ -9,6 +23,7 @@
             <form action="?selectedRoom" method="post">
                 <select name="AY" id="yearSelect">
                     <?php
+                    include 'config.php';
                     // Get current year
                     $currentYear = date("Y");
 
@@ -17,23 +32,23 @@
                         $year = $currentYear + $i;
                         $nextYear = $year + 1;
                         $optionValue = $year . "-" . $nextYear;
-                        ?>
-                        <option value=<?php echo $optionValue ?>     <?php if (isset($_GET['selectedRoom'])) {
-                                    echo ($_POST['AY'] == "$optionValue") ? "selected" : "";
-                                } ?> required><?php echo $optionValue ?>
+                    ?>
+                        <option value="<?php echo $optionValue ?>" <?php if (isset($_GET['selectedRoom'])) {
+                                                                        echo ($_POST['AY'] == "$optionValue") ? "selected" : "";
+                                                                    } ?> required><?php echo $optionValue ?>
                         </option>
-                        <?php
+                    <?php
                     }
                     ?>
                 </select>
                 <label for="firstSemester">Set Semester:</label>
                 <input type="radio" name="SetSem" id="firstSemester" value="1st" <?php if (isset($_GET['selectedRoom'])) {
-                    echo ($_POST['SetSem'] == '1st') ? "checked" : "";
-                } ?> required>
+                                                                                        echo ($_POST['SetSem'] == '1st') ? "checked" : "";
+                                                                                    } ?> required>
                 <label for="firstSemester">1st</label>
                 <input type="radio" name="SetSem" id="secondSemester" value="2nd" <?php if (isset($_GET['selectedRoom'])) {
-                    echo ($_POST['SetSem'] == '2nd') ? "checked" : "";
-                } ?> required>
+                                                                                        echo ($_POST['SetSem'] == '2nd') ? "checked" : "";
+                                                                                    } ?> required>
                 <label for="secondSemester">2nd</label>
                 <select name="room" id="">
                     <?php
@@ -41,11 +56,11 @@
                     $getRoom->execute();
                     $resultGetRoom = $getRoom->get_result();
                     while ($rowGetRoom = $resultGetRoom->fetch_assoc()) {
-                        ?>
+                    ?>
                         <option value="<?php echo $rowGetRoom['room_id'] ?>" <?php if (isset($_GET['selectedRoom'])) {
-                               echo ($_POST['room'] == $rowGetRoom['room_id']) ? "selected" : "";
-                           } ?> required><?php echo $rowGetRoom['room_name'] ?></option>
-                        <?php
+                                                                                    echo ($_POST['room'] == $rowGetRoom['room_id']) ? "selected" : "";
+                                                                                } ?> required><?php echo $rowGetRoom['room_name'] ?></option>
+                    <?php
                     }
                     ?>
                 </select>
@@ -70,7 +85,7 @@
                     $cellValue = $nameFetchClassResult . "<br>" . $teacher_name . "<br>" . $subject_name . "<br>";
                     return $cellValue;
                 }
-                ?>
+            ?>
                 <table>
                     <thead>
                         <tr>
@@ -90,22 +105,23 @@
 
                         // Loop through each row of the schedule and organize the data by time and day
                         while ($rowSchedule = $resultfetchSchedule->fetch_object()) {
-                            // Decode schedule_time and schedule_day
-                            $schedule_time = json_decode($rowSchedule->schedule_time, true);
-                            $schedule_day = json_decode($rowSchedule->schedule_day, true);
+                            
+                            $schedule_time = [
+                                'start' => $rowSchedule->schedule_time_start,
+                                'end' => $rowSchedule->schedule_time_end
+                            ];
+                            $schedule_day = $rowSchedule->schedule_day;
 
-                            // Loop through each day in the schedule
-                            foreach ($schedule_day as $day) {
-                                // Loop through each half-hour interval for the current day
-                                for ($i = strtotime($schedule_time['start']); $i < strtotime($schedule_time['end']); $i += 1800) {
-                                    // Format the time in hh:mm format
-                                    $time_start = date('h:i A', $i);
-                                    $time_end = date('h:i A', $i + 1800);
 
-                                    // Store the schedule data in the $scheduleData array
-                                    $scheduleData[$day][$time_start] = $rowSchedule;
-                                }
+                            for ($i = strtotime($schedule_time['start']); $i < strtotime($schedule_time['end']); $i += 1800) {
+                                // Format the time in hh:mm format
+                                $time_start = date('h:i A', $i);
+                                $time_end = date('h:i A', $i + 1800);
+
+                                // Store the schedule data in the $scheduleData array
+                                $scheduleData[$schedule_day][$time_start] = $rowSchedule;
                             }
+                            
                         }
 
                         // Loop through each half-hour interval and display the schedule data
@@ -114,7 +130,7 @@
                             $time_start = date('h:i A', $i);
                             $time_end = date('h:i A', $i + 1800);
 
-                            ?>
+                        ?>
                             <tr>
                                 <td><?php echo $time_start . ' - ' . $time_end; ?></td>
                                 <?php
@@ -151,8 +167,11 @@
                                         $fetchSubjects->bind_result($subject_name, $subject_description);
                                         $fetchSubjects->fetch();
 
+                                        // Fetch the ID from schedule tb
+                                        $schedID = $rowSchedule->schedule_id;
+
                                         // Call the findCellValues function to display the schedule data
-                                        echo '<td>' . findCellValues($nameFetchClassResult, $teacher_name, $subject_name) . '</td>';
+                                        echo "<td><a href='action.php?schedID=$schedID' class='disabled-link' data-schedid='$schedID'>" . findCellValues($nameFetchClassResult, $teacher_name, $subject_name) . "</a></td>";
                                     } else {
                                         // Display an empty cell if there is no schedule data for the current day and time
                                         echo '<td></td>';
@@ -163,9 +182,52 @@
                         <?php } ?>
                     </tbody>
                 </table>
-                <?php
+            <?php
             }
             ?>
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('editButton').addEventListener('click', function() {
+        var links = document.querySelectorAll('td a');
+        var enable = this.textContent === 'Enable Edit';
+        
+        links.forEach(function(link) {
+            if (enable) {
+                // Enable the link for editing
+                link.classList.remove('disabled-link');
+                link.href = 'action.php?EditschedID=' + link.getAttribute('data-schedid');
+            } else {
+                // Disable the link
+                link.classList.add('disabled-link');
+                link.removeAttribute('href');
+            }
+        });
+
+        this.textContent = enable ? 'Disable Edit' : 'Enable Edit';
+    });
+
+    document.getElementById('deleteButton').addEventListener('click', function() {
+        var links = document.querySelectorAll('td a');
+        var enable = this.textContent === 'Enable Delete';
+        
+        links.forEach(function(link) {
+            if (enable) {
+                // Enable the link for deleting
+                link.classList.remove('disabled-link');
+                link.href = 'action.php?DelschedID=' + link.getAttribute('data-schedid');
+            } else {
+                // Disable the link
+                link.classList.add('disabled-link');
+                link.removeAttribute('href');
+            }
+        });
+
+        this.textContent = enable ? 'Disable Delete' : 'Enable Delete';
+    });
+</script>
+
+</body>
+</html>

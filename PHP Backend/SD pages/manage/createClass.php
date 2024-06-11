@@ -10,10 +10,10 @@
             <form action="?action=createClass" method="post">
                 <input type="radio" name="standing" value="College" <?php if (isset($_POST['standing']) || isset($_POST['sub1']) || isset($_POST['sub2'])) {
                     echo ($_POST['standing'] == 'College') ? "checked" : "";
-                } ?> onchange="this.form.submit()" required><label for="">College</label>
+                } ?> required><label for="">College</label>
                 <input type="radio" name="standing" value="SHS" <?php if (isset($_POST['standing']) || isset($_POST['sub1']) || isset($_POST['sub2'])) {
                     echo ($_POST['standing'] == 'SHS') ? "checked" : "";
-                } ?> onchange="this.form.submit()" required><label for="">SHS</label><br>
+                } ?> required><label for="">SHS</label><br>
 
                 <label>Course / Strand</label><br>
                 <input type="text" name="CorS" id="" required value="<?php if (isset($_POST['CorS']))
