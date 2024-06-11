@@ -1,5 +1,7 @@
 <?php
+
 include 'config.php';
+
 if (!isset($_SESSION['sd_id'])) {
     header("Location: ../index.html");
     exit;

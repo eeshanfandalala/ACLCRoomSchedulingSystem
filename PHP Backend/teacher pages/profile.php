@@ -11,7 +11,7 @@ if (!isset($_SESSION['teacher_id'])) {
     $sql = mysqli_query($con, "SELECT * FROM `teacher_tb` WHERE `teacher_id` = '$user_id'");
     while ($row = mysqli_fetch_array($sql)) {
 
-        ?>
+?>
 
         <body>
             <main>
@@ -31,22 +31,30 @@ if (!isset($_SESSION['teacher_id'])) {
                     <form method="post" enctype="multipart/form-data" class="form-profile">
                         <div>
                             <label>Name</label><br>
-                            <input type="text" name="teacher_name" id="teacher_name" value="<?php echo $row['teacher_name']; ?>"
-                                disabled required><br>
+                            <input type="text" name="teacher_name" id="teacher_name" value="<?php echo $row['teacher_name']; ?>" disabled required><br>
+
                             <label>Department</label><br>
-                            <input type="text" name="teacher_dept" id="teacher_dept"
-                                value="<?php echo $row['teacher_department']; ?>" disabled required>
+                            <select name="teacher_dept" id="" required>
+                                <?php
+                                $fetchdepts = mysqli_query($con, "SELECT department_name FROM department_tb");
+                                while ($rowdept = mysqli_fetch_array($fetchdepts)) {
+                                ?>
+                                    <option value="<?php echo $rowdept['department_name']; ?>" <?php echo $rowdept['department_name'] == $row['teacher_department'] ? 'selected' : ''; ?>><?php echo $rowdept['department_name']; ?></option>
+                                <?php
+                                }
+                                ?>
+                            </select>
+                            <!-- <input type="text" name="teacher_dept" id="teacher_dept" value="<?php // echo $row['teacher_department']; 
+                                                                                                    ?>" disabled required> -->
+
                             <label>Profeciency</label><br>
-                            <input type="text" name="teacher_prof" id="teacher_prof"
-                                value="<?php echo $row['teacher_proficency']; ?>" disabled required>
+                            <input type="text" name="teacher_prof" id="teacher_prof" value="<?php echo $row['teacher_proficency']; ?>" disabled required>
                             <label>Email</label><br>
-                            <input type="email" name="teacher_email" id="teacher_email"
-                                value="<?php echo $row['teacher_email']; ?>" disabled required>
+                            <input type="email" name="teacher_email" id="teacher_email" value="<?php echo $row['teacher_email']; ?>" disabled required>
                             <label>Number</label><br>
-                            <input type="number" name="teacher_number" id="teacher_number"
-                                value="<?php echo $row['teacher_number']; ?>" disabled required>
+                            <input type="number" name="teacher_number" id="teacher_number" value="<?php echo $row['teacher_number']; ?>" disabled required>
                             <!-- <input type="text" name="teacher_password" id="teacher_password" disabled value="<?php //echo $row['teacher_password']; 
-                                    ?>"> -->
+                                                                                                                    ?>"> -->
 
                             <button type="submit" name="update_btn" id="update_btn" style="display: none;">Update</button>
                         </div>
@@ -55,7 +63,7 @@ if (!isset($_SESSION['teacher_id'])) {
                         <div class="profile-picture-container">
                             <div class="file-input-wrapper">
                                 <img src="./profile_pictures/<?php echo $row['teacher_pic'];
-                                $profpic = $row['teacher_pic']; ?>" alt="profile picture">
+                                                                $profpic = $row['teacher_pic']; ?>" alt="profile picture">
                                 <input type="file" name="profile_pic" id="profile_pic" disabled>
                                 <label for="profile_pic" class="custom-file-input">Change Photo</label>
                             </div>
@@ -66,14 +74,14 @@ if (!isset($_SESSION['teacher_id'])) {
         </body>
 
         <script>
-            document.getElementById('edit_btn').addEventListener('click', function () {
+            document.getElementById('edit_btn').addEventListener('click', function() {
                 var inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="number"], input[type="password"], input[type="file"]');
                 var updateBtn = document.getElementById('update_btn');
                 for (var i = 0; i < inputs.length; i++) {
                     inputs[i].disabled = !inputs[i].disabled;
                 }
                 // Check if any input is disabled
-                var anyInputDisabled = Array.from(inputs).some(function (input) {
+                var anyInputDisabled = Array.from(inputs).some(function(input) {
                     return input.disabled;
                 });
 
@@ -81,7 +89,7 @@ if (!isset($_SESSION['teacher_id'])) {
                 updateBtn.style.display = anyInputDisabled ? 'none' : 'block';
             });
         </script>
-        <?php
+<?php
     }
 }
 
@@ -107,6 +115,12 @@ if (isset($_POST['update_btn'])) {
     // Update the database
     $sql = $con->prepare("UPDATE teacher_tb SET teacher_pic = ?, teacher_name = ?, teacher_department=?, teacher_proficency = ?, teacher_email= ?, teacher_number = ? WHERE teacher_id='$user_id'");
     $sql->bind_param("sssssi", $profile_pic, $teacher_name, $teacher_dept, $teacher_prof, $teacher_email, $teacher_number);
-    $sql->execute();
+    if ($sql->execute()) {
+        echo "<script>alert('Profile updated successfully');
+                window.location.replace('user-manage-account.php');</script>";
+    }
+    $sql->close();
+    $_POST['update_btn'] == false;
+    exit;
 }
 ?>
