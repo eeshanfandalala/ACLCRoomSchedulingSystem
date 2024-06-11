@@ -19,7 +19,6 @@ span {
     color: white;
     border: none;
     border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 input::placeholder {
@@ -73,11 +72,21 @@ tr:nth-child(even) {
     padding: 20px;
     display: inline-block;
     border-radius: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 label {
     font-size: 12px;
+}
+
+input[type="text"] {
+    background-color: #5c6295;
+    color: white;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 10px;
+    box-sizing: border;
 }
 
 .create-new-form input[type="text"],

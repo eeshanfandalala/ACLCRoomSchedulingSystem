@@ -11,12 +11,12 @@
                             $year = $currentYear + $i;
                             $nextYear = $year + 1;
                             $optionValue = $year . "-" . $nextYear;
-                            ?>
-                            <option value=<?php echo $optionValue ?>     <?php if (isset($_GET['selectedRoom'])) {
-                                        echo ($_POST['AY'] == "$optionValue") ? "selected" : "";
-                                    } ?> required><?php echo $optionValue ?>
+                        ?>
+                            <option value=<?php echo $optionValue ?> <?php if (isset($_GET['selectedRoom'])) {
+                                                                            echo ($_POST['AY'] == "$optionValue") ? "selected" : "";
+                                                                        } ?> required><?php echo $optionValue ?>
                             </option>
-                            <?php
+                        <?php
                         }
                         ?>
                     </select>
@@ -25,13 +25,13 @@
                 <div>
                     <label>Semester</label><br>
                     <input type="radio" name="SetSem" id="firstSemester" value="1st" <?php if (isset($_GET['selectedRoom'])) {
-                        echo ($_POST['SetSem'] == '1st') ? "checked" : "";
-                    } ?> required>
+                                                                                            echo ($_POST['SetSem'] == '1st') ? "checked" : "";
+                                                                                        } ?> required>
 
                     <label>1st</label>
                     <input type="radio" name="SetSem" id="secondSemester" value="2nd" <?php if (isset($_GET['selectedRoom'])) {
-                        echo ($_POST['SetSem'] == '2nd') ? "checked" : "";
-                    } ?> required>
+                                                                                            echo ($_POST['SetSem'] == '2nd') ? "checked" : "";
+                                                                                        } ?> required>
                     <label>2nd</label>
                 </div>
 
@@ -43,11 +43,11 @@
                         $getRoom->execute();
                         $resultGetRoom = $getRoom->get_result();
                         while ($rowGetRoom = $resultGetRoom->fetch_assoc()) {
-                            ?>
+                        ?>
                             <option value="<?php echo $rowGetRoom['room_id'] ?>" <?php if (isset($_GET['selectedRoom'])) {
-                                   echo ($_POST['room'] == $rowGetRoom['room_id']) ? "selected" : "";
-                               } ?> required><?php echo $rowGetRoom['room_name'] ?></option>
-                            <?php
+                                                                                        echo ($_POST['room'] == $rowGetRoom['room_id']) ? "selected" : "";
+                                                                                    } ?> required><?php echo $rowGetRoom['room_name'] ?></option>
+                        <?php
                         }
                         ?>
                     </select>
@@ -74,7 +74,7 @@
                     $cellValue = $nameFetchClassResult . "<br>" . $teacher_name . "<br>" . $subject_name . "<br>";
                     return $cellValue;
                 }
-                ?>
+            ?>
                 <table>
                     <thead>
                         <tr>
@@ -108,7 +108,7 @@
                             $time_start = date('h:i A', $i);
                             $time_end = date('h:i A', $i + 1800);
 
-                            ?>
+                        ?>
                             <tr>
                                 <td><?php echo $time_start . ' - ' . $time_end; ?></td>
                                 <?php
@@ -152,7 +152,7 @@
                         <?php } ?>
                     </tbody>
                 </table>
-                <?php
+            <?php
             }
             ?>
         </div>

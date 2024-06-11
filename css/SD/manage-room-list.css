@@ -22,9 +22,10 @@ span {
     background-color: #5c6295;
     color: white;
     width: 30%;
+    padding: 10px;
+    margin-bottom: 10px;
     border: none;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;;
 }
 
 input::placeholder {
@@ -74,7 +75,6 @@ tr:nth-child(even) {
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     display: inline-block;
 }
 
