@@ -21,7 +21,7 @@
     <div>
         <div>
             <form action="?selectedRoom" method="post">
-                <select name="AY" id="yearSelect" onchange="this.form.submit()>
+                <select name="AY" id="yearSelect" onchange="this.form.submit()">
                     <?php
                     include 'config.php';
                     // Get current year
