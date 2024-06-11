@@ -6,8 +6,6 @@
     </div>
     <div>
         <div>
-
-
             <form action="?selectedRoom" method="post">
                 <select name="AY" id="yearSelect">
                     <?php

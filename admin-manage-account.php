@@ -31,9 +31,9 @@ if (!isset($_SESSION['sd_id'])) {
             <title>Manage Account</title>
             <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
             <link rel="stylesheet" href="css/SD/sidebar.css">
-            <link rel="stylesheet" href="css/SD/nav-container.css">
-            <link rel="stylesheet" href="css/SD/manage-account.css">
-            <link rel="stylesheet" href="css/SD/change-password.css">
+            <link rel="stylesheet" href="css/nav-container.css">
+            <link rel="stylesheet" href="css/manage-account.css">
+            <link rel="stylesheet" href="css/change-password.css">
 
         </head>
 

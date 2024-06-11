@@ -16,7 +16,8 @@ if (!isset($_SESSION['sd_id'])) {
         <body>
             <main>
                 <div class="nav-container">
-                    <button onclick="window.location.href='admin-manage-account.php'" class="nav-button active">My Profile</button>
+                    <button onclick="window.location.href='admin-manage-account.php'" class="nav-button active">My
+                        Profile</button>
 
                     <form action="" method="post">
                         <input type="hidden" name="changepasspage" value="on">
@@ -36,19 +37,19 @@ if (!isset($_SESSION['sd_id'])) {
                         <div>
                             <label>First Name</label><br>
                             <input type="text" name="SD_firstname" id="SD_firstname" value="<?php echo $row['SD_firstname']; ?>"
-                                disabled placeholder="First Name" required><br>
+                                disabled required><br>
 
                             <label>Last Name</label><br>
                             <input type="text" name="SD_lastname" id="SD_lastname" value="<?php echo $row['SD_lastname']; ?>"
-                                disabled placeholder="Last Name" required><br>
+                                disabled required><br>
 
                             <label>Email</label><br>
                             <input type="email" name="SD_email" id="SD_email" value="<?php echo $row['SD_email']; ?>" disabled
-                                placeholder="email" required><br>
+                                required><br>
 
                             <label>Contact Number</label><br>
                             <input type="number" name="SD_number" id="SD_number" value="<?php echo $row['SD_number']; ?>"
-                                disabled placeholder="Contact Number"><br>
+                                disabled><br>
 
                             <button type="submit" name="update_btn" id="update_btn" style="display: none;">Save Changes</button>
                         </div>
@@ -64,8 +65,6 @@ if (!isset($_SESSION['sd_id'])) {
                         </div>
                     </form>
                 </div>
-
-
             </main>
         </body>
 
@@ -89,7 +88,6 @@ if (!isset($_SESSION['sd_id'])) {
     }
 }
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
-
     if (isset($_POST['update_btn'])) {
         if (!empty($_FILES['profile_pic']['name'])) {
             $profile_pic = $_FILES['profile_pic']['name'];

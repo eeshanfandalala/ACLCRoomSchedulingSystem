@@ -14,8 +14,9 @@
     margin: 20px 0;
 }
 
-.container span {
-    font-size: 12px;
+#password_login,
+#confirm_password {
+    margin-bottom: 30px;
 }
 
 .container button {

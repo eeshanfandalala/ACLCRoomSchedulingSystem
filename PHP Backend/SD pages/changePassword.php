@@ -102,7 +102,7 @@ if (isset($_POST['backtoeditprofile'])) {
                 <label>Enter Current Password</label><br>
                 <input type="password" name="currentPass" id="currentPass" required value="<?php if (isset($_POST['currentPass']))
                     echo $_POST['currentPass']; ?>" />
-                <!-- <input type="hidden" name="changepasspage" value="on"> -->
+
                 <label>Enter New Password</label><br>
                 <input type="password" name="newPass" id="newPass" required>
 
@@ -111,8 +111,6 @@ if (isset($_POST['backtoeditprofile'])) {
 
                 <button type="submit" name="subNewPass">Submit</button>
             </div>
+        </form>
     </div>
-    </form>
-    </div>
-
 </main>
