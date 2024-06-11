@@ -19,10 +19,10 @@ if (!isset($_SESSION['sd_id'])) {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Manage Account</title>
+            <title>Reports</title>
             <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
             <link rel="stylesheet" href="css/SD/sidebar.css">
-            <link rel="stylesheet" href="css/SD/manage-account.css">
+            <link rel="stylesheet" href="css/SD/reports.css">
         </head>
 
         <body>
@@ -97,8 +97,7 @@ if (!isset($_SESSION['sd_id'])) {
             <section class="home-section">
                 <div class="home-content">
                     <i class='bx bx-menu'></i> <!-- button -->
-                    <span class="text">Manage</span>
-                    <button id="edit_btn">Edit</button>
+                    <span class="text">Reports</span>
                 </div>
                 <?php include './PHP Backend/SD pages/report.php' ?>
             </section>
