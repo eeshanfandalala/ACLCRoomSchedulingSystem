@@ -1,5 +1,5 @@
 .main-flex {
-    padding: 0 20px;
+    padding: 0 20px 20px 20px;
     display: flex;
 }
 
@@ -26,8 +26,8 @@ input::placeholder {
 
 table {
     background: linear-gradient(to bottom right, #3d4479, #172278);
-    width: 100%;
     color: white;
+    width: 100%;
     padding: 20px;
     border-collapse: collapse;
     border-radius: 15px;

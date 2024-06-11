@@ -35,7 +35,7 @@
                 $viewTeach = mysqli_query($con, "SELECT * FROM teacher_tb");
                 while ($row = mysqli_fetch_array($viewTeach)) {
                     $statusText = ($row['status'] == 0) ? "Not Active" : "Active";
-                    ?>
+                ?>
                     <tr>
                         <td><?php echo htmlspecialchars($row['teacher_name']); ?></td>
                         <td><?php echo htmlspecialchars($row['teacher_email']); ?></td>
@@ -45,18 +45,17 @@
                         <td><?php echo htmlspecialchars($row['teacher_daysAvailable']); ?></td>
                         <td>
                             <form action="" method="post">
-                                <input type="hidden" name="teacher_id"
-                                    value="<?php echo htmlspecialchars($row['teacher_id']); ?>">
+                                <input type="hidden" name="teacher_id" value="<?php echo htmlspecialchars($row['teacher_id']); ?>">
                                 <select name="status" onchange="this.form.submit()">
                                     <option value="1" <?php if ($row['status'] == 1)
-                                        echo 'selected'; ?>>Active</option>
+                                                            echo 'selected'; ?>>Active</option>
                                     <option value="0" <?php if ($row['status'] == 0)
-                                        echo 'selected'; ?>>Not Active</option>
+                                                            echo 'selected'; ?>>Not Active</option>
                                 </select>
                             </form>
                         </td>
                     </tr>
-                    <?php
+                <?php
                 }
                 ?>
             </tbody>
