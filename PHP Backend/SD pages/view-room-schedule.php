@@ -21,7 +21,7 @@
     <div>
         <div>
             <form action="?selectedRoom" method="post">
-                <select name="AY" id="yearSelect">
+                <select name="AY" id="yearSelect" onchange="this.form.submit()>
                     <?php
                     include 'config.php';
                     // Get current year
@@ -42,15 +42,15 @@
                     ?>
                 </select>
                 <label for="firstSemester">Set Semester:</label>
-                <input type="radio" name="SetSem" id="firstSemester" value="1st" <?php if (isset($_GET['selectedRoom'])) {
+                <input type="radio" name="SetSem" id="firstSemester" value="1st" onchange="this.form.submit()" <?php if (isset($_GET['selectedRoom'])) {
                                                                                         echo ($_POST['SetSem'] == '1st') ? "checked" : "";
                                                                                     } ?> required>
                 <label for="firstSemester">1st</label>
-                <input type="radio" name="SetSem" id="secondSemester" value="2nd" <?php if (isset($_GET['selectedRoom'])) {
+                <input type="radio" name="SetSem" id="secondSemester" value="2nd" onchange="this.form.submit()" <?php if (isset($_GET['selectedRoom'])) {
                                                                                         echo ($_POST['SetSem'] == '2nd') ? "checked" : "";
                                                                                     } ?> required>
                 <label for="secondSemester">2nd</label>
-                <select name="room" id="">
+                <select name="room" id="" onchange="this.form.submit()">
                     <?php
                     $getRoom = $con->prepare("SELECT * FROM room_tb");
                     $getRoom->execute();
@@ -171,7 +171,7 @@
                                         $schedID = $rowSchedule->schedule_id;
 
                                         // Call the findCellValues function to display the schedule data
-                                        echo "<td><a href='action.php?schedID=$schedID' class='disabled-link' data-schedid='$schedID'>" . findCellValues($nameFetchClassResult, $teacher_name, $subject_name) . "</a></td>";
+                                        echo "<td><a href='./PHP Backend/SD pages/action.php?schedID=$schedID' class='disabled-link' data-schedid='$schedID'>" . findCellValues($nameFetchClassResult, $teacher_name, $subject_name) . "</a></td>";
                                     } else {
                                         // Display an empty cell if there is no schedule data for the current day and time
                                         echo '<td></td>';
@@ -198,7 +198,7 @@
             if (enable) {
                 // Enable the link for editing
                 link.classList.remove('disabled-link');
-                link.href = 'action.php?EditschedID=' + link.getAttribute('data-schedid');
+                link.href = './PHP Backend/SD pages/action.php?EditschedID=' + link.getAttribute('data-schedid');
             } else {
                 // Disable the link
                 link.classList.add('disabled-link');
@@ -217,7 +217,7 @@
             if (enable) {
                 // Enable the link for deleting
                 link.classList.remove('disabled-link');
-                link.href = 'action.php?DelschedID=' + link.getAttribute('data-schedid');
+                link.href = './PHP Backend/SD pages/action.php?DelschedID=' + link.getAttribute('data-schedid');
             } else {
                 // Disable the link
                 link.classList.add('disabled-link');

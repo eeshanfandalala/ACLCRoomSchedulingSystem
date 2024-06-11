@@ -1,5 +1,5 @@
 <?php
-include 'config.php';
+include '../../config.php';
 
 if (isset($_GET['EditschedID'])) {
 
@@ -108,7 +108,7 @@ if (isset($_GET['EditschedID'])) {
     $delSched = $con->prepare("DELETE FROM schedule_tb WHERE schedule_id = ?");
     $delSched->bind_param("i", $schedID);
     if ($delSched->execute()) {
-        echo "<script>alert('Deleted Successfully'); window.location.href = 'view-room-schedule.php';</script>";
+        echo "<script>alert('Deleted Successfully'); window.location.href = '../../admin-view-class-schedule.php';</script>";
         exit;
     }
 }
@@ -131,7 +131,7 @@ if (isset($_POST['update'])) {
     $updateSched->bind_param("ssiiii", $new_time_start, $new_time_end, $teacherID, $classID, $subjectID, $schedID);
     $updateSched->execute();
     // }
-    echo "<script>alert('Updated Successfully'); window.location.href = 'view-room-schedule.php';</script>";
+    echo "<script>alert('Updated Successfully'); window.location.href = '../../admin-view-class-schedule.php';</script>";
 
     // header('Location : ');
 }
