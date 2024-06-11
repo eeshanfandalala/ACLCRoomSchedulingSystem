@@ -19,10 +19,10 @@ if (!isset($_SESSION['teacher_id'])) {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Manage Account</title>
+            <title>View Room Schedule</title>
             <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
             <link rel="stylesheet" href="css/SD/sidebar.css">
-            <link rel="stylesheet" href="css/SD/manage-account.css">
+            <link rel="stylesheet" href="css/teacher/view-room-schedule.css">
         </head>
 
         <body>
@@ -72,8 +72,7 @@ if (!isset($_SESSION['teacher_id'])) {
             <section class="home-section">
                 <div class="home-content">
                     <i class='bx bx-menu'></i> <!-- button -->
-                    <span class="text">Manage Account</span>
-                    <button id="edit_btn">Edit</button>
+                    <span class="text">View Room Schedule</span>
                 </div>
                 <?php include './PHP Backend/teacher pages/view-room-schedule.php' ?>
             </section>
