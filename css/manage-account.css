@@ -51,7 +51,7 @@ label {
 select,
 input[type="text"],
 input[type="email"],
-input[type="number"],
+input[type="tel"],
 input[type="password"] {
     background-color: #5c6295;
     color: white;

@@ -32,13 +32,14 @@ function signupValidation()
 
     if (empty($confirm_password)) {
         $confirm_password_error = "Please Confirm Your Password.";
-        $isValid = false;
+        $isValidcConfirm = false;
     } else if ($password !== $confirm_password) {
         $confirm_password_error = 'Passwords do not match';
-        $isValid = false;
+        $isValidConfirm = false;
     }
 
     return [
+        'isValidConfirm' => $isValidConfirm,
         'isValid' => $isValid,
         'username_error' => $username_error,
         'password_error' => $password_error,
@@ -77,8 +78,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['signup_submit'])) {
         $signup_result = signupValidation();
         if (!$signup_result['isValid']) {
-            echo "<script>alert('" . $signup_result['username_error'], $signup_result['password_error'], $signup_result['confirm_password_error'] . "!'); window.location.href = 'index.html';</script>";
+            echo "<script>alert('" . $signup_result['username_error'], $signup_result['password_error'] . "!'); window.location.href = 'index.html';</script>";
             // echo $signup_result['username_error'], $signup_result['password_error'], $signup_result['confirm_password_error'];
+        }elseif(!$signup_result['isValidConfirm']){
+            echo "<script>alert('" . $signup_result['confirm_password_error'] . "!'); window.location.href = 'index.html';</script>";
+
         } else {
             $name = $_POST['username'];
             $password = $_POST['password_signup'];

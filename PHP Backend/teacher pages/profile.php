@@ -52,7 +52,7 @@ if (!isset($_SESSION['teacher_id'])) {
                             <label>Email</label><br>
                             <input type="email" name="teacher_email" id="teacher_email" value="<?php echo $row['teacher_email']; ?>" disabled required>
                             <label>Number</label><br>
-                            <input type="number" name="teacher_number" id="teacher_number" value="<?php echo $row['teacher_number']; ?>" disabled required>
+                            <input type="tel" pattern="[0-9]{11}" name="teacher_number" id="teacher_number" value="<?php echo $row['teacher_number']; ?>" disabled required>
                             <!-- <input type="text" name="teacher_password" id="teacher_password" disabled value="<?php //echo $row['teacher_password']; 
                                                                                                                     ?>"> -->
 
@@ -104,7 +104,7 @@ if (isset($_POST['update_btn'])) {
     if (!empty($_FILES['profile_pic']['name'])) {
         $profile_pic = $_FILES['profile_pic']['name'];
         $template = $_FILES['profile_pic']['tmp_name'];
-        $folder = '../profile_pictures/' . $profile_pic;
+        $folder = './profile_pictures/' . $profile_pic;
 
         move_uploaded_file($template, $folder);
     } else {

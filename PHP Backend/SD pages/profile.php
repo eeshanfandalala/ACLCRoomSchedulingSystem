@@ -50,7 +50,7 @@ if (!isset($_SESSION['sd_id'])) {
                                 required><br>
 
                             <label>Contact Number</label><br>
-                            <input type="number" name="SD_number" id="SD_number" value="<?php echo $row['SD_number']; ?>"
+                            <input type="tel" pattern="[0-9]{11}" name="SD_number" id="SD_number" value="<?php echo $row['SD_number']; ?>"
                                 disabled><br>
 
                             <button type="submit" name="update_btn" id="update_btn" style="display: none;">Save Changes</button>
