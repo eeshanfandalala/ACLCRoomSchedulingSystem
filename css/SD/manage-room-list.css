@@ -25,7 +25,8 @@ span {
     padding: 10px;
     margin-bottom: 10px;
     border: none;
-    border-radius: 10px;;
+    border-radius: 10px;
+    ;
 }
 
 input::placeholder {
@@ -52,11 +53,19 @@ td {
     padding: 12px;
     border: 1px solid transparent;
     text-align: center;
+    border-left: 1px solid #7d84b9;
+    border-right: 1px solid #7d84b9;
 }
 
-th {
-    background-color: #f2f2f2;
-    color: black;
+/* no border for the first and last cell */
+table th:first-child,
+table td:first-child {
+    border-left: none;
+}
+
+table th:last-child,
+table td:last-child {
+    border-right: none;
 }
 
 tbody tr:nth-child(even) {
