@@ -19,10 +19,10 @@ if (!isset($_SESSION['teacher_id'])) {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Manage Account</title>
+            <title>My Schedule</title>
             <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
             <link rel="stylesheet" href="css/SD/sidebar.css">
-            <link rel="stylesheet" href="css/SD/manage-account.css">
+            <link rel="stylesheet" href="css/teacher/view-my-schedule.css">
         </head>
 
         <body>
@@ -50,10 +50,10 @@ if (!isset($_SESSION['teacher_id'])) {
                     <li>
                         <a href="">
                             <i class='bx bxs-cog'></i>
-                            <span class="link-name">Account</span>
+                            <span class="link-name">Manage Account</span>
                         </a>
                         <ul class="sub-menu blank">
-                            <li><a class="link-name" href="user-manage-account.php">Account</a></li>
+                            <li><a class="link-name" href="user-manage-account.php">Manage Account</a></li>
                         </ul>
                     </li>
                     <li>
@@ -72,8 +72,7 @@ if (!isset($_SESSION['teacher_id'])) {
             <section class="home-section">
                 <div class="home-content">
                     <i class='bx bx-menu'></i> <!-- button -->
-                    <span class="text">Manage Account</span>
-                    <button id="edit_btn" type="button" onclick="print()">Print</button>
+                    <span class="text">My Schedule</span>
                 </div>
                 <?php include './PHP Backend/teacher pages/mySchedule.php' ?>
             </section>

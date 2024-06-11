@@ -36,10 +36,11 @@ form select {
     transition: all .5s ease;
 }
 
-input[type="submit"] {
+/* print button */
+.print {
     background-color: #0679E2;
     color: white;
-    margin-left: 10px;
+    margin-left: 20px;
     padding: 10px;
     border: none;
     border-radius: 10px;
@@ -47,7 +48,7 @@ input[type="submit"] {
     transition: all .5s ease;
 }
 
-input[type="submit"]:hover {
+.print:hover {
     background-color: #0056b3;
 }
 
