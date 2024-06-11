@@ -4,7 +4,7 @@
             <form action="?selectedRoom" method="post" class="filter-container">
                 <div>
                     <label>School Year</label><br>
-                    <select name="AY" id="yearSelect">
+                    <select name="AY" id="yearSelect" onchange="this.form.submit()">
                         <?php
                         $currentYear = date("Y");
                         for ($i = -1; $i < 4; $i++) {
@@ -24,12 +24,12 @@
 
                 <div>
                     <label>Semester</label><br>
-                    <input type="radio" name="SetSem" id="firstSemester" value="1st" style="margin-top: 10px" <?php if (isset($_GET['selectedRoom'])) {
+                    <input type="radio" name="SetSem" id="firstSemester" value="1st" style="margin-top: 10px" onchange="this.form.submit()" <?php if (isset($_GET['selectedRoom'])) {
                                                                                                                     echo ($_POST['SetSem'] == '1st') ? "checked" : "";
                                                                                                                 } ?> required>
 
                     <label>1st</label>
-                    <input type="radio" name="SetSem" id="secondSemester" value="2nd" <?php if (isset($_GET['selectedRoom'])) {
+                    <input type="radio" name="SetSem" id="secondSemester" value="2nd" onchange="this.form.submit()" <?php if (isset($_GET['selectedRoom'])) {
                                                                                             echo ($_POST['SetSem'] == '2nd') ? "checked" : "";
                                                                                         } ?> required>
                     <label>2nd</label>
@@ -37,7 +37,7 @@
 
                 <div>
                     <label>Room</label><br>
-                    <select name="room">
+                    <select name="room" onchange="this.form.submit()">
                         <?php
                         $getRoom = $con->prepare("SELECT * FROM room_tb");
                         $getRoom->execute();
@@ -51,7 +51,7 @@
                         }
                         ?>
                     </select>
-                    <input type="submit" value="Filter">
+                    <!-- <input type="submit" value="Filter"> -->
                 </div>
             </form>
 
@@ -90,17 +90,23 @@
                             <?php
                             $scheduleData = array();
                             while ($rowSchedule = $resultfetchSchedule->fetch_object()) {
-                                $schedule_time = json_decode($rowSchedule->schedule_time, true);
-                                $schedule_day = json_decode($rowSchedule->schedule_day, true);
+                                // $schedule_time = json_decode($rowSchedule->schedule_time, true);
+                                // $schedule_day = json_decode($rowSchedule->schedule_day, true);
 
-                                foreach ($schedule_day as $day) {
+                                $schedule_time = [
+                                    'start' => $rowSchedule->schedule_time_start,
+                                    'end' => $rowSchedule->schedule_time_end
+                                ];
+                                $schedule_day = $rowSchedule->schedule_day;
+
+                                // foreach ($schedule_day as $day) {
                                     for ($i = strtotime($schedule_time['start']); $i < strtotime($schedule_time['end']); $i += 1800) {
                                         $time_start = date('h:i A', $i);
                                         $time_end = date('h:i A', $i + 1800);
 
-                                        $scheduleData[$day][$time_start] = $rowSchedule;
+                                        $scheduleData[$schedule_day][$time_start] = $rowSchedule;
                                     }
-                                }
+                                // }
                             }
 
                             for ($i = strtotime('7:00 AM'); $i < strtotime('10:00 PM'); $i += 1800) {
