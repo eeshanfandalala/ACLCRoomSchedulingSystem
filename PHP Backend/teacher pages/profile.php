@@ -35,6 +35,8 @@ if (!isset($_SESSION['teacher_id'])) {
 
                             <label>Department</label><br>
                             <select name="teacher_dept" id="" required>
+                            <option value="" disabled selected>Select a Department</option>
+
                                 <?php
                                 $fetchdepts = mysqli_query($con, "SELECT department_name FROM department_tb");
                                 while ($rowdept = mysqli_fetch_array($fetchdepts)) {

@@ -7,6 +7,7 @@ function validateNewPassword($newPass, $confirmPass)
     $newPass_error = '';
     $confirmPass_error = '';
     $isValid = true;
+    $isValidConfirmPass = true;
 
     if (empty($newPass)) {
         $newPass_error = 'Please enter new password';
@@ -21,15 +22,16 @@ function validateNewPassword($newPass, $confirmPass)
 
     if (empty($confirmPass)) {
         $confirmPass_error = 'Please confirm new password';
-        $isValid = false;
+        $isValidConfirmPass = false;
     } elseif ($confirmPass !== $newPass) {
         $confirmPass_error = 'Passwords do not match';
-        $isValid = false;
+        $isValidConfirmPass = false;
     }
 
     return [
         'isValid' => $isValid,
         'newPass_error' => $newPass_error,
+        'isValidConfirmPass' => $isValidConfirmPass,
         'confirmPass_error' => $confirmPass_error
     ];
 }
@@ -52,10 +54,13 @@ if (isset($_POST['subNewPass'])) {
             $confirmPass = $_POST['confirmPass'];
             $validPass = validateNewPassword($newPass, $confirmPass);
             if (!$validPass['isValid']) {
-                echo "<script>alert('" . $validPass['newPass_error'] . " " . $validPass['confirmPass_error'] . "')</script>";
+                echo "<script>alert('" . $validPass['newPass_error'] . "')</script>";
+            }else if(!$validPass['isValidConfirmPass']){
+                echo "<script>alert('" . $validPass['confirmPass_error'] . "')</script>";
+
             } else {
                 $hashedNewPass = password_hash($newPass, PASSWORD_DEFAULT);
-                $updatePassword = $con->prepare("UPDATE sd_tb SET SD_password = ? WHERE SD_id = ?");
+                $updatePassword = $con->prepare("UPDATE teacher_tb SET teacher_password = ? WHERE teacher_id = ?");
                 $updatePassword->bind_param("si", $hashedNewPass, $user_id);
                 if ($updatePassword->execute()) {
                     echo "<script>alert('Password Updated Successfully!');</script>";

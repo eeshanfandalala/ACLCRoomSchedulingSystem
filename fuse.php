@@ -13,6 +13,7 @@ function signupValidation()
     $password_error = '';
     $confirm_password_error = '';
     $isValid = true;
+    $isValidConfirm = true;
 
     if (empty($username)) {
         $username_error = "Enter Username";
@@ -32,7 +33,7 @@ function signupValidation()
 
     if (empty($confirm_password)) {
         $confirm_password_error = "Please Confirm Your Password.";
-        $isValidcConfirm = false;
+        $isValidConfirm = false;
     } else if ($password !== $confirm_password) {
         $confirm_password_error = 'Passwords do not match';
         $isValidConfirm = false;
@@ -80,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!$signup_result['isValid']) {
             echo "<script>alert('" . $signup_result['username_error'], $signup_result['password_error'] . "!'); window.location.href = 'index.html';</script>";
             // echo $signup_result['username_error'], $signup_result['password_error'], $signup_result['confirm_password_error'];
-        }elseif(!$signup_result['isValidConfirm']){
+        }else if(!$signup_result['isValidConfirm']){
             echo "<script>alert('" . $signup_result['confirm_password_error'] . "!'); window.location.href = 'index.html';</script>";
 
         } else {
@@ -88,6 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $password = $_POST['password_signup'];
             $email = $_POST['email_signup'];
             $password = password_hash($password, PASSWORD_DEFAULT);
+            $deafaultPic = 'user.png';
 
 
             $sql = $con->prepare("SELECT `teacher_email` FROM teacher_tb WHERE `teacher_email` = ?");
@@ -98,8 +100,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($sql->num_rows > 0) {
                 echo "<script>alert('Email already exists!'); window.location.href = 'index.html';</script>";
             } else {
-                $sqlInsert = $con->prepare("INSERT INTO `teacher_tb`(`teacher_name`, `teacher_password`, `teacher_email`, `status`) VALUES (?,?,?, 0)");
-                $sqlInsert->bind_param("sss", $name, $password, $email);
+                $sqlInsert = $con->prepare("INSERT INTO `teacher_tb`(`teacher_name`, `teacher_password`, `teacher_email`, `teacher_pic`, `status`) VALUES (?,?,?,?, 0)");
+                $sqlInsert->bind_param("ssss", $name, $password, $email, $deafaultPic);
                 $sqlInsert->execute();
                 echo "<script>alert('Success')</script>";
                 echo "<script>window.location.href = 'index.html';</script>";
