@@ -58,7 +58,6 @@
                         ?>
                     </select>
 
-
                     <!--<input type="submit" value="Filter" class="filter-button">-->
                 </div>
             </form>

@@ -3,20 +3,6 @@
     padding: 0 20px 20px 20px;
 }
 
-.side-by-side {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.create-new-room .text {
-    color: white;
-    margin-bottom: 10px;
-}
-
-span {
-    font-weight: bold;
-}
-
 table {
     background: linear-gradient(to bottom right, #3d4479, #172278);
     width: 100%;
