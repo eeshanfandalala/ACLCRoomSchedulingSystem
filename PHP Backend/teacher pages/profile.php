@@ -49,7 +49,7 @@ if (!isset($_SESSION['teacher_id'])) {
                             <!-- <input type="text" name="teacher_dept" id="teacher_dept" value="<?php // echo $row['teacher_department']; 
                                                                                                     ?>" disabled required> -->
 
-                            <label>Profeciency</label><br>
+                            <label>Proficiency</label><br>
                             <input type="text" name="teacher_prof" id="teacher_prof" value="<?php echo $row['teacher_proficency']; ?>" disabled required>
                             <label>Email</label><br>
                             <input type="email" name="teacher_email" id="teacher_email" value="<?php echo $row['teacher_email']; ?>" disabled required>
@@ -77,7 +77,7 @@ if (!isset($_SESSION['teacher_id'])) {
 
         <script>
             document.getElementById('edit_btn').addEventListener('click', function() {
-                var inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="number"], input[type="password"], input[type="file"]');
+                var inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="password"], input[type="file"]');
                 var updateBtn = document.getElementById('update_btn');
                 for (var i = 0; i < inputs.length; i++) {
                     inputs[i].disabled = !inputs[i].disabled;
@@ -116,7 +116,7 @@ if (isset($_POST['update_btn'])) {
 
     // Update the database
     $sql = $con->prepare("UPDATE teacher_tb SET teacher_pic = ?, teacher_name = ?, teacher_department=?, teacher_proficency = ?, teacher_email= ?, teacher_number = ? WHERE teacher_id='$user_id'");
-    $sql->bind_param("sssssi", $profile_pic, $teacher_name, $teacher_dept, $teacher_prof, $teacher_email, $teacher_number);
+    $sql->bind_param("ssssss", $profile_pic, $teacher_name, $teacher_dept, $teacher_prof, $teacher_email, $teacher_number);
     if ($sql->execute()) {
         echo "<script>alert('Profile updated successfully');
                 window.location.replace('user-manage-account.php');</script>";

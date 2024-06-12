@@ -72,7 +72,7 @@ if (!isset($_SESSION['sd_id'])) {
 
         <script>
             document.getElementById('edit_btn').addEventListener('click', function () {
-                var inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="number"], input[type="password"], input[type="file"]');
+                var inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="password"], input[type="file"]');
                 var updateBtn = document.getElementById('update_btn');
                 for (var i = 0; i < inputs.length; i++) {
                     inputs[i].disabled = !inputs[i].disabled;
@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             $SD_number = $_POST['SD_number'];
 
             $updateProfileInfo = $con->prepare("UPDATE sd_tb SET SD_pic =?, SD_lastname=?, SD_firstname=?, SD_email=?, SD_number=?");
-            $updateProfileInfo->bind_param("ssssi", $profile_pic, $SD_lastname, $SD_firstname, $SD_email, $SD_number);
+            $updateProfileInfo->bind_param("sssss", $profile_pic, $SD_lastname, $SD_firstname, $SD_email, $SD_number);
             if ($updateProfileInfo->execute()) {
                 echo "<script>alert('Profile updated successfully');
                 window.location.replace('admin-manage-account.php');</script>";
@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $deafaultSDValues = array(
             "SD_lastname" => "",
             "Lastname" => "",
-            "SD_number" => 0,
+            "SD_number" => "",
             "SD_pic" => "user.png",
             "Email" => "aclcormocadmin@gmail.com",
             "Password" => "Komong2x!",
