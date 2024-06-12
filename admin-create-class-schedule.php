@@ -104,10 +104,7 @@ if (!isset($_SESSION['sd_id'])) {
                     <i class='bx bx-menu'></i> <!-- button -->
                     <span class="text">Create Class Schedule</span>
                 </div>
-                <div>
-                    <?php include './PHP Backend/SD pages/create-class-schedule.php' ?>
-
-                </div>
+                <?php include './PHP Backend/SD pages/create-class-schedule.php' ?>
             </section>
         </body>
 <?php
