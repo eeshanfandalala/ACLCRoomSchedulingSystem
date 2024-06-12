@@ -1,3 +1,27 @@
+<style>
+    .editable input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+</style>
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userid']) && isset($_POST['field']) && isset($_POST['value'])) {
+    $userid = $_POST['userid'];
+    $field = $_POST['field'];
+    $value = $_POST['value'];
+
+    $stmt = $con->prepare("UPDATE subject_tb SET $field = ? WHERE subject_id = ?");
+    $stmt->bind_param("si", $value, $userid);
+    if ($stmt->execute()) {
+        echo 'Updated success';
+    } else {
+        echo 'error';
+    }
+
+    $stmt->close();
+    exit;
+}
+?>
 <div class="main">
     <div class="create-new-room">
         <div class="text">
@@ -15,9 +39,9 @@
                     <?php
                     $fetchdept = mysqli_query($con, "SELECT department_name FROM department_tb");
                     while ($row = mysqli_fetch_array($fetchdept)) {
-                        ?>
+                    ?>
                         <option value="<?php echo $row['department_name'] ?>"><?php echo $row['department_name'] ?></option>
-                        <?php
+                    <?php
                     }
                     ?>
                 </select>
@@ -51,18 +75,18 @@
             <tbody>
                 <?php
                 // include('../../config.php');
-                
+
                 $getSubjects = $con->query("SELECT * FROM subject_tb");
                 $i = 1;
                 while ($row = $getSubjects->fetch_assoc()) {
-                    ?>
+                ?>
                     <tr>
                         <td><?php echo $i ?></td>
-                        <td><?php echo $row['subject_name'] ?></td>
+                        <td class="editable" data-userid="<?php echo $row['subject_id'] ?>" data-field="subject_name"><?php echo $row['subject_name'] ?></td>
                         <td><?php echo $row['subject_department'] ?></td>
                         <td><?php echo $row['subject_type'] ?></td>
                     </tr>
-                    <?php
+                <?php
                     $i++;
                 }
                 ?>
@@ -72,6 +96,7 @@
 </div>
 
 <script src="searchtable.js"></script>
+
 
 <?php
 
