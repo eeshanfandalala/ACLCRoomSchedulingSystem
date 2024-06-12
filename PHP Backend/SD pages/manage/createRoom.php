@@ -97,20 +97,15 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     if ($result->num_rows > 0) {
         echo "<script>alert('Room name already exists')</script>";
     } else {
-        // Prepare the SQL statement to insert into room_tb
         $insertRoomSql = $con->prepare("INSERT INTO room_tb(room_name, room_type, room_floor, room_building) VALUES (?, ?, ?, ?)");
-
-        // Bind parameters
         $insertRoomSql->bind_param("ssss", $RoomName, $RoomType, $RoomFloor, $RoomBuilding);
 
-        // Execute the statement to insert into room_tb
         if ($insertRoomSql->execute()) {
             echo "Room record inserted successfully<br>";
         } else {
             echo "Error inserting room record: " . $insertRoomSql->error;
         }
-
-        // Close the statement
+        
         $insertRoomSql->close();
     }
 }

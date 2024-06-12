@@ -22,8 +22,7 @@ if (!isset($_SESSION['sd_id'])) {
             <title>View Class Schedule</title>
             <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
             <link rel="stylesheet" href="css/SD/sidebar.css">
-            <link rel="stylesheet" href="css/SD/manage-account.css">
-            <link rel="stylesheet" href="css/table.css">
+            <link rel="stylesheet" href="css/SD/view-room-schedule.css">
         </head>
 
         <body>
