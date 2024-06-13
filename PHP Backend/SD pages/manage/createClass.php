@@ -28,25 +28,32 @@ if (isset($_GET['del'])) {
     }
 }
 ?>
-<div class="main-flex">
-    <div class="create-new-form">
-        <div class="text">
-            <span>Create New Class</span>
-        </div>
-        <div id="form1">
-            <form action="" method="post">
+<div class="main">
+    <div class="top" class="side-by-side">
+        <form action="" method="post" class="side-by-side">
+            <div>
+                <div class="text">
+                    <span>Create New Class</span>
+                </div>
+                <label>Standing</label><br>
                 <input type="radio" name="standing" value="College" onchange="this.form.submit()" <?php if (isset($_POST['standing']) || isset($_POST['sub1']) || isset($_POST['sub2'])) {
                                                                                                         echo ($_POST['standing'] == 'College') ? "checked" : "";
-                                                                                                    } ?> required><label for="">College</label>
+                                                                                                    } ?> required>
+                <label style="margin-right: 10px">College</label>
+
                 <input type="radio" name="standing" value="SHS" onchange="this.form.submit()" <?php if (isset($_POST['standing']) || isset($_POST['sub1']) || isset($_POST['sub2'])) {
                                                                                                     echo ($_POST['standing'] == 'SHS') ? "checked" : "";
-                                                                                                } ?> required><label for="">SHS</label><br>
-            </form>
-            <?php
-            if (isset($_POST['standing']) || isset($_POST['sub1'])) {
-                $standing = $_POST['standing'];
-            ?>
-                <form action="" method="post">
+                                                                                                } ?> required>
+                <label>SHS</label>
+            </div>
+        </form>
+
+        <?php
+        if (isset($_POST['standing']) || isset($_POST['sub1'])) {
+            $standing = $_POST['standing'];
+        ?>
+            <form action="" method="post" class="side-by-side">
+                <div>
                     <input type="hidden" name="standing" id="" value="<?php echo $_POST['standing'] ?>">
                     <!-- <label>Course / Strand</label><br> -->
                     <label><?php echo isset($_POST['standing']) && $_POST['standing'] == 'College' ? 'Program' : 'Strand'; ?></label><br>
@@ -64,10 +71,11 @@ if (isset($_GET['del'])) {
                         $fetchclasses->free_result();
                         ?>
                     </datalist>
+                </div>
 
+                <div>
                     <label>Year Level</label><br>
-                    <input type="number" name="YrLvl" id="level" list="level-list" required value="<?php if (isset($_POST['YrLvl']))
-                                                                                                        echo $_POST['YrLvl']; ?>"><br>
+
                     <datalist id="level-list">
                         <?php
                         $fetchclasses = $con->query("SELECT DISTINCT class_year FROM class_tb WHERE class_standing = '$standing'");
@@ -79,24 +87,25 @@ if (isset($_GET['del'])) {
                         $fetchclasses->free_result();
                         ?>
                     </datalist>
+                    <input type="number" name="YrLvl" id="level" list="level-list" required value="<?php if (isset($_POST['YrLvl'])) echo $_POST['YrLvl']; ?>">
 
-                    <button type="submit" name="sub1">Next</button><br><br>
-                </form>
-            <?php
-            }
-            ?>
+                    <button type="submit" name="sub1">Next</button><br>
+                </div>
+            </form>
+        <?php
+        }
+        ?>
 
-
-
-            <?php
-            if (isset($_POST['sub1'])) {
-                $standing = $_POST['standing'];
-            ?>
-                <form action="?action=createClass" method="post">
-                    <input type="hidden" name="standing" id="" value="<?php echo $_POST['standing']; ?>">
-                    <input type="hidden" name="CorS" id="" value="<?php echo $_POST['CorS']; ?>">
-                    <input type="hidden" name="YrLvl" id="" value="<?php echo $_POST['YrLvl']; ?>">
-                    <label>Section Name</label><br>
+        <?php
+        if (isset($_POST['sub1'])) {
+            $standing = $_POST['standing'];
+        ?>
+            <form action="?action=createClass" method="post" class="side-by-side">
+                <input type="hidden" name="standing" id="" value="<?php echo $_POST['standing']; ?>">
+                <input type="hidden" name="CorS" id="" value="<?php echo $_POST['CorS']; ?>">
+                <input type="hidden" name="YrLvl" id="" value="<?php echo $_POST['YrLvl']; ?>">
+                <div>
+                    <label>Section</label><br>
                     <input type="text" name="section" id="" list="section-list" required><br>
                     <datalist id="section-list">
                         <?php
@@ -109,8 +118,10 @@ if (isset($_GET['del'])) {
                         $fetchclasses->free_result();
                         ?>
                     </datalist>
+                </div>
 
-                    <label>Department</label><br>
+                <div>
+                    <label>Department</label>
                     <datalist id="department-list">
                         <?php
                         // $fetchdept = $con->prepare("SELECT DISTINCT `class_department` FROM `class_tb` WHERE class_standing = '$standing'");
@@ -125,15 +136,17 @@ if (isset($_GET['del'])) {
                         }
                         $fetchdept->free_result();
                         ?>
-                    </datalist>
-                    <input type="text" name="SubDept" id="department-list" list="department-list" required><br>
-                    <button type="submit" name="sub2">Add</button>
-                <?php
-            }
-                ?>
+                    </datalist><br>
+                    <input type="text" name="SubDept" id="department-list" list="department-list" required>
 
-                </form>
-        </div>
+                    <button type="submit" name="sub2">Add</button>
+                </div>
+
+            <?php
+        }
+            ?>
+
+            </form>
     </div>
 
     <div class="list">
@@ -148,6 +161,7 @@ if (isset($_GET['del'])) {
                     <th>Program</th>
                     <th>Year level</th>
                     <th>Section</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -162,7 +176,6 @@ if (isset($_GET['del'])) {
                         <td class="editable-dropdown" data-userid="<?php echo $row['class_id']; ?>" data-field="class_year" data-standing="<?php echo $row['class_standing']; ?>"><?php echo $row['class_year'] ?></td>
                         <td class="editable-dropdown" data-userid="<?php echo $row['class_id']; ?>" data-field="class_section"><?php echo $row['class_section'] ?></td>
                         <td><a href="?del=<?php echo $row['class_id']; ?>" onclick="return confirm('Are you sure you want to delete this item?')"><button>Delete</button></a></td>
-
                     </tr>
                 <?php
                     $i++;

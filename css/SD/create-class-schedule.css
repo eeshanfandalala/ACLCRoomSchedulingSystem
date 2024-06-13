@@ -12,7 +12,7 @@
     display: flex;
 }
 
-form, .main-form {
+form {
     background: linear-gradient(to bottom right, #3d4479, #172278);
     color: white;
     width: auto;
@@ -127,6 +127,7 @@ input[type="checkbox"] {
 }
 
 @media (max-width: 600px) {
+
     table,
     thead,
     tbody,

@@ -16,7 +16,7 @@
                     <input type="radio" name="standing" value="College" <?php if (isset($_POST['sub2']) || isset($_POST['sub1']) || isset($_POST['sub3']) || isset($_POST['sub4'])) {
                                                                             echo ($_POST['standing'] == 'College') ? "checked" : "";
                                                                         } ?> required>
-                    <label>College</label>
+                    <label style="margin-right: 10px">College</label>
 
                     <input type="radio" name="standing" value="SHS" <?php if (isset($_POST['sub2']) || isset($_POST['sub1']) || isset($_POST['sub3']) || isset($_POST['sub4'])) {
                                                                         echo ($_POST['standing'] == 'SHS') ? "checked" : "";
