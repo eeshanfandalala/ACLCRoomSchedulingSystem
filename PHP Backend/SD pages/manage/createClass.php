@@ -1,5 +1,32 @@
 <?php
-// include '../../config.php'; 
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userid']) && isset($_POST['field']) && isset($_POST['value'])) {
+    $userid = $_POST['userid'];
+    $field = $_POST['field'];
+    $value = $_POST['value'];
+
+    $stmt = $con->prepare("UPDATE class_tb SET $field = ? WHERE class_id = ?");
+    $stmt->bind_param('si', $value, $userid);
+
+    if ($stmt->execute()) {
+        echo 'success';
+    } else {
+        echo 'error';
+    }
+
+    $stmt->close();
+    exit;
+}
+
+if (isset($_GET['del'])) {
+    $id = $_GET['del'];
+    $stmt = $con->prepare("DELETE FROM class_tb WHERE class_id = ?");
+    $stmt->bind_param("i", $id);
+    if ($stmt->execute()) {
+        echo "<script>alert('Item deleted successfully!');</script>";
+    } else {
+        echo "<script>alert('Something went wrong!');</script>";
+    }
+}
 ?>
 <div class="main-flex">
     <div class="create-new-form">
@@ -125,15 +152,17 @@
             </thead>
             <tbody>
                 <?php
-                $getClasses = $con->query("SELECT `class_courseStrand`, `class_year`, `class_section` FROM `class_tb`;");
+                $getClasses = $con->query("SELECT * FROM `class_tb`;");
                 $i = 1;
                 while ($row = $getClasses->fetch_assoc()) {
                 ?>
                     <tr>
                         <td><?php echo $i ?></td>
-                        <td><?php echo $row['class_courseStrand'] ?></td>
-                        <td><?php echo $row['class_year'] ?></td>
-                        <td><?php echo $row['class_section'] ?></td>
+                        <td class="editable" data-userid="<?php echo $row['class_id']; ?>" data-field="class_courseStrand"><?php echo $row['class_courseStrand'] ?></td>
+                        <td class="editable-dropdown" data-userid="<?php echo $row['class_id']; ?>" data-field="class_year" data-standing="<?php echo $row['class_standing']; ?>"><?php echo $row['class_year'] ?></td>
+                        <td class="editable-dropdown" data-userid="<?php echo $row['class_id']; ?>" data-field="class_section"><?php echo $row['class_section'] ?></td>
+                        <td><a href="?del=<?php echo $row['class_id']; ?>" onclick="return confirm('Are you sure you want to delete this item?')"><button>Delete</button></a></td>
+
                     </tr>
                 <?php
                     $i++;
@@ -146,6 +175,106 @@
 
 
 <script src="searchtable.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const standingOptions = {
+            'College': ['1', '2', '3', '4'],
+            'SHS': ['11', '12']
+        };
+
+        const sectionOptions = ['A', 'B', 'C', 'D', 'E', 'F', 'G']; // Example section options
+
+        document.querySelectorAll('.editable').forEach(cell => {
+            cell.addEventListener('dblclick', function() {
+                if (!this.querySelector('input')) {
+                    let originalValue = this.textContent.trim();
+                    let input = document.createElement('input');
+                    input.type = 'text';
+                    input.value = originalValue;
+                    this.textContent = '';
+                    this.appendChild(input);
+                    input.focus();
+
+                    input.addEventListener('blur', function() {
+                        let newValue = this.value.trim();
+                        let userId = cell.getAttribute('data-userid');
+                        let field = cell.getAttribute('data-field');
+
+                        // Make an AJAX request to update the database
+                        let xhr = new XMLHttpRequest();
+                        xhr.open('POST', '', true);
+                        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === 4 && xhr.status === 200) {
+                                if (xhr.responseText.trim() === 'success') {
+                                    cell.textContent = newValue;
+                                } else {
+                                    cell.textContent = originalValue;
+                                    cell.textContent = newValue;
+
+                                    // alert('Update failed');
+                                }
+                            }
+                        };
+                        xhr.send(`userid=${userId}&field=${field}&value=${newValue}`);
+                    });
+                }
+            });
+        });
+
+        document.querySelectorAll('.editable-dropdown').forEach(cell => {
+            cell.addEventListener('dblclick', function() {
+                if (!this.querySelector('select')) {
+                    let originalValue = this.textContent.trim();
+                    let userId = this.getAttribute('data-userid');
+                    let field = this.getAttribute('data-field');
+                    let standing = this.getAttribute('data-standing');
+                    let select = document.createElement('select');
+
+                    let options = field === 'class_year' ? (standingOptions[standing] || []) : sectionOptions;
+
+                    options.forEach(optionValue => {
+                        let option = document.createElement('option');
+                        option.value = optionValue;
+                        option.text = optionValue;
+                        option.selected = optionValue === originalValue;
+                        select.appendChild(option);
+                    });
+
+                    this.textContent = '';
+                    this.appendChild(select);
+                    select.focus();
+
+                    select.addEventListener('blur', function() {
+                        cell.textContent = originalValue;
+                    });
+
+                    select.addEventListener('change', function() {
+                        let newValue = this.value.trim();
+
+                        // Make an AJAX request to update the database
+                        let xhr = new XMLHttpRequest();
+                        xhr.open('POST', '', true);
+                        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === 4 && xhr.status === 200) {
+                                if (xhr.responseText.trim() === 'success') {
+                                    cell.textContent = newValue;
+                                } else {
+                                    cell.textContent = originalValue;
+                                    // alert('Update failed');
+                                    cell.textContent = newValue;
+
+                                }
+                            }
+                        };
+                        xhr.send(`userid=${userId}&field=${field}&value=${newValue}`);
+                    });
+                }
+            });
+        });
+    });
+</script>
 
 <?php
 if (isset($_GET['action']) && $_GET['action'] == 'createClass') {
