@@ -148,7 +148,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'createDepartment') {
         $insertDept = $con->prepare("INSERT INTO department_tb(department_name) VALUES (?)");
         $insertDept->bind_param("s", $deptName);
         if ($insertDept->execute()) {
-            echo "<script>alert('Department created successfully');</script>";
+            echo "<script>alert('Department created successfully');window.location.href = 'admin-manage-department-list.php';</script>";
         } else {
             echo "<script>alert('Error creating department');</script>";
         }

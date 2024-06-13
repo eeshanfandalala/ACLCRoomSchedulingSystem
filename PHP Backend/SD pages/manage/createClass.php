@@ -165,7 +165,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'createClass') {
         $insertClass = $con->prepare("INSERT INTO class_tb(class_courseStrand, class_year, class_section, class_department, class_standing) VALUES (?, ?, ?, ?, ?)");
         $insertClass->bind_param("sssss", $CorS, $year, $section, $SubDept, $standing);
         if ($insertClass->execute()) {
-            echo "<script>alert('Class record inserted successfully');windoe.location.href = 'admin-manage-class-list.php';</script>";
+            echo "<script>alert('Class record inserted successfully');window.location.href = 'admin-manage-class-list.php';</script>";
         } else {
             echo "<script>alert('Error inserting class')</script>";
         }

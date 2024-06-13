@@ -90,6 +90,7 @@ while ($row = $fetchDepartments->fetch_assoc()) {
                     <th>Subject Name</th>
                     <th>Department</th>
                     <th>Type</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -205,7 +206,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'createSubject') {
         $insertSubject->bind_param('sss', $SubjectName, $SubDept, $roomType);
 
         if ($insertSubject->execute()) {
-            echo "<script>alert('Subject added');</script>";
+            echo "<script>alert('Subject added');window.location.href = 'admin-manage-subject-list.php';</script>";
         } else {
             echo "<script>alert('Error creating Department');</script>";
         }
