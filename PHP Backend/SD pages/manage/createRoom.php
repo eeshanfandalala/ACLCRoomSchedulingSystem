@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $insertRoomSql->bind_param("ssss", $RoomName, $RoomType, $RoomFloor, $RoomBuilding);
 
         if ($insertRoomSql->execute()) {
-            echo "Room record inserted successfully<br>";
+            echo "<script>alert('Room record inserted successfully');window.location.href = 'admin-manage-room-list.php';</script>'";
         } else {
             echo "Error inserting room record: " . $insertRoomSql->error;
         }
