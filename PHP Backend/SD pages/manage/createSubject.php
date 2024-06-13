@@ -26,13 +26,20 @@ if (isset($_GET['del'])) {
     $id = $_GET['del'];
     $stmt = $con->prepare("DELETE FROM subject_tb WHERE subject_id = ?");
     $stmt->bind_param("i", $id);
-    if($stmt->execute()){
+    if ($stmt->execute()) {
         echo "<script>alert('Item deleted successfully!');</script>";
-    }else{
+    } else {
         echo "<script>alert('Something went wrong!');</script>";
-
     }
+    exit;
+}
 
+// Fetch distinct department options from the database
+$departments = [];
+
+$fetchDepartments = $con->query("SELECT DISTINCT department_name FROM department_tb");
+while ($row = $fetchDepartments->fetch_assoc()) {
+    $departments[] = $row['department_name'];
 }
 ?>
 <div class="main">
@@ -95,11 +102,11 @@ if (isset($_GET['del'])) {
                 while ($row = $getSubjects->fetch_assoc()) {
                 ?>
                     <tr>
-                        <td><?php echo $i ?></td>
-                        <td class="editable" data-userid="<?php echo $row['subject_id'] ?>" data-field="subject_name"><?php echo $row['subject_name'] ?></td>
-                        <td><?php echo $row['subject_department'] ?></td>
-                        <td><?php echo $row['subject_type'] ?></td>
-                        <td><a href="?del=<?php echo $row['subject_id'] ?>" onclick="return confirm('Are you sure you want to delete this item?')"><button>Delete</button></a></td>
+                        <td><?php echo $i; ?></td>
+                        <td class="editable" data-userid="<?php echo $row['subject_id']; ?>" data-field="subject_name"><?php echo $row['subject_name']; ?></td>
+                        <td class="editable" data-userid="<?php echo $row['subject_id']; ?>" data-field="subject_department"><?php echo $row['subject_department']; ?></td>
+                        <td class="editable" data-userid="<?php echo $row['subject_id']; ?>" data-field="subject_type"><?php echo $row['subject_type']; ?></td>
+                        <td><a href="?del=<?php echo $row['subject_id']; ?>" onclick="return confirm('Are you sure you want to delete this item?')"><button>Delete</button></a></td>
                     </tr>
                 <?php
                     $i++;
@@ -111,6 +118,71 @@ if (isset($_GET['del'])) {
 </div>
 
 <script src="searchtable.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const departmentOptions = <?php echo json_encode($departments); ?>;
+        const typeOptions = ['Lecture', 'Laboratory'];
+
+        document.querySelectorAll('.editable').forEach(cell => {
+            cell.addEventListener('dblclick', function() {
+                if (!this.querySelector('input') && !this.querySelector('select')) {
+                    let originalValue = this.textContent;
+                    let userId = this.getAttribute('data-userid');
+                    let field = this.getAttribute('data-field');
+                    let inputElement;
+
+                    if (field === 'subject_name') {
+                        inputElement = document.createElement('input');
+                        inputElement.type = 'text';
+                        inputElement.value = originalValue;
+                    } else {
+                        inputElement = document.createElement('select');
+                        let options = field === 'subject_department' ? departmentOptions : typeOptions;
+                        options.forEach(optionValue => {
+                            let option = document.createElement('option');
+                            option.value = optionValue;
+                            option.text = optionValue;
+                            option.selected = optionValue === originalValue;
+                            inputElement.appendChild(option);
+                        });
+                    }
+
+                    this.textContent = '';
+                    this.appendChild(inputElement);
+                    inputElement.focus();
+
+                    inputElement.addEventListener('blur', function() {
+                        cell.textContent = originalValue;
+                    });
+
+                    inputElement.addEventListener('change', function() {
+                        let newValue = this.value;
+
+                        // Make an AJAX request to update the database
+                        let xhr = new XMLHttpRequest();
+                        xhr.open('POST', '', true);
+                        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === 4 && xhr.status === 200) {
+                                if (xhr.responseText.trim() === 'success') {
+                                    cell.textContent = newValue;
+                                } else {
+                                    cell.textContent = originalValue;
+                                    cell.textContent = newValue;
+
+                                    // alert('Update failed');
+                                }
+                            }
+                        };
+                        xhr.send(`userid=${userId}&field=${field}&value=${newValue}`);
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+
 
 
 <?php
