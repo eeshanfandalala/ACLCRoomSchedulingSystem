@@ -21,6 +21,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userid']) && isset($_P
     $stmt->close();
     exit;
 }
+if (isset($_GET['del'])) {
+    // echo 'hi';
+    $id = $_GET['del'];
+    $stmt = $con->prepare("DELETE FROM subject_tb WHERE subject_id = ?");
+    $stmt->bind_param("i", $id);
+    if($stmt->execute()){
+        echo "<script>alert('Item deleted successfully!');</script>";
+    }else{
+        echo "<script>alert('Something went wrong!');</script>";
+
+    }
+
+}
 ?>
 <div class="main">
     <div class="create-new-room">
@@ -85,6 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userid']) && isset($_P
                         <td class="editable" data-userid="<?php echo $row['subject_id'] ?>" data-field="subject_name"><?php echo $row['subject_name'] ?></td>
                         <td><?php echo $row['subject_department'] ?></td>
                         <td><?php echo $row['subject_type'] ?></td>
+                        <td><a href="?del=<?php echo $row['subject_id'] ?>" onclick="return confirm('Are you sure you want to delete this item?')"><button>Delete</button></a></td>
                     </tr>
                 <?php
                     $i++;

@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+<style>
+    .error {
+        color: red;
+        /* display: none; */
+    }
+</style>
 
 <body>
     <div class="main">
@@ -63,34 +69,45 @@
 
                     <div>
                         <label>Section</label><br>
-                        <select name="class">
+                        <select name="class" id="class-select" required>
                             <?php
-                            while ($row = mysqli_fetch_array($result)) {
-                                $classID = $row['class_id'];
-                                $courseStrand = $row['class_courseStrand'];
-                                $year = $row['class_year'];
-                                $section = $row['class_section'];
-                                $departmentUnder = $row['class_department'];
+                            if ($result->num_rows > 0) {
 
-                                $className = $courseStrand . $year . '-' . $section;
-                                $classID_name = $classID . '|' . $className;
-                                $classID_name = htmlspecialchars($classID_name);
+                                while ($row = mysqli_fetch_array($result)) {
+                                    $classID = $row['class_id'];
+                                    $courseStrand = $row['class_courseStrand'];
+                                    $year = $row['class_year'];
+                                    $section = $row['class_section'];
+                                    $departmentUnder = $row['class_department'];
+
+                                    $className = $courseStrand . $year . '-' . $section;
+                                    $classID_name = $classID . '|' . $className;
+                                    $classID_name = htmlspecialchars($classID_name);
                             ?>
-                                <option value='<?php echo $classID_name; ?>' <?php if (isset($_POST['sub2']) || isset($_POST['sub3']) || isset($_POST['sub4'])) {
-                                                                                    echo ($_POST['class'] == "$classID_name") ? "selected" : "";
-                                                                                } ?>><?php echo $className; ?></option>
+                                    <option value='<?php echo $classID_name; ?>' <?php if (isset($_POST['sub2']) || isset($_POST['sub3']) || isset($_POST['sub4'])) {
+                                                                                        echo ($_POST['class'] == "$classID_name") ? "selected" : "";
+                                                                                    } ?>><?php echo $className; ?></option>
+                                <?php
+                                }
+                            } else {
+                                ?>
+                                <option value="" id="class-option" disabled selected>Pls create a class/section</option>
+
                             <?php
                             }
+
                             ?>
                         </select>
-                        <input type="submit" name="sub2" value="Next">
+                        <span id="class-error" class="error" style="display:none;">Pls create a class/section</span>
+
+                        <input type="submit" name="sub2" value="Next" id="sub2">
                     </div>
                 </form>
 
                 <?php
                 if (isset($_POST['sub2']) || $_GET['action'] == "form3" || $_GET['action'] == 'form4') {
                 ?>
-                    <form action="?action=form3" method="post" class="side-by-side">
+                    <form action="?action=form3" method="post" class="side-by-side" id="select-subject-teacher-form">
                         <input type="hidden" value="<?php echo $_POST['standing']; ?>" name="standing">
                         <input type="hidden" name="AY" value="<?php echo $_POST['AY'] ?>">
                         <input type="hidden" name="SetSem" value="<?php echo $_POST['SetSem'] ?>">
@@ -103,13 +120,22 @@
                                 $findsubjects = $con->prepare("SELECT * FROM subject_tb");
                                 $findsubjects->execute();
                                 $resultSubjects = $findsubjects->get_result();
-                                while ($rowsubjects = $resultSubjects->fetch_assoc()) {
+                                if ($resultSubjects->num_rows > 0) {
+
+                                    while ($rowsubjects = $resultSubjects->fetch_assoc()) {
                                 ?>
-                                    <option value="<?php echo $rowsubjects['subject_id'] . '|' . $rowsubjects['subject_name']; ?>">
-                                        <?php echo $rowsubjects['subject_name']; ?>
-                                    </option>
+                                        <option value="<?php echo $rowsubjects['subject_id'] . '|' . $rowsubjects['subject_name']; ?>">
+                                            <?php echo $rowsubjects['subject_name']; ?>
+                                        </option>
+                                    <?php
+                                    }
+                                } else {
+                                    ?>
+                                    <option value="Pls create a subject" disabled></option>
                                 <?php
+
                                 }
+
                                 $findsubjects->free_result();
                                 ?>
                             </datalist>
@@ -125,11 +151,18 @@
                                 $findTechers = $con->prepare("SELECT * FROM teacher_tb WHERE `status` = 1");
                                 $findTechers->execute();
                                 $resultTeachers = $findTechers->get_result();
-                                while ($rowTeacher = $resultTeachers->fetch_assoc()) {
+                                if ($resultTeachers->num_rows > 0) {
+
+                                    while ($rowTeacher = $resultTeachers->fetch_assoc()) {
                                 ?>
-                                    <option value="<?php echo $rowTeacher['teacher_id'] . '|' . $rowTeacher['teacher_name']; ?>">
-                                        <?php echo $rowTeacher['teacher_name']; ?>
-                                    </option>
+                                        <option value="<?php echo $rowTeacher['teacher_id'] . '|' . $rowTeacher['teacher_name']; ?>">
+                                            <?php echo $rowTeacher['teacher_name']; ?>
+                                        </option>
+                                    <?php
+                                    }
+                                } else {
+                                    ?>
+                                    <option value="" disabled selected>Pls create a teacher</option>
                                 <?php
                                 }
                                 ?>
@@ -138,7 +171,7 @@
                             <input type="text" name="teacher" id="selected-teacher" list="teacher-list" placeholder="Choose a teacher..." value="<?php if (isset($_POST['sub3']) || isset($_POST['sub4'])) :
                                                                                                                                                         echo $_POST['teacher'];
                                                                                                                                                     endif; ?>" required>
-                            <input type="submit" name="sub3" value="Add">
+                            <input type="submit" name="sub3" id="sub3" value="Add">
                         </div>
                     </form>
         </div>
@@ -154,7 +187,7 @@
     ?>
 
         <main class="form-4">
-            <form action="?action=form4" method="post">
+            <form action="?action=form4" method="post" id="select-room-form">
                 <input type="hidden" value="<?php echo $_POST['standing']; ?>" name="standing">
                 <input type="hidden" name="AY" value="<?php echo $_POST['AY'] ?>">
                 <input type="hidden" name="SetSem" value="<?php echo $_POST['SetSem'] ?>">
@@ -181,12 +214,19 @@
                                     $findeRooms->execute();
                                     $resultRooms = $findeRooms->get_result();
                                     $roomType = ''; // Initialize roomType variable
-                                    while ($rowRoom = $resultRooms->fetch_assoc()) {
-                                        $roomType = $rowRoom['room_type'];
+                                    if ($resultRooms->num_rows > 0) {
+
+                                        while ($rowRoom = $resultRooms->fetch_assoc()) {
+                                            $roomType = $rowRoom['room_type'];
                                     ?>
-                                        <option value="<?php echo $rowRoom['room_id'] . '|' . $rowRoom['room_name']; ?>">
-                                            <?php echo $rowRoom['room_name']; ?>
-                                        </option>
+                                            <option value="<?php echo $rowRoom['room_id'] . '|' . $rowRoom['room_name']; ?>">
+                                                <?php echo $rowRoom['room_name']; ?>
+                                            </option>
+                                        <?php
+                                        }
+                                    } else {
+                                        ?>
+                                        <option value="Pls create a room" disabled selected></option>
                                     <?php
                                     }
 
@@ -333,7 +373,7 @@
                         <td><?php echo htmlspecialchars($schedule['schedule_day']); ?></td>
                     </tr>
                 <?php
-            } ?>
+                        } ?>
         </tbody>
     </table>
 <?php
@@ -351,6 +391,149 @@
 
 ?>
 </div>
+<script>
+    function checkClasses() {
+        var selectClass = document.getElementById('class-select');
+        // var classOption = document.getElementById('class-option');
+        var classError = document.getElementById('class-error');
+        var submitButton = document.getElementById('sub2');
+        if (selectClass.options.length === 1 && selectClass.options[0].value === "") {
+            submitButton.disabled = true;
+            // selectClass.style.color = 'red';
+            classError.style.display = 'none';
+        } else {
+            submitButton.disabled = false;
+        }
+    }
+
+    window.onload = function() {
+        checkClassesAndSubmit(); // Check classes on page load
+    }
+
+    function checkSubjects() {
+        var subjectInput = document.getElementById('selected-subject');
+        var subjectDatalist = document.getElementById('subject-list');
+
+        var teacherInput = document.getElementById('selected-teacher');
+        var teacherDatalist = document.getElementById('teacher-list');
+
+        var submitButton = document.getElementById('sub3');
+
+        var noSubjects = subjectDatalist.options.length === 0 ||
+            (subjectDatalist.options.length === 1 && subjectDatalist.options[0].disabled);
+
+        var noTeachers = teacherDatalist.options.length === 0 ||
+            (teacherDatalist.options.length === 1 && teacherDatalist.options[0].disabled);
+
+        if (noSubjects) {
+            subjectInput.disabled = true;
+            subjectInput.value = 'Pls create a subject';
+            subjectInput.style.color = 'red';
+        } else {
+            subjectInput.disabled = false;
+        }
+
+        if (noTeachers) {
+            teacherInput.disabled = true;
+            teacherInput.value = 'No teachers is available';
+            teacherInput.style.color = 'red';
+
+        } else {
+            teacherInput.disabled = false;
+        }
+
+        submitButton.disabled = noSubjects || noTeachers;
+    }
+    window.onload = function() {
+        checkSubjects();
+    }
+
+    function checkRoom() {
+        var roomInput = document.getElementById('selected-room');
+        var roomDatalist = document.getElementById('room-list');
+        var submitButton = document.getElementById('sub4');
+
+        var noRooms = roomDatalist.options.length === 0 ||
+            (roomDatalist.options.length === 1 && roomDatalist.options[0].disabled);
+
+        if (noRooms) {
+            roomInput.disabled = true;
+            roomInput.value = 'Pls create a room';
+            roomInput.style.color = 'red';
+        } else {
+            roomInput.disabled = false;
+        }
+
+
+    }
+    window.onload = function() {
+        checkRoom();
+    }
+
+
+    document.getElementById('select-subject-teacher-form').addEventListener('submit', function(event) {
+        var inputSubject = document.getElementById('selected-subject');
+        var datalistSubject = document.getElementById('subject-list');
+        var optionsSubject = datalistSubject.options;
+        var inputValueSubject = inputSubject.value;
+
+        var inputTeacher = document.getElementById('selected-teacher');
+        var datalistTeacher = document.getElementById('teacher-list');
+        var optionsTeacher = datalistTeacher.options;
+        var inputValueTeacher = inputTeacher.value;
+
+        var isValidSubject = false;
+        var isValidTeacher = false;
+
+        for (var i = 0; i < optionsSubject.length; i++) {
+            if (inputValueSubject === optionsSubject[i].value) {
+                isValidSubject = true;
+                break;
+            }
+        }
+
+        for (var i = 0; i < optionsTeacher.length; i++) {
+            if (inputValueTeacher === optionsTeacher[i].value) {
+                isValidTeacher = true;
+                break;
+            }
+        }
+
+        if (!isValidSubject) {
+            alert('Please select a valid subject from the list.');
+            event.preventDefault(); // Prevent the form from submitting
+            return;
+        }
+
+        if (!isValidTeacher) {
+            alert('Please select a valid teacher from the list.');
+            event.preventDefault(); // Prevent the form from submitting
+            return;
+        }
+    });
+
+    document.getElementById('select-room-form').addEventListener('submit', function(event) {
+        var inputRoom = document.getElementById('selected-room');
+        var datalistRoom = document.getElementById('room-list');
+        var optionsRoom = datalistRoom.options;
+        var inputValueRoom = inputRoom.value;
+        var isValidRoom = false;
+
+        for (var i = 0; i < optionsRoom.length; i++) {
+            if (inputValueRoom === optionsRoom[i].value) {
+                isValidRoom = true;
+                break;
+            }
+        }
+
+        if (!isValidRoom) {
+            alert('Please select a valid room from the list.');
+            event.preventDefault(); // Prevent the form from submitting
+            return;
+        }
+
+    });
+</script>
 <script>
     // Get references to the start and end time input fields
     const startTimeInput = document.getElementById('startTime');
