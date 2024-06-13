@@ -1,3 +1,35 @@
+
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userid']) && isset($_POST['field']) && isset($_POST['value'])) {
+    $userid = $_POST['userid'];
+    $field = $_POST['field'];
+    $value = $_POST['value'];
+
+    $stmt = $con->prepare("UPDATE department_tb SET $field = ? WHERE department_id = ?");
+    $stmt->bind_param("si", $value, $userid);
+    if ($stmt->execute()) {
+        echo 'Updated success';
+    } else {
+        echo 'error';
+    }
+
+    $stmt->close();
+    exit;
+}
+
+if (isset($_GET['del'])) {
+    // echo 'hi';
+    $id = $_GET['del'];
+    $stmt = $con->prepare("DELETE FROM department_tb WHERE department_id = ?");
+    $stmt->bind_param("i", $id);
+    if ($stmt->execute()) {
+        echo "<script>alert('Item deleted successfully!');</script>";
+    } else {
+        echo "<script>alert('Something went wrong!');</script>";
+    }
+    exit;
+}
+?>
 <div class="main-flex">
     <div class="create-new-form">
         <div class="text">
@@ -25,16 +57,18 @@
             <tbody>
                 <?php
                 // include('../../config.php');
-                
+
                 $getDepartment = $con->query("SELECT * FROM department_tb");
                 $i = 1;
                 while ($row = $getDepartment->fetch_assoc()) {
-                    ?>
+                ?>
                     <tr>
                         <td><?php echo $i ?></td>
-                        <td><?php echo $row['department_name'] ?></td>
+                        <td class="editable" data-userid="<?php echo $row['department_id']; ?>" data-field="department_name"><?php echo $row['department_name'] ?></td>
+                        <td><a href="?del=<?php echo $row['department_id']; ?>" onclick="return confirm('Are you sure you want to delete this item?')"><button>Delete</button></a></td>
+
                     </tr>
-                    <?php
+                <?php
                     $i++;
                 }
                 ?>
@@ -45,6 +79,56 @@
 
 
 <script src="searchtable.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".editable").forEach((cell) => {
+            cell.addEventListener("dblclick", function() {
+                if (!this.querySelector("input")) {
+                    let originalValue = this.textContent;
+                    let input = document.createElement("input");
+                    input.type = "text";
+                    input.value = originalValue;
+                    this.textContent = "";
+                    this.appendChild(input);
+                    input.focus();
+
+                    input.addEventListener("blur", function() {
+                        cell.textContent = originalValue;
+                    });
+
+                    input.addEventListener("keypress", function(e) {
+                        if (e.key === "Enter") {
+                            let newValue = this.value;
+                            let userId = cell.getAttribute("data-userid");
+                            let field = cell.getAttribute("data-field");
+
+                            // Make an AJAX request to update the database
+                            let xhr = new XMLHttpRequest();
+                            xhr.open("POST", "", true);
+                            xhr.setRequestHeader(
+                                "Content-Type",
+                                "application/x-www-form-urlencoded"
+                            );
+                            xhr.onreadystatechange = function() {
+                                if (xhr.readyState === 4 && xhr.status === 200) {
+                                    if (xhr.responseText.trim() == "Updated success") {
+                                        cell.textContent = newValue;
+                                    } else {
+                                        cell.textContent = originalValue;
+                                        cell.textContent = newValue;
+
+                                        // alert('Update failed');
+                                    }
+                                }
+                            };
+                            xhr.send(`userid=${userId}&field=${field}&value=${newValue}`);
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
 
 <?php
 
