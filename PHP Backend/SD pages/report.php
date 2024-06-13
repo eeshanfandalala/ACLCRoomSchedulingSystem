@@ -21,12 +21,12 @@ include 'config.php';
                         $year = $currentYear + $i;
                         $nextYear = $year + 1;
                         $optionValue = $year . "-" . $nextYear;
-                        ?>
-                        <option value=<?php echo $optionValue ?>     <?php if (isset($_POST['AY'])) {
-                                    echo ($_POST['AY'] == "$optionValue") ? "selected" : "";
-                                } ?> required><?php echo $optionValue ?>
+                    ?>
+                        <option value=<?php echo $optionValue ?> <?php if (isset($_POST['AY'])) {
+                                                                        echo ($_POST['AY'] == "$optionValue") ? "selected" : "";
+                                                                    } ?> required><?php echo $optionValue ?>
                         </option>
-                        <?php
+                    <?php
                     }
                     ?>
                 </select>
@@ -35,13 +35,13 @@ include 'config.php';
             <div>
                 <label>Set Semester</label><br>
                 <input type="radio" name="SetSem" id="firstSemester" value="1st" <?php if (isset($_POST['SetSem'])) {
-                    echo ($_POST['SetSem'] == '1st') ? "checked" : "";
-                } ?> onchange="this.form.submit()" required>
+                                                                                        echo ($_POST['SetSem'] == '1st') ? "checked" : "";
+                                                                                    } ?> onchange="this.form.submit()" required>
                 <label>1st</label>
 
                 <input type="radio" name="SetSem" id="secondSemester" value="2nd" <?php if (isset($_POST['SetSem'])) {
-                    echo ($_POST['SetSem'] == '2nd') ? "checked" : "";
-                } ?> onchange="this.form.submit()" required>
+                                                                                        echo ($_POST['SetSem'] == '2nd') ? "checked" : "";
+                                                                                    } ?> onchange="this.form.submit()" required>
                 <label>2nd</label>
             </div>
         </form>
@@ -55,25 +55,42 @@ include 'config.php';
             <input type="text" id="searchBar" placeholder="Search for classes...">
             <div class="container" id="classContainer">
                 <?php
-                $countClassWithSubjects = $con->prepare("SELECT c.class_id, c.class_courseStrand, c.class_year, c.class_section, c.class_department, c.class_standing, COUNT(DISTINCT s.subject_id) AS total_subjects
-                                                FROM class_tb c
-                                                LEFT JOIN schedule_tb s ON c.class_id = s.class_id
-                                                WHERE s.schedule_SY = ? AND s.schedule_semester = ?
-                                                GROUP BY c.class_id, c.class_courseStrand, c.class_year, c.class_section, c.class_department, c.class_standing;");
+                $countClassWithSubjects = $con->prepare("SELECT
+                c.class_id,
+                c.class_courseStrand,
+                c.class_year,
+                c.class_section,
+                c.class_department,
+                c.class_standing,
+                COUNT(DISTINCT s.subject_id) AS num_subjects
+            FROM
+                class_tb c
+            LEFT JOIN
+                schedule_tb s ON c.class_id = s.class_id
+                            AND s.schedule_SY = ?
+                            AND s.schedule_semester = ?
+            GROUP BY
+                c.class_id,
+                c.class_courseStrand,
+                c.class_year,
+                c.class_section,
+                c.class_department,
+                c.class_standing;");
+
                 $countClassWithSubjects->bind_param("ss", $_POST['AY'], $_POST['SetSem']);
                 $countClassWithSubjects->execute();
                 $resultcountClassWithSubjects = $countClassWithSubjects->get_result();
                 while ($row = $resultcountClassWithSubjects->fetch_assoc()) {
-                    ?>
+
+                ?>
                     <div class="card">
                         <h2><?php echo htmlspecialchars($row['class_courseStrand']) . " " . htmlspecialchars($row['class_year']) . "-" . htmlspecialchars($row['class_section']); ?>
                         </h2>
-                        <p><strong>Class ID:</strong> <?php echo htmlspecialchars($row['class_id']); ?></p>
                         <p><strong>Department:</strong> <?php echo htmlspecialchars($row['class_department']); ?></p>
                         <p><strong>Standing:</strong> <?php echo htmlspecialchars($row['class_standing']); ?></p>
-                        <p><strong>Total Subjects:</strong> <?php echo htmlspecialchars($row['total_subjects']); ?></p>
+                        <p><strong>Total Subjects:</strong> <?php echo htmlspecialchars($row['num_subjects']); ?></p>
                     </div>
-                    <?php
+                <?php
                 }
                 ?>
             </div>
@@ -87,23 +104,44 @@ include 'config.php';
             <input type="text" id="teacherSearchBar" placeholder="Search for teachers...">
             <div class="container" id="teacherContainer">
                 <?php
-                $countTeacherWithSubjects = $con->prepare("SELECT t.teacher_name, t.teacher_id, COUNT(DISTINCT s.schedule_id) AS total_classes, COUNT(DISTINCT s.subject_id) AS total_subjects
-                                                    FROM teacher_tb t
-                                                    LEFT JOIN schedule_tb s ON t.teacher_id = s.teacher_id
-                                                    WHERE s.schedule_SY = ? AND s.schedule_semester = ?
-                                                    GROUP BY t.teacher_id, t.teacher_name;");
+                $countTeacherWithSubjects = $con->prepare("SELECT
+                t.`teacher_pic`,
+                `t`.`status`,
+                t.teacher_id,
+                t.teacher_name,
+                COUNT(DISTINCT s.subject_id) AS total_subjects_taught,
+                COUNT(DISTINCT s.class_id) AS total_classes_taught
+            FROM
+                teacher_tb t
+            LEFT JOIN
+                schedule_tb s ON t.teacher_id = s.teacher_id
+                AND s.schedule_SY = ?
+                AND s.schedule_semester = ?
+            GROUP BY
+                t.teacher_id,
+                t.teacher_name;");
+
                 $countTeacherWithSubjects->bind_param("ss", $_POST['AY'], $_POST['SetSem']);
                 $countTeacherWithSubjects->execute();
                 $resultcountTeacherWithSubjects = $countTeacherWithSubjects->get_result();
                 while ($row = $resultcountTeacherWithSubjects->fetch_assoc()) {
-                    ?>
+                ?>
                     <div class="card">
                         <h2><?php echo htmlspecialchars($row['teacher_name']); ?></h2>
-                        <p><strong>Teacher ID:</strong> <?php echo htmlspecialchars($row['teacher_id']); ?></p>
-                        <p><strong>Total Classes:</strong> <?php echo htmlspecialchars($row['total_classes']); ?></p>
-                        <p><strong>Total Subjects:</strong> <?php echo htmlspecialchars($row['total_subjects']); ?></p>
+                        <p><strong>Total Classes:</strong> <?php echo htmlspecialchars($row['total_classes_taught']); ?></p>
+                        <p><strong>Total Subjects:</strong> <?php echo htmlspecialchars($row['total_subjects_taught']); ?></p>
+                        <p><strong>Is Active:</strong> <?php echo htmlspecialchars($row['status']) == 1 ? 'Yes' : 'No'; ?></p>
+                        <!-- </div>
+                    <div> -->
+                        <div class="profile-picture-container">
+                            <div class="file-input-wrapper">
+                                <img src="./profile_pictures/<?php echo $row['teacher_pic'];
+                                                                $profpic = $row['teacher_pic']; ?>" alt="profile picture" style="width: 100px;">
+
+                            </div>
+                        </div>
                     </div>
-                    <?php
+                <?php
                 }
                 ?>
             </div>
@@ -116,6 +154,7 @@ include 'config.php';
             </div>
             <input type="text" id="roomSearchBar" placeholder="Search for rooms...">
             <div class="container" id="roomContainer">
+
                 <?php
                 if (isset($_POST['AY']) && isset($_POST['SetSem'])) {
 
@@ -129,78 +168,80 @@ include 'config.php';
                         echo '<p><strong>Floor:</strong> ' . htmlspecialchars($room['room_floor']) . '</p>';
                         echo '<p><strong>Building:</strong> ' . htmlspecialchars($room['room_building']) . '</p>';
 
-                        $scheduleSQL = $con->prepare("SELECT `schedule_day`, `schedule_time` FROM schedule_tb WHERE room_id = ? AND schedule_SY = ? AND schedule_semester = ?");
-                        $scheduleSQL->bind_param("sss", $room['room_id'], $_POST['AY'], $_POST['SetSem']);
+                        // Prepare and execute query to fetch schedules for the current room
+                        $scheduleSQL = $con->prepare("SELECT * FROM schedule_tb WHERE room_id = ? AND schedule_SY = ? AND schedule_semester = ?");
+                        $scheduleSQL->bind_param("iss", $room['room_id'], $_POST['AY'], $_POST['SetSem']);
                         $scheduleSQL->execute();
                         $resultscheduleSQL = $scheduleSQL->get_result();
 
+                        // Initialize arrays for vacant times, days of week, and timeslots
                         $vacantTimes = [];
                         $daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
                         $times = [
-                            "07:00:00",
-                            "07:30:00",
-                            "08:00:00",
-                            "08:30:00",
-                            "09:00:00",
-                            "09:30:00",
-                            "10:00:00",
-                            "10:30:00",
-                            "11:00:00",
-                            "11:30:00",
-                            "12:00:00",
-                            "12:30:00",
-                            "13:00:00",
-                            "13:30:00",
-                            "14:00:00",
-                            "14:30:00",
-                            "15:00:00",
-                            "15:30:00",
-                            "16:00:00",
-                            "16:30:00",
-                            "17:00:00",
-                            "17:30:00",
-                            "18:00:00",
-                            "18:30:00",
-                            "19:00:00",
-                            "19:30:00",
-                            "20:00:00",
-                            "20:30:00",
-                            "21:00:00",
-                            "21:30:00",
+                            "07:00:00", "07:30:00",
+                            "08:00:00", "08:30:00",
+                            "09:00:00", "09:30:00",
+                            "10:00:00", "10:30:00",
+                            "11:00:00", "11:30:00",
+                            "12:00:00", "12:30:00",
+                            "13:00:00", "13:30:00",
+                            "14:00:00", "14:30:00",
+                            "15:00:00", "15:30:00",
+                            "16:00:00", "16:30:00",
+                            "17:00:00", "17:30:00",
+                            "18:00:00", "18:30:00",
+                            "19:00:00", "19:30:00",
+                            "20:00:00", "20:30:00",
+                            "21:00:00", "21:30:00",
                             "22:00:00"
                         ];
 
+                        // Process each day of the week
                         foreach ($daysOfWeek as $day) {
                             $occupiedTimes = [];
 
-                            $resultscheduleSQL->data_seek(0); // Reset result pointer for each day
+                            // Reset result pointer for each day
+                            $resultscheduleSQL->data_seek(0);
+
+                            // Fetch and process each schedule record
                             while ($row = $resultscheduleSQL->fetch_assoc()) {
-                                $occupiedRoomTime = json_decode($row['schedule_time'], true);
-                                $occupiedRoomDays = json_decode($row['schedule_day'], true);
+                                // Convert occupied time to timestamps
+                                $occupiedTimeStart = strtotime($row['schedule_time_start']);
+                                $occupiedTimeEnd = strtotime($row['schedule_time_end']);
 
-                                if (in_array($day, $occupiedRoomDays)) {
-                                    $occupiedTimeStart = strtotime($occupiedRoomTime['start']);
-                                    $occupiedTimeEnd = strtotime($occupiedRoomTime['end']);
-
+                                // Check if the schedule applies to the current day
+                                if (strpos($row['schedule_day'], $day) !== false) {
+                                    // Find the indexes of occupied times in the times array
                                     $startIndex = array_search(date('H:i:s', $occupiedTimeStart), $times);
                                     $endIndex = array_search(date('H:i:s', $occupiedTimeEnd), $times);
 
+                                    // Mark occupied times in the times array
                                     for ($i = $startIndex; $i < $endIndex; $i++) {
-                                        $occupiedTimes[] = $times[$i];
+                                        $occupiedTimes[$i] = true;
                                     }
                                 }
                             }
 
-                            $vacantTimes[$day] = array_diff($times, $occupiedTimes);
+                            // Find vacant times by comparing occupiedTimes with times array
+                            $vacantTimes[$day] = [];
+                            for ($i = 0; $i < count($times); $i++) {
+                                if (!isset($occupiedTimes[$i])) {
+                                    $vacantTimes[$day][] = $times[$i];
+                                }
+                            }
                         }
 
+                        // Display vacant times for each day
                         foreach ($vacantTimes as $day => $times) {
-                            echo "<h2>$day</h2>";
+                            echo "<h3>$day</h3>";
                             echo "<p>" . implode(", ", $times) . "</p>";
                         }
+
                         echo "</div>";
                     }
                 }
+
+
                 ?>
             </div>
             <a id="toggleTeacherBtn" class="see-more" data-target="roomContainer">See More</a>
@@ -210,7 +251,7 @@ include 'config.php';
 
 <script>
     document.querySelectorAll('.see-more').forEach(button => {
-        button.addEventListener('click', function () {
+        button.addEventListener('click', function() {
             const containerId = this.getAttribute('data-target');
             const container = document.getElementById(containerId);
             const cards = container.querySelectorAll('.card');
@@ -233,7 +274,7 @@ include 'config.php';
     });
 
     // Initial state: show only the first 3 cards in each container
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const containers = document.querySelectorAll('.container');
         containers.forEach(container => {
             const cards = container.querySelectorAll('.card');
@@ -246,7 +287,7 @@ include 'config.php';
     });
 
     // Search functionality for classes
-    document.getElementById('searchBar').addEventListener('input', function () {
+    document.getElementById('searchBar').addEventListener('input', function() {
         const searchTerm = this.value.toLowerCase();
         const cards = document.querySelectorAll('#classContainer .card');
         cards.forEach(card => {
@@ -260,7 +301,7 @@ include 'config.php';
     });
 
     // Search functionality for teachers
-    document.getElementById('teacherSearchBar').addEventListener('input', function () {
+    document.getElementById('teacherSearchBar').addEventListener('input', function() {
         const searchTerm = this.value.toLowerCase();
         const cards = document.querySelectorAll('#teacherContainer .card');
         cards.forEach(card => {
@@ -274,7 +315,7 @@ include 'config.php';
     });
 
     // Search functionality for rooms
-    document.getElementById('roomSearchBar').addEventListener('input', function () {
+    document.getElementById('roomSearchBar').addEventListener('input', function() {
         const searchTerm = this.value.toLowerCase();
         const cards = document.querySelectorAll('#roomContainer .card');
         cards.forEach(card => {
