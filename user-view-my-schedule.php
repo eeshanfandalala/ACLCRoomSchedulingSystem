@@ -48,7 +48,7 @@ if (!isset($_SESSION['teacher_id'])) {
                         </ul>
                     </li>
                     <li>
-                        <a href="">
+                        <a href="user-manage-account.php">
                             <i class='bx bxs-cog'></i>
                             <span class="link-name">Manage Account</span>
                         </a>
