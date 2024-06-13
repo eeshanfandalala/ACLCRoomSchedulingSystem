@@ -26,6 +26,8 @@
                     <label>Semester</label><br>
                     <input type="radio" name="SetSem" id="firstSemester" value="1st" style="margin-top: 10px" onchange="this.form.submit()" <?php if (isset($_GET['selectedRoom'])) {
                                                                                                                     echo ($_POST['SetSem'] == '1st') ? "checked" : "";
+                                                                                                                } else {
+                                                                                                                    echo "checked"; // checked by default
                                                                                                                 } ?> required>
 
                     <label>1st</label>
@@ -38,6 +40,7 @@
                 <div>
                     <label>Room</label><br>
                     <select name="room" onchange="this.form.submit()">
+                        <option>--Choose a room--</option>
                         <?php
                         $getRoom = $con->prepare("SELECT * FROM room_tb");
                         $getRoom->execute();

@@ -44,6 +44,7 @@
                 <div>
                     <label>Room Type</label><br>
                     <select name="room" onchange="this.form.submit()">
+                        <option>--Choose a room--</option>
                         <?php
                         $getRoom = $con->prepare("SELECT * FROM room_tb");
                         $getRoom->execute();
