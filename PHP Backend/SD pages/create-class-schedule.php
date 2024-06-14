@@ -210,16 +210,16 @@
 
                                     ?>
                                 </datalist>
-                                <input type="text" name="room" id=" " list="room-list" class="<?php echo htmlspecialchars($roomType); ?>">
+                                <input type="text" name="room" id="selected-room" list="room-list" class="<?php echo htmlspecialchars($roomType); ?>">
                             </div>
 
                             <div class="time">
                                 <label>Time</label><br>
                                 <div>
                                     <label>From</label>
-                                    <input type="time" name="schedule_time[start]" id="startTime" min="07:00" max="22:00" step="1800">
+                                    <input type="time" name="schedule_time[start]" id="startTime" min="07:00" max="22:00">
                                     <label>to</label>
-                                    <input type="time" name="schedule_time[end]" id="endTime" min="07:00" max="22:00" step="1800">
+                                    <input type="time" name="schedule_time[end]" id="endTime" min="07:00" max="22:00">
                                 </div>
                             </div>
 
@@ -500,63 +500,109 @@
             return;
         }
     });
-    // Add an event listener to the inputs to enforce 30-minute increments
+    // // Add an event listener to the inputs to enforce 30-minute increments
+    // document.addEventListener('DOMContentLoaded', function() {
+    //     var startTimeInput = document.getElementById('startTime');
+    //     var endTimeInput = document.getElementById('endTime');
+
+    //     // Function to round time to nearest 30 minutes
+    //     function roundToNearest30Minutes(time) {
+    //         var timeParts = time.split(':');
+    //         var hours = parseInt(timeParts[0]);
+    //         var minutes = parseInt(timeParts[1]);
+
+    //         // Round to nearest 30 minutes
+    //         var roundedMinutes = Math.round(minutes / 30) * 30 % 60;
+    //         var roundedHours = Math.floor(minutes / 30) + hours;
+
+    //         // Format hours and minutes
+    //         var formattedHours = ('0' + roundedHours).slice(-2);
+    //         var formattedMinutes = ('0' + roundedMinutes).slice(-2);
+
+    //         return formattedHours + ':' + formattedMinutes;
+    //     }
+
+    //     // Round start time on input change
+    //     startTimeInput.addEventListener('change', function() {
+    //         this.value = roundToNearest30Minutes(this.value);
+    //     });
+
+    //     // Round end time on input change
+    //     endTimeInput.addEventListener('change', function() {
+    //         this.value = roundToNearest30Minutes(this.value);
+    //     });
+    // });
+</script>
+<script>
+    // Function to round only the minutes to the nearest 30 minutes for the start time
+    function roundMinutesToNearest30(time) {
+        var timeParts = time.split(':');
+        var hours = parseInt(timeParts[0]);
+        var minutes = parseInt(timeParts[1]);
+
+        // Round to nearest 30 minutes
+        var roundedMinutes = Math.round(minutes / 30) * 30 % 60;
+
+        // Format hours and minutes
+        var formattedHours = ('0' + hours).slice(-2);
+        var formattedMinutes = ('0' + roundedMinutes).slice(-2);
+
+        return formattedHours + ':' + formattedMinutes;
+    }
+
+    // Function to round both hours and minutes to the nearest 30 minutes for the end time
+    function roundToNearest30Minutes(time) {
+        var timeParts = time.split(':');
+        var hours = parseInt(timeParts[0]);
+        var minutes = parseInt(timeParts[1]);
+
+        // Round to nearest 30 minutes
+        var roundedMinutes = Math.round(minutes / 30) * 30 % 60;
+        var roundedHours = hours + Math.floor(minutes / 30);
+
+        // Ensure endHour wraps around if it exceeds 24
+        roundedHours = roundedHours % 24;
+
+        // Format hours and minutes
+        var formattedHours = ('0' + roundedHours).slice(-2);
+        var formattedMinutes = ('0' + roundedMinutes).slice(-2);
+
+        return formattedHours + ':' + formattedMinutes;
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
-        var startTimeInput = document.getElementById('startTime');
-        var endTimeInput = document.getElementById('endTime');
+        const startTimeInput = document.getElementById('startTime');
+        const endTimeInput = document.getElementById('endTime');
+        const selectedRoom = document.getElementById('selected-room');
+        const roomType = selectedRoom ? selectedRoom.className : "";
 
-        // Function to round time to nearest 30 minutes
-        function roundToNearest30Minutes(time) {
-            var timeParts = time.split(':');
-            var hours = parseInt(timeParts[0]);
-            var minutes = parseInt(timeParts[1]);
-
-            // Round to nearest 30 minutes
-            var roundedMinutes = Math.round(minutes / 30) * 30 % 60;
-            var roundedHours = Math.floor(minutes / 30) + hours;
-
-            // Format hours and minutes
-            var formattedHours = ('0' + roundedHours).slice(-2);
-            var formattedMinutes = ('0' + roundedMinutes).slice(-2);
-
-            return formattedHours + ':' + formattedMinutes;
-        }
-
-        // Round start time on input change
         startTimeInput.addEventListener('change', function() {
-            this.value = roundToNearest30Minutes(this.value);
+            // Round the start time's minutes to the nearest 30 minutes
+            const roundedStartTime = roundMinutesToNearest30(this.value);
+            this.value = roundedStartTime;
+
+            const [startHour, startMinute] = roundedStartTime.split(':').map(Number);
+
+            let endHour, endMinute;
+
+            if (roomType === "Lecture") {
+                endHour = startHour + 1;
+                endMinute = startMinute;
+            } else if (roomType === "Laboratory") {
+                endHour = startHour + Math.floor((startMinute + 90) / 60);
+                endMinute = (startMinute + 30) % 60;
+            }
+
+            // Ensure endHour wraps around if it exceeds 24
+            endHour = endHour % 24;
+
+            const endTimeValue = `${String(endHour).padStart(2, '0')}:${String(endMinute).padStart(2, '0')}`;
+            endTimeInput.value = endTimeValue;
         });
 
-        // Round end time on input change
         endTimeInput.addEventListener('change', function() {
             this.value = roundToNearest30Minutes(this.value);
         });
-    });
-</script>
-<script>
-    // Get references to the start and end time input fields
-
-    const startTimeInput = document.getElementById('startTime');
-    const endTimeInput = document.getElementById('endTime');
-    const selectedRoom = document.getElementById('selected-room');
-    const roomType = selectedRoom.className;
-
-    startTimeInput.addEventListener('change', function() {
-        const startTimeValue = startTimeInput.value;
-        const [startHour, startMinute] = startTimeValue.split(':').map(Number);
-
-        let endHour = (startHour + 1) % 24;
-        let endMinute = '';
-
-        if (roomType === "lecture") {
-            endMinute = (startMinute + 60) % 60;
-        } else if (roomType === "Laboratory") {
-            endMinute = (startMinute + 90) % 60;
-            endHour += Math.floor((startMinute + 30) / 60);
-        }
-
-        const endTimeValue = `${String(endHour).padStart(2, '0')}:${String(endMinute).padStart(2, '0')}`;
-        endTimeInput.value = endTimeValue;
     });
 </script>
 </body>
