@@ -104,7 +104,7 @@ if (!isset($_SESSION['sd_id'])) {
                     <i class='bx bx-menu'></i> <!-- button -->
                     <span class="text">View Class Schedule</span>
                 </div>
-                <?php include './PHP Backend/SD pages/view-room-schedule.php' ?>
+                <?php include './PHP Backend/SD pages/view-class-schedule.php' ?>
             </section>
         </body>
 <?php
