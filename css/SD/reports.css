@@ -142,3 +142,9 @@ input::placeholder {
 .see-more:hover {
     background-color: #0056b3;
 }
+
+.not-found-message {
+    margin-top: 10px;
+    display: none;
+    text-align: center;
+}
