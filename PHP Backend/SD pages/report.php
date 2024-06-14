@@ -2,47 +2,46 @@
 include 'config.php';
 ?>
 
-<main>
-    <div class="filter-container">
-        <div class="text">
-            <span>Filter By</span>
-        </div>
-        <form action="" method="post">
+<div class="main">
+    <div class="top" class="side-by-side">
+        <form action="" method="post" class="side-by-side">
             <div>
-                <label>School Year</label><br>
-                <select name="AY" id="yearSelect" onchange="this.form.submit()">
-                    <?php
-                    include 'config.php';
-                    // Get current year
-                    $currentYear = date("Y");
+                <div>
+                    <span class="text">Filter By</span><br>
+                    <div>
+                        <label>School Year</label><br>
+                        <select name="AY" id="yearSelect" onchange="this.form.submit()">
+                            <?php
+                            include 'config.php';
+                            $currentYear = date("Y");
+                            for ($i = -1; $i < 4; $i++) {
+                                $year = $currentYear + $i;
+                                $nextYear = $year + 1;
+                                $optionValue = $year . "-" . $nextYear;
+                            ?>
+                                <option value=<?php echo $optionValue ?> <?php if (isset($_POST['AY'])) {
+                                                                                echo ($_POST['AY'] == "$optionValue") ? "selected" : "";
+                                                                            } ?> required><?php echo $optionValue ?>
+                                </option>
+                            <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
 
-                    // Generate options for the current year and the next 5 years
-                    for ($i = -1; $i < 4; $i++) {
-                        $year = $currentYear + $i;
-                        $nextYear = $year + 1;
-                        $optionValue = $year . "-" . $nextYear;
-                    ?>
-                        <option value=<?php echo $optionValue ?> <?php if (isset($_POST['AY'])) {
-                                                                        echo ($_POST['AY'] == "$optionValue") ? "selected" : "";
-                                                                    } ?> required><?php echo $optionValue ?>
-                        </option>
-                    <?php
-                    }
-                    ?>
-                </select>
-            </div>
+                    <div>
+                        <label>Set Semester</label><br>
+                        <input type="radio" name="SetSem" id="firstSemester" value="1st" <?php if (isset($_POST['SetSem'])) {
+                                                                                                echo ($_POST['SetSem'] == '1st') ? "checked" : "";
+                                                                                            } ?> onchange="this.form.submit()" required>
+                        <label>1st</label>
 
-            <div>
-                <label>Set Semester</label><br>
-                <input type="radio" name="SetSem" id="firstSemester" value="1st" <?php if (isset($_POST['SetSem'])) {
-                                                                                        echo ($_POST['SetSem'] == '1st') ? "checked" : "";
-                                                                                    } ?> onchange="this.form.submit()" required>
-                <label>1st</label>
-
-                <input type="radio" name="SetSem" id="secondSemester" value="2nd" <?php if (isset($_POST['SetSem'])) {
-                                                                                        echo ($_POST['SetSem'] == '2nd') ? "checked" : "";
-                                                                                    } ?> onchange="this.form.submit()" required>
-                <label>2nd</label>
+                        <input type="radio" name="SetSem" id="secondSemester" value="2nd" <?php if (isset($_POST['SetSem'])) {
+                                                                                                echo ($_POST['SetSem'] == '2nd') ? "checked" : "";
+                                                                                            } ?> onchange="this.form.submit()" required>
+                        <label>2nd</label>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
@@ -86,9 +85,9 @@ include 'config.php';
                     <div class="card">
                         <h2><?php echo htmlspecialchars($row['class_courseStrand']) . " " . htmlspecialchars($row['class_year']) . "-" . htmlspecialchars($row['class_section']); ?>
                         </h2>
-                        <p><strong>Department:</strong> <?php echo htmlspecialchars($row['class_department']); ?></p>
-                        <p><strong>Standing:</strong> <?php echo htmlspecialchars($row['class_standing']); ?></p>
-                        <p><strong>Total Subjects:</strong> <?php echo htmlspecialchars($row['num_subjects']); ?></p>
+                        <p>Department: <?php echo htmlspecialchars($row['class_department']); ?></p>
+                        <p>Standing: <?php echo htmlspecialchars($row['class_standing']); ?></p>
+                        <p>Total Subjects: <?php echo htmlspecialchars($row['num_subjects']); ?></p>
                     </div>
                 <?php
                 }
@@ -127,17 +126,17 @@ include 'config.php';
                 while ($row = $resultcountTeacherWithSubjects->fetch_assoc()) {
                 ?>
                     <div class="card">
-                        <h2><?php echo htmlspecialchars($row['teacher_name']); ?></h2>
-                        <p><strong>Total Classes:</strong> <?php echo htmlspecialchars($row['total_classes_taught']); ?></p>
-                        <p><strong>Total Subjects:</strong> <?php echo htmlspecialchars($row['total_subjects_taught']); ?></p>
-                        <p><strong>Is Active:</strong> <?php echo htmlspecialchars($row['status']) == 1 ? 'Yes' : 'No'; ?></p>
-                        <!-- </div>
-                    <div> -->
+                        <div>
+                            <h2><?php echo htmlspecialchars($row['teacher_name']); ?></h2>
+                            <p>Total Classes: <?php echo htmlspecialchars($row['total_classes_taught']); ?></p>
+                            <p>Total Subjects: <?php echo htmlspecialchars($row['total_subjects_taught']); ?></p>
+                            <p>Is Active: <?php echo htmlspecialchars($row['status']) == 1 ? 'Yes' : 'No'; ?></p>
+                        </div>
+
                         <div class="profile-picture-container">
                             <div class="file-input-wrapper">
                                 <img src="./profile_pictures/<?php echo $row['teacher_pic'];
                                                                 $profpic = $row['teacher_pic']; ?>" alt="profile picture" style="width: 100px;">
-
                             </div>
                         </div>
                     </div>
@@ -168,13 +167,11 @@ include 'config.php';
                         echo '<p><strong>Floor:</strong> ' . htmlspecialchars($room['room_floor']) . '</p>';
                         echo '<p><strong>Building:</strong> ' . htmlspecialchars($room['room_building']) . '</p>';
 
-                        // Prepare and execute query to fetch schedules for the current room
                         $scheduleSQL = $con->prepare("SELECT * FROM schedule_tb WHERE room_id = ? AND schedule_SY = ? AND schedule_semester = ?");
                         $scheduleSQL->bind_param("iss", $room['room_id'], $_POST['AY'], $_POST['SetSem']);
                         $scheduleSQL->execute();
                         $resultscheduleSQL = $scheduleSQL->get_result();
 
-                        // Initialize arrays for vacant times, days of week, and timeslots
                         $vacantTimes = [];
                         $daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
                         $times = [
@@ -196,33 +193,21 @@ include 'config.php';
                             "22:00:00"
                         ];
 
-                        // Process each day of the week
                         foreach ($daysOfWeek as $day) {
                             $occupiedTimes = [];
-
-                            // Reset result pointer for each day
                             $resultscheduleSQL->data_seek(0);
 
-                            // Fetch and process each schedule record
                             while ($row = $resultscheduleSQL->fetch_assoc()) {
-                                // Convert occupied time to timestamps
                                 $occupiedTimeStart = strtotime($row['schedule_time_start']);
                                 $occupiedTimeEnd = strtotime($row['schedule_time_end']);
-
-                                // Check if the schedule applies to the current day
                                 if (strpos($row['schedule_day'], $day) !== false) {
-                                    // Find the indexes of occupied times in the times array
                                     $startIndex = array_search(date('H:i:s', $occupiedTimeStart), $times);
                                     $endIndex = array_search(date('H:i:s', $occupiedTimeEnd), $times);
-
-                                    // Mark occupied times in the times array
                                     for ($i = $startIndex; $i < $endIndex; $i++) {
                                         $occupiedTimes[$i] = true;
                                     }
                                 }
                             }
-
-                            // Find vacant times by comparing occupiedTimes with times array
                             $vacantTimes[$day] = [];
                             for ($i = 0; $i < count($times); $i++) {
                                 if (!isset($occupiedTimes[$i])) {
@@ -231,23 +216,19 @@ include 'config.php';
                             }
                         }
 
-                        // Display vacant times for each day
                         foreach ($vacantTimes as $day => $times) {
                             echo "<h3>$day</h3>";
                             echo "<p>" . implode(", ", $times) . "</p>";
                         }
-
                         echo "</div>";
                     }
                 }
-
-
                 ?>
             </div>
             <a id="toggleTeacherBtn" class="see-more" data-target="roomContainer">See More</a>
         </section>
     </div>
-</main>
+</div>
 
 <script>
     document.querySelectorAll('.see-more').forEach(button => {
@@ -273,7 +254,6 @@ include 'config.php';
         });
     });
 
-    // Initial state: show only the first 3 cards in each container
     document.addEventListener('DOMContentLoaded', function() {
         const containers = document.querySelectorAll('.container');
         containers.forEach(container => {
@@ -286,7 +266,6 @@ include 'config.php';
         });
     });
 
-    // Search functionality for classes
     document.getElementById('searchBar').addEventListener('input', function() {
         const searchTerm = this.value.toLowerCase();
         const cards = document.querySelectorAll('#classContainer .card');
@@ -300,7 +279,6 @@ include 'config.php';
         });
     });
 
-    // Search functionality for teachers
     document.getElementById('teacherSearchBar').addEventListener('input', function() {
         const searchTerm = this.value.toLowerCase();
         const cards = document.querySelectorAll('#teacherContainer .card');
@@ -314,7 +292,6 @@ include 'config.php';
         });
     });
 
-    // Search functionality for rooms
     document.getElementById('roomSearchBar').addEventListener('input', function() {
         const searchTerm = this.value.toLowerCase();
         const cards = document.querySelectorAll('#roomContainer .card');
