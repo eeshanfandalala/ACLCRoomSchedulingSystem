@@ -35,7 +35,7 @@ if (!isset($_SESSION['teacher_id'])) {
 
                             <label>Department</label><br>
                             <select name="teacher_dept" id="" required>
-                            <option value="" disabled selected>Select a Department</option>
+                                <option value="" disabled selected>Select a Department</option>
 
                                 <?php
                                 $fetchdepts = mysqli_query($con, "SELECT department_name FROM department_tb");
@@ -46,8 +46,6 @@ if (!isset($_SESSION['teacher_id'])) {
                                 }
                                 ?>
                             </select>
-                            <!-- <input type="text" name="teacher_dept" id="teacher_dept" value="<?php // echo $row['teacher_department']; 
-                                                                                                    ?>" disabled required> -->
 
                             <label>Proficiency</label><br>
                             <input type="text" name="teacher_prof" id="teacher_prof" value="<?php echo $row['teacher_proficency']; ?>" disabled required>
@@ -55,8 +53,7 @@ if (!isset($_SESSION['teacher_id'])) {
                             <input type="email" name="teacher_email" id="teacher_email" value="<?php echo $row['teacher_email']; ?>" disabled required>
                             <label>Number</label><br>
                             <input type="tel" pattern="[0-9]{11}" name="teacher_number" id="teacher_number" value="<?php echo $row['teacher_number']; ?>" disabled required>
-                            <!-- <input type="text" name="teacher_password" id="teacher_password" disabled value="<?php //echo $row['teacher_password']; 
-                                                                                                                    ?>"> -->
+                            <p class="instructions">Enter your 11-digit phone number (e.g., 09123456789).</p>
 
                             <button type="submit" name="update_btn" id="update_btn" style="display: none;">Update</button>
                         </div>
@@ -82,12 +79,10 @@ if (!isset($_SESSION['teacher_id'])) {
                 for (var i = 0; i < inputs.length; i++) {
                     inputs[i].disabled = !inputs[i].disabled;
                 }
-                // Check if any input is disabled
                 var anyInputDisabled = Array.from(inputs).some(function(input) {
                     return input.disabled;
                 });
 
-                // Toggle visibility of the update button
                 updateBtn.style.display = anyInputDisabled ? 'none' : 'block';
             });
         </script>
@@ -102,7 +97,6 @@ if (isset($_POST['update_btn'])) {
     $teacher_email = $_POST['teacher_email'];
     $teacher_number = $_POST['teacher_number'];
 
-    // Check if a new profile picture is uploaded
     if (!empty($_FILES['profile_pic']['name'])) {
         $profile_pic = $_FILES['profile_pic']['name'];
         $template = $_FILES['profile_pic']['tmp_name'];
@@ -110,11 +104,9 @@ if (isset($_POST['update_btn'])) {
 
         move_uploaded_file($template, $folder);
     } else {
-        // If no new picture uploaded, fetch the existing picture name
         $profile_pic = $profpic;
     }
 
-    // Update the database
     $sql = $con->prepare("UPDATE teacher_tb SET teacher_pic = ?, teacher_name = ?, teacher_department=?, teacher_proficency = ?, teacher_email= ?, teacher_number = ? WHERE teacher_id='$user_id'");
     $sql->bind_param("ssssss", $profile_pic, $teacher_name, $teacher_dept, $teacher_prof, $teacher_email, $teacher_number);
     if ($sql->execute()) {

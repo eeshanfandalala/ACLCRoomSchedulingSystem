@@ -1,9 +1,3 @@
-<style>
-    .editable input {
-        width: 100%;
-        box-sizing: border-box;
-    }
-</style>
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userid']) && isset($_POST['field']) && isset($_POST['value'])) {
     $userid = $_POST['userid'];
@@ -22,7 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userid']) && isset($_P
     exit;
 }
 if (isset($_GET['del'])) {
-    // echo 'hi';
     $id = $_GET['del'];
     $stmt = $con->prepare("DELETE FROM subject_tb WHERE subject_id = ?");
     $stmt->bind_param("i", $id);
@@ -34,9 +27,7 @@ if (isset($_GET['del'])) {
     exit;
 }
 
-// Fetch distinct department options from the database
 $departments = [];
-
 $fetchDepartments = $con->query("SELECT DISTINCT department_name FROM department_tb");
 while ($row = $fetchDepartments->fetch_assoc()) {
     $departments[] = $row['department_name'];
@@ -83,6 +74,8 @@ while ($row = $fetchDepartments->fetch_assoc()) {
             <span>Subject List</span>
         </div>
         <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for subject..">
+        <p class="guide">Please double-click on any cell to make edits.</p>
+        
         <table id="roomTable">
             <thead>
                 <tr>
