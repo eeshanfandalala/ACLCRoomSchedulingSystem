@@ -26,7 +26,6 @@ span {
     margin-bottom: 10px;
     border: none;
     border-radius: 10px;
-    ;
 }
 
 input::placeholder {
@@ -109,7 +108,8 @@ label {
     transition: all .5s ease;
 }
 
-.submit-room {
+.submit-room,
+button {
     background-color: #0679E2;
     color: white;
     margin-left: 10px;

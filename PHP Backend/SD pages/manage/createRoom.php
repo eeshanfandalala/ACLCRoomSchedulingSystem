@@ -1,12 +1,4 @@
-<style>
-    .editable input {
-        width: 100%;
-        box-sizing: border-box;
-    }
-</style>
-
 <?php
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userid']) && isset($_POST['field']) && isset($_POST['value'])) {
     $userid = $_POST['userid'];
     $field = $_POST['field'];
@@ -94,6 +86,7 @@ if (isset($_GET['del'])) {
                     <th>Building</th>
                     <th>Floor</th>
                     <th>Type</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>

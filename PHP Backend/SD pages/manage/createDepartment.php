@@ -52,6 +52,7 @@ if (isset($_GET['del'])) {
                 <tr>
                     <th>#</th>
                     <th>Department Name</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -65,8 +66,7 @@ if (isset($_GET['del'])) {
                     <tr>
                         <td><?php echo $i ?></td>
                         <td class="editable" data-userid="<?php echo $row['department_id']; ?>" data-field="department_name"><?php echo $row['department_name'] ?></td>
-                        <td><a href="?del=<?php echo $row['department_id']; ?>" onclick="return confirm('Are you sure you want to delete this item?')"><button>Delete</button></a></td>
-
+                        <td><a href="?del=<?php echo $row['department_id']; ?>" class="delete-link" onclick="return confirm('Are you sure you want to delete this item?')"><button>Delete</button></a></td>
                     </tr>
                 <?php
                     $i++;

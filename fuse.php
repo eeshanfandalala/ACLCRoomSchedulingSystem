@@ -100,7 +100,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($sql->num_rows > 0) {
                 echo "<script>alert('Email already exists!'); window.location.href = 'index.html';</script>";
             } else {
-                $sqlInsert = $con->prepare("INSERT INTO `teacher_tb`(`teacher_name`, `teacher_password`, `teacher_email`, `teacher_pic`, `status`) VALUES (?,?,?,?, 0)");
+                $sd_id_query = mysqli_query($con, "SELECT `SD_id` FROM `sd_tb`");
+                $row = mysqli_fetch_assoc($sd_id_query);
+                $sd_id = $row['SD_id'];
+                $sqlInsert = $con->prepare("INSERT INTO `teacher_tb`(`teacher_name`, `teacher_password`, `teacher_email`, `teacher_pic`, `status`,`SD_id`) VALUES (?,?,?,?, 0,$sd_id)");
                 $sqlInsert->bind_param("ssss", $name, $password, $email, $deafaultPic);
                 $sqlInsert->execute();
                 echo "<script>alert('Success')</script>";
