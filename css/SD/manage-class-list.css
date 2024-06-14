@@ -108,7 +108,7 @@ tr:nth-child(even) {
 label {
     font-size: 12px;
 }
-
+select,
 input[type="text"],
 input[type="number"] {
     background-color: #5c6295;

@@ -7,12 +7,12 @@
                 <div>
                     <label>Standing</label><br>
                     <input type="radio" name="standing" value="College" <?php if (isset($_POST['sub2']) || isset($_POST['sub1']) || isset($_POST['sub3']) || isset($_POST['sub4'])) {
-                                                                            echo ($_POST['standing'] == 'College') ? "checked" : "";
+                                                                            echo ($_POST['standing'] === 'College') ? "checked" : "";
                                                                         } ?> required>
                     <label style="margin-right: 10px">College</label>
 
                     <input type="radio" name="standing" value="SHS" <?php if (isset($_POST['sub2']) || isset($_POST['sub1']) || isset($_POST['sub3']) || isset($_POST['sub4'])) {
-                                                                        echo ($_POST['standing'] == 'SHS') ? "checked" : "";
+                                                                        echo ($_POST['standing'] === 'SHS') ? "checked" : "";
                                                                     } ?> required>
                     <label>SHS</label>
                     <input type="submit" name="sub1" value="Next">

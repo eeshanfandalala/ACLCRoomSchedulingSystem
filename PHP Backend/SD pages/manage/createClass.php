@@ -84,18 +84,40 @@ while ($row = $fetchDepartments->fetch_assoc()) {
                 <div>
                     <label>Year Level</label><br>
 
-                    <datalist id="level-list">
+                    <select name="YrLvl" id="level" required>
+                        <option value="" selected disabled></option>
                         <?php
-                        $fetchclasses = $con->query("SELECT DISTINCT class_year FROM class_tb WHERE class_standing = '$standing'");
-                        while ($row = $fetchclasses->fetch_assoc()) {
-                        ?>
-                            <option value="<?php echo $row['class_year'] ?>"></option>
-                        <?php
+
+                        if ($standing === 'College') {
+                            $options = ['1', '2', '3', '4']; // College levels
+                        } else {
+                            $options = ['11', '12']; // SHS levels
                         }
-                        $fetchclasses->free_result();
+
+
+                        foreach ($options as $option) {
+                            // Check if the option should be selected based on POST data
+                            $selected = isset($_POST['YrLvl']) && $_POST['YrLvl'] === $option ? 'selected' : '';
+
+                            echo '<option value="' . $option . '" ' . $selected . '>' . $option . '</option>';
+                        }
                         ?>
-                    </datalist>
-                    <input type="number" name="YrLvl" id="level" list="level-list" required value="<?php if (isset($_POST['YrLvl'])) echo $_POST['YrLvl']; ?>">
+                    </select>
+                    <!-- <datalist id="level-list">
+                        <?php
+                        // $fetchclasses = $con->query("SELECT DISTINCT class_year FROM class_tb WHERE class_standing = '$standing'");
+                        // while ($row = $fetchclasses->fetch_assoc()) {
+                        // 
+                        ?>
+                        //     <option value="<?php //echo $row['class_year'] 
+                                                ?>"></option>
+                        // <?php
+                            // }
+                            // $fetchclasses->free_result();
+                            ?>
+                    </datalist> -->
+                    <!-- <input type="number" name="YrLvl" id="level" list="level-list" required value="<?php //if (isset($_POST['YrLvl'])) echo $_POST['YrLvl']; 
+                                                                                                        ?>"> -->
 
                     <button type="submit" name="sub1">Next</button><br>
                 </div>
