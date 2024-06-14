@@ -101,3 +101,74 @@ input[type="submit"]:hover {
     cursor: default;
     color: white;
 }
+
+/* for print function */
+.print-info {
+    display: none;
+}
+
+@media print {
+    .filter-container,
+    #editButton,
+    #deleteButton,
+    .print {
+        display: none;
+    }
+
+    .print-info {
+        display: block;
+    }
+
+    @media print {
+        @page {
+            margin: 0;
+        }
+
+        .home-section * {
+            color: black !important;
+            background: white !important;
+        }
+
+        .sidebar,
+        .home-content i,
+        .home-content .text,
+        .filter-container,
+        .print {
+            display: none;
+        }
+
+        .home-section {
+            background: white;
+            color: black;
+            width: 100%;
+            margin-left: 0;
+        }
+
+        main {
+            padding: 0;
+        }
+
+        .print-info {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            display: block;
+        }
+
+        table {
+            background: white;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            background: white;
+            color: black;
+            padding: 8px;
+            border: 1px solid black;
+            text-align: center;
+        }
+    }
+}

@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
 
 <body>
     <div class="main">
@@ -60,8 +65,6 @@
                         }
                         ?>
                     </select>
-
-                    <!--<input type="submit" value="Filter" class="filter-button">-->
                 </div>
             </form>
 
@@ -72,6 +75,23 @@
             </div>
         </div>
 
+        <!-- for printing -->
+        <div class="print-info">
+            <p>School Year: <span id="printAY"><?php echo isset($_POST['AY']) ? $_POST['AY'] : ''; ?></span></p>
+            <p>Semester: <span id="printSem"><?php echo isset($_POST['SetSem']) ? $_POST['SetSem'] : ''; ?></span></p>
+            <p>Class: <span id="printClass"><?php
+                                            if (isset($_POST['class'])) {
+                                                $classId = $_POST['class'];
+                                                $getClass = $con->prepare("SELECT class_courseStrand, class_year, class_section FROM class_tb WHERE class_id = ?");
+                                                $getClass->bind_param("i", $classId);
+                                                $getClass->execute();
+                                                $getClass->store_result();
+                                                $getClass->bind_result($class_courseStrand, $class_year, $class_section);
+                                                $getClass->fetch();
+                                                echo $class_courseStrand . ' ' . $class_year . ' - ' . $class_section;
+                                            }
+                                            ?></span></p>
+        </div>
 
         <div class="list">
             <?php
@@ -194,11 +214,9 @@
 
             links.forEach(function(link) {
                 if (enable) {
-                    // Enable the link for editing
                     link.classList.remove('disabled-link');
                     link.href = './PHP Backend/SD pages/actionClass.php?EditschedID=' + link.getAttribute('data-schedid') + '&roomType=' + link.getAttribute('data-roomID');
                 } else {
-                    // Disable the link
                     link.classList.add('disabled-link');
                     link.removeAttribute('href');
                 }
@@ -213,11 +231,9 @@
 
             links.forEach(function(link) {
                 if (enable) {
-                    // Enable the link for deleting
                     link.classList.remove('disabled-link');
                     link.href = './PHP Backend/SD pages/actionClass.php?DelschedID=' + link.getAttribute('data-schedid');
                 } else {
-                    // Disable the link
                     link.classList.add('disabled-link');
                     link.removeAttribute('href');
                 }
