@@ -99,4 +99,5 @@ input[type="submit"]:hover {
     pointer-events: none;
     text-decoration: none;
     cursor: default;
+    color: white;
 }
