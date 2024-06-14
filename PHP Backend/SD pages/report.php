@@ -3,7 +3,7 @@ include 'config.php';
 ?>
 
 <div class="main">
-    <div class="top" class="side-by-side">
+    <div class="top side-by-side">
         <form action="" method="post" class="side-by-side">
             <div>
                 <div>
@@ -12,17 +12,13 @@ include 'config.php';
                         <label>School Year</label><br>
                         <select name="AY" id="yearSelect" onchange="this.form.submit()">
                             <?php
-                            include 'config.php';
                             $currentYear = date("Y");
                             for ($i = -1; $i < 4; $i++) {
                                 $year = $currentYear + $i;
                                 $nextYear = $year + 1;
                                 $optionValue = $year . "-" . $nextYear;
                             ?>
-                                <option value=<?php echo $optionValue ?> <?php if (isset($_POST['AY'])) {
-                                                                                echo ($_POST['AY'] == "$optionValue") ? "selected" : "";
-                                                                            } ?> required><?php echo $optionValue ?>
-                                </option>
+                                <option value="<?php echo $optionValue ?>" <?php if (isset($_POST['AY']) && $_POST['AY'] == $optionValue) echo "selected"; ?>><?php echo $optionValue ?></option>
                             <?php
                             }
                             ?>
@@ -31,14 +27,10 @@ include 'config.php';
 
                     <div>
                         <label>Set Semester</label><br>
-                        <input type="radio" name="SetSem" id="firstSemester" value="1st" <?php if (isset($_POST['SetSem'])) {
-                                                                                                echo ($_POST['SetSem'] == '1st') ? "checked" : "";
-                                                                                            } ?> onchange="this.form.submit()" required>
+                        <input type="radio" name="SetSem" id="firstSemester" value="1st" <?php if (isset($_POST['SetSem']) && $_POST['SetSem'] == '1st') echo "checked"; ?> onchange="this.form.submit()" required>
                         <label>1st</label>
 
-                        <input type="radio" name="SetSem" id="secondSemester" value="2nd" <?php if (isset($_POST['SetSem'])) {
-                                                                                                echo ($_POST['SetSem'] == '2nd') ? "checked" : "";
-                                                                                            } ?> onchange="this.form.submit()" required>
+                        <input type="radio" name="SetSem" id="secondSemester" value="2nd" <?php if (isset($_POST['SetSem']) && $_POST['SetSem'] == '2nd') echo "checked"; ?> onchange="this.form.submit()" required>
                         <label>2nd</label>
                     </div>
                 </div>
@@ -57,36 +49,34 @@ include 'config.php';
                 if (isset($_POST['AY']) && isset($_POST['SetSem'])) {
 
                     $countClassWithSubjects = $con->prepare("SELECT
-                c.class_id,
-                c.class_courseStrand,
-                c.class_year,
-                c.class_section,
-                c.class_department,
-                c.class_standing,
-                COUNT(DISTINCT s.subject_id) AS num_subjects
-            FROM
-                class_tb c
-            LEFT JOIN
-                schedule_tb s ON c.class_id = s.class_id
-                            AND s.schedule_SY = ?
-                            AND s.schedule_semester = ?
-            GROUP BY
-                c.class_id,
-                c.class_courseStrand,
-                c.class_year,
-                c.class_section,
-                c.class_department,
-                c.class_standing;");
+                        c.class_id,
+                        c.class_courseStrand,
+                        c.class_year,
+                        c.class_section,
+                        c.class_department,
+                        c.class_standing,
+                        COUNT(DISTINCT s.subject_id) AS num_subjects
+                    FROM
+                        class_tb c
+                    LEFT JOIN
+                        schedule_tb s ON c.class_id = s.class_id
+                                    AND s.schedule_SY = ?
+                                    AND s.schedule_semester = ?
+                    GROUP BY
+                        c.class_id,
+                        c.class_courseStrand,
+                        c.class_year,
+                        c.class_section,
+                        c.class_department,
+                        c.class_standing");
 
                     $countClassWithSubjects->bind_param("ss", $_POST['AY'], $_POST['SetSem']);
                     $countClassWithSubjects->execute();
                     $resultcountClassWithSubjects = $countClassWithSubjects->get_result();
                     while ($row = $resultcountClassWithSubjects->fetch_assoc()) {
-
                 ?>
                         <div class="card">
-                            <h2><?php echo htmlspecialchars($row['class_courseStrand']) . " " . htmlspecialchars($row['class_year']) . "-" . htmlspecialchars($row['class_section']); ?>
-                            </h2>
+                            <h2><?php echo htmlspecialchars($row['class_courseStrand']) . " " . htmlspecialchars($row['class_year']) . "-" . htmlspecialchars($row['class_section']); ?></h2>
                             <p>Department: <?php echo htmlspecialchars($row['class_department']); ?></p>
                             <p>Standing: <?php echo htmlspecialchars($row['class_standing']); ?></p>
                             <p>Total Subjects: <?php echo htmlspecialchars($row['num_subjects']); ?></p>
@@ -96,7 +86,8 @@ include 'config.php';
                 }
                 ?>
             </div>
-            <a id="toggleClassBtn" class="see-more" data-target="classContainer">See More</a>
+            <p id="classContainer-not-found" class="not-found-message" style="display: none;">Not Found</p>
+            <a id="toggleClassBtn" class="see-more" data-target="classContainer" style="display: none;">See More</a>
         </section>
 
         <section>
@@ -109,39 +100,35 @@ include 'config.php';
                 if (isset($_POST['AY']) && isset($_POST['SetSem'])) {
 
                     $countTeacherWithSubjects = $con->prepare("SELECT
-                t.`teacher_pic`,
-                `t`.`status`,
-                t.teacher_id,
-                t.teacher_name,
-                COUNT(DISTINCT s.subject_id) AS total_subjects_taught,
-                COUNT(DISTINCT s.class_id) AS total_classes_taught
-            FROM
-                teacher_tb t
-            LEFT JOIN
-                schedule_tb s ON t.teacher_id = s.teacher_id
-                AND s.schedule_SY = ?
-                AND s.schedule_semester = ?
-            GROUP BY
-                t.teacher_id,
-                t.teacher_name;");
+                        t.`teacher_pic`,
+                        `t`.`status`,
+                        t.teacher_id,
+                        t.teacher_name,
+                        COUNT(DISTINCT s.subject_id) AS total_subjects_taught,
+                        COUNT(DISTINCT s.class_id) AS total_classes_taught
+                    FROM
+                        teacher_tb t
+                    LEFT JOIN
+                        schedule_tb s ON t.teacher_id = s.teacher_id
+                        AND s.schedule_SY = ?
+                        AND s.schedule_semester = ?
+                    GROUP BY
+                        t.teacher_id,
+                        t.teacher_name");
 
                     $countTeacherWithSubjects->bind_param("ss", $_POST['AY'], $_POST['SetSem']);
                     $countTeacherWithSubjects->execute();
                     $resultcountTeacherWithSubjects = $countTeacherWithSubjects->get_result();
                     while ($row = $resultcountTeacherWithSubjects->fetch_assoc()) {
                 ?>
-                    <div class="card">
-                        <div>
+                        <div class="card">
                             <h2><?php echo htmlspecialchars($row['teacher_name']); ?></h2>
                             <p>Total Classes: <?php echo htmlspecialchars($row['total_classes_taught']); ?></p>
                             <p>Total Subjects: <?php echo htmlspecialchars($row['total_subjects_taught']); ?></p>
                             <p>Is Active: <?php echo htmlspecialchars($row['status']) == 1 ? 'Yes' : 'No'; ?></p>
-                        </div>
-
                             <div class="profile-picture-container">
                                 <div class="file-input-wrapper">
-                                    <img src="./profile_pictures/<?php echo $row['teacher_pic'];
-                                                                    $profpic = $row['teacher_pic']; ?>" alt="profile picture" style="width: 100px;">
+                                    <img src="./profile_pictures/<?php echo $row['teacher_pic']; ?>" alt="profile picture" style="width: 100px;">
                                 </div>
                             </div>
                         </div>
@@ -150,7 +137,8 @@ include 'config.php';
                 }
                 ?>
             </div>
-            <a id="toggleTeacherBtn" class="see-more" data-target="teacherContainer">See More</a>
+            <p id="teacherContainer-not-found" class="not-found-message" style="display: none;">Not Found</p>
+            <a id="toggleTeacherBtn" class="see-more" data-target="teacherContainer" style="display: none;">See More</a>
         </section>
 
         <section>
@@ -159,7 +147,6 @@ include 'config.php';
             </div>
             <input type="text" id="roomSearchBar" placeholder="Search for rooms...">
             <div class="container" id="roomContainer">
-
                 <?php
                 if (isset($_POST['AY']) && isset($_POST['SetSem'])) {
 
@@ -215,7 +202,11 @@ include 'config.php';
                                 }
                             }
                             $vacantTimes[$day] = [];
-                            for ($i = 0; $i < count($times); $i++) {
+                            for (
+                                $i = 0;
+                                $i < count($times);
+                                $i++
+                            ) {
                                 if (!isset($occupiedTimes[$i])) {
                                     $vacantTimes[$day][] = $times[$i];
                                 }
@@ -231,83 +222,79 @@ include 'config.php';
                 }
                 ?>
             </div>
-            <a id="toggleTeacherBtn" class="see-more" data-target="roomContainer">See More</a>
+            <p id="roomContainer-not-found" class="not-found-message" Zzstyle="display: none;">Not Found</p>
+            <a id="toggleRoomBtn" class="see-more" data-target="roomContainer" style="display: none;">See More</a>
         </section>
     </div>
 </div>
-
 <script>
-    document.querySelectorAll('.see-more').forEach(button => {
-        button.addEventListener('click', function() {
-            const containerId = this.getAttribute('data-target');
-            const container = document.getElementById(containerId);
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleButtons = document.querySelectorAll('.see-more');
+
+        toggleButtons.forEach(button => {
+            const targetId = button.getAttribute('data-target');
+            const container = document.getElementById(targetId);
             const cards = container.querySelectorAll('.card');
-            const isExpanded = this.getAttribute('data-expanded') === 'true';
-            if (isExpanded) {
-                cards.forEach((card, index) => {
-                    if (index >= 3) {
+            const notFoundMessage = document.getElementById(`${targetId}-not-found`);
+
+            function toggleSeeMoreButton() {
+                const visibleCards = Array.from(cards).filter(card => card.style.display !== 'none');
+                if (visibleCards.length > 3 && notFoundMessage.style.display === 'none') {
+                    button.style.display = 'inline-block';
+                } else {
+                    button.style.display = 'none';
+                }
+            }
+
+            toggleSeeMoreButton();
+            for (let i = 3; i < cards.length; i++) {
+                if (i >= 3) {
+                    cards[i].style.display = 'none';
+                }
+            }
+
+            button.addEventListener('click', function() {
+                const isExpanded = this.getAttribute('data-expanded') === 'true';
+                for (let i = 3; i < cards.length; i++) {
+                    cards[i].style.display = isExpanded ? 'none' : 'block';
+                }
+                this.textContent = isExpanded ? 'See More' : 'See Less';
+                this.setAttribute('data-expanded', !isExpanded);
+                toggleSeeMoreButton();
+            });
+        });
+
+        function handleSearchInput(inputId, containerId) {
+            const searchBar = document.getElementById(inputId);
+            const cards = document.querySelectorAll(`#${containerId} .card`);
+            const notFoundElement = document.getElementById(`${containerId}-not-found`);
+
+            searchBar.addEventListener('input', function() {
+                const searchTerm = this.value.trim().toLowerCase();
+                let foundResults = false;
+
+                cards.forEach(card => {
+                    const textContent = card.textContent.toLowerCase();
+                    if (textContent.includes(searchTerm)) {
+                        card.style.display = 'block';
+                        foundResults = true;
+                    } else {
                         card.style.display = 'none';
                     }
                 });
-                this.textContent = 'See More';
-            } else {
-                cards.forEach(card => {
-                    card.style.display = 'block';
-                });
-                this.textContent = 'See Less';
-            }
-            this.setAttribute('data-expanded', !isExpanded);
-        });
-    });
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const containers = document.querySelectorAll('.container');
-        containers.forEach(container => {
-            const cards = container.querySelectorAll('.card');
-            cards.forEach((card, index) => {
-                if (index >= 3) {
-                    card.style.display = 'none';
+                if (!foundResults) {
+                    notFoundElement.style.display = 'block';
+                    document.querySelector(`#${containerId} .see-more`).style.display = 'none';
+                } else {
+                    notFoundElement.style.display = 'none';
+                    toggleSeeMoreButton();
                 }
             });
-        });
-    });
+        }
 
-    document.getElementById('searchBar').addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        const cards = document.querySelectorAll('#classContainer .card');
-        cards.forEach(card => {
-            const classText = card.querySelector('h2').textContent.toLowerCase();
-            if (classText.includes(searchTerm)) {
-                card.style.display = 'block';
-            } else {
-                card.style.display = 'none';
-            }
-        });
-    });
-
-    document.getElementById('teacherSearchBar').addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        const cards = document.querySelectorAll('#teacherContainer .card');
-        cards.forEach(card => {
-            const teacherText = card.querySelector('h2').textContent.toLowerCase();
-            if (teacherText.includes(searchTerm)) {
-                card.style.display = 'block';
-            } else {
-                card.style.display = 'none';
-            }
-        });
-    });
-
-    document.getElementById('roomSearchBar').addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        const cards = document.querySelectorAll('#roomContainer .card');
-        cards.forEach(card => {
-            const roomText = card.querySelector('h2').textContent.toLowerCase();
-            if (roomText.includes(searchTerm)) {
-                card.style.display = 'block';
-            } else {
-                card.style.display = 'none';
-            }
-        });
+        handleSearchInput('searchBar', 'classContainer');
+        handleSearchInput('teacherSearchBar', 'teacherContainer');
+        handleSearchInput('roomSearchBar', 'roomContainer');
     });
 </script>
