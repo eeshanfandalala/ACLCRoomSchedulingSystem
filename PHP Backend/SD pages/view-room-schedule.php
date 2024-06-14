@@ -42,7 +42,7 @@
                 </div>
 
                 <div>
-                    <label>Room Type</label><br>
+                    <label>Room</label><br>
                     <select name="room" onchange="this.form.submit()">
                         <option>--Choose a room--</option>
                         <?php
@@ -77,6 +77,14 @@
                 $AY = $_POST['AY'];
                 $SetSem = $_POST['SetSem'];
                 $room = $_POST['room'];
+
+                $getRoomType = $con->prepare("SELECT room_type FROM room_tb WHERE room_id = ?");
+                $getRoomType->bind_param("s", $room);
+                $getRoomType->execute();
+                $getRoomType->bind_result($roomType);
+                $getRoomType->fetch();
+                $getRoomType->close();
+
 
                 $fetchSchedule = $con->prepare("SELECT * FROM schedule_tb WHERE room_id = ? AND schedule_SY = ? AND schedule_semester = ?");
                 $fetchSchedule->bind_param("iss", $room, $AY, $SetSem);
@@ -160,7 +168,7 @@
 
                                         $schedID = $rowSchedule->schedule_id;
 
-                                        echo "<td><a href='./PHP Backend/SD pages/action.php?schedID=$schedID' class='disabled-link' data-schedid='$schedID'>" . findCellValues($nameFetchClassResult, $teacher_name, $subject_name) . "</a></td>";
+                                        echo "<td><a href='./PHP Backend/SD pages/action.php?schedID=" . urlencode($schedID) . "&roomType=" . urlencode($roomType) . "' class='disabled-link' data-schedid='$schedID' data-roomID='$roomType'>" . findCellValues($nameFetchClassResult, $teacher_name, $subject_name) . "</a></td>";
                                     } else {
                                         // If empty
                                         echo '<td></td>';
@@ -186,7 +194,7 @@
                 if (enable) {
                     // Enable the link for editing
                     link.classList.remove('disabled-link');
-                    link.href = './PHP Backend/SD pages/action.php?EditschedID=' + link.getAttribute('data-schedid');
+                    link.href = './PHP Backend/SD pages/action.php?EditschedID=' + link.getAttribute('data-schedid') + '&roomType=' +  link.getAttribute('data-roomID');
                 } else {
                     // Disable the link
                     link.classList.add('disabled-link');

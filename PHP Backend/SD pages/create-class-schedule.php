@@ -232,12 +232,12 @@
 
                                     ?>
                                 </datalist>
-                                <input type="text" name="room" id="selected-room" list="room-list" placeholder="Select a room..." class="<?php echo htmlspecialchars($roomType); ?>">
+                                <input type="text" name="room" id=" " list="room-list" placeholder="Select a room..." class="<?php echo htmlspecialchars($roomType); ?>">
                             </td>
                             <td>
                                 <div class="time">
-                                    <label for="">Start: </label><input type="time" name="schedule_time[start]" id="startTime" min="07:00" max="22:00"><br>
-                                    <label for="">End: </label><input type="time" name="schedule_time[end]" id="endTime" min="07:00" max="22:00">
+                                    <label for="">Start: </label><input type="time" name="schedule_time[start]" id="startTime" min="07:00" max="22:00" step="1800"><br>
+                                    <label for="">End: </label><input type="time" name="schedule_time[end]" id="endTime" min="07:00" max="22:00" step="1800">
                                 </div>
 
                             </td>
@@ -532,6 +532,38 @@
             return;
         }
 
+    });
+    // Add an event listener to the inputs to enforce 30-minute increments
+    document.addEventListener('DOMContentLoaded', function() {
+        var startTimeInput = document.getElementById('startTime');
+        var endTimeInput = document.getElementById('endTime');
+
+        // Function to round time to nearest 30 minutes
+        function roundToNearest30Minutes(time) {
+            var timeParts = time.split(':');
+            var hours = parseInt(timeParts[0]);
+            var minutes = parseInt(timeParts[1]);
+
+            // Round to nearest 30 minutes
+            var roundedMinutes = Math.round(minutes / 30) * 30 % 60;
+            var roundedHours = Math.floor(minutes / 30) + hours;
+
+            // Format hours and minutes
+            var formattedHours = ('0' + roundedHours).slice(-2);
+            var formattedMinutes = ('0' + roundedMinutes).slice(-2);
+
+            return formattedHours + ':' + formattedMinutes;
+        }
+
+        // Round start time on input change
+        startTimeInput.addEventListener('change', function() {
+            this.value = roundToNearest30Minutes(this.value);
+        });
+
+        // Round end time on input change
+        endTimeInput.addEventListener('change', function() {
+            this.value = roundToNearest30Minutes(this.value);
+        });
     });
 </script>
 <script>

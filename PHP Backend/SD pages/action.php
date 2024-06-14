@@ -4,6 +4,9 @@ include '../../config.php';
 if (isset($_GET['EditschedID'])) {
 
     $schedID = $_GET['EditschedID'];
+    $roomType = $_GET['roomType'];
+
+
     $fetchSched = $con->prepare("SELECT schedule_time_start, schedule_time_end, schedule_day, teacher_id, class_id, subject_id, room_id FROM schedule_tb WHERE schedule_id = ?");
     $fetchSched->bind_param("i", $schedID);
     $fetchSched->execute();
@@ -41,9 +44,10 @@ if (isset($_GET['EditschedID'])) {
 ?>
     <form action="" method="post">
         <input type="hidden" name="schedID" id="" value="<?php echo $_GET['EditschedID']; ?>">
+        <input type="hidden" name="" id="selected-room" class="<?php echo htmlspecialchars($roomType); ?>">
         <label for="">Time:</label>
-        <input type="time" name="new-time-start" id="" value="<?php echo $schedule_time_start; ?>">
-        <input type="time" name="new-time-end" id="" value="<?php echo $schedule_time_end; ?>">
+        <input type="time" name="new-time-start" id="startTime" min="07:00" max="22:00" step="1800" value="<?php echo $schedule_time_start; ?>">
+        <input type="time" name="new-time-end" id="endTime" min="07:00" max="22:00" step="1800" value="<?php echo $schedule_time_end; ?>">
         <br>
         <!-- <label for="">Day:</label><br>
         <input type="checkbox" name="day[]" id="" value="Monday" <?php //echo $schedule_day == 'Monday' ? 'checked' : ''; 
@@ -102,6 +106,74 @@ if (isset($_GET['EditschedID'])) {
             <input type="submit" name="update" id="">
         </select>
     </form>
+    <script>
+        // Add an event listener to the inputs to enforce 30-minute increments
+        document.addEventListener('DOMContentLoaded', function() {
+            var startTimeInput = document.getElementById('startTime');
+            var endTimeInput = document.getElementById('endTime');
+
+            // Function to round time to nearest 30 minutes
+            function roundToNearest30Minutes(time) {
+                var timeParts = time.split(':');
+                var hours = parseInt(timeParts[0]);
+                var minutes = parseInt(timeParts[1]);
+
+                // Round to nearest 30 minutes
+                var roundedMinutes = Math.round(minutes / 30) * 30 % 60;
+                var roundedHours = Math.floor(minutes / 30) + hours;
+
+                // Format hours and minutes
+                var formattedHours = ('0' + roundedHours).slice(-2);
+                var formattedMinutes = ('0' + roundedMinutes).slice(-2);
+
+                return formattedHours + ':' + formattedMinutes;
+            }
+
+            // Round start time on input change
+            startTimeInput.addEventListener('change', function() {
+                this.value = roundToNearest30Minutes(this.value);
+            });
+
+            // Round end time on input change
+            endTimeInput.addEventListener('change', function() {
+                this.value = roundToNearest30Minutes(this.value);
+            });
+        });
+    </script>
+    <script>
+        // Get references to the start and end time input fields
+        const startTimeInput = document.getElementById('startTime');
+        const endTimeInput = document.getElementById('endTime');
+        const selectedRoom = document.getElementById('selected-room');
+        const roomType = selectedRoom.className;
+
+        // Add event listener to the start time input field
+        startTimeInput.addEventListener('change', function() {
+            // Get the value of the start time input field
+            const startTimeValue = startTimeInput.value;
+
+            // Parse the start time string into hours and minutes
+            const [startHour, startMinute] = startTimeValue.split(':').map(Number);
+
+            // Calculate the end time by adding 1 hour and 30 minutes to the start time
+            let endHour = (startHour + 1) % 24;
+            let endMinute = '';
+
+            // Determine end minutes based on room type
+            if (roomType === "lecture") {
+                endMinute = (startMinute + 60) % 60;
+            } else if (roomType === "Laboratory") {
+                endMinute = (startMinute + 90) % 60;
+                endHour += Math.floor((startMinute + 30) / 60); // Add extra hour if minutes exceed 60
+            }
+
+            // Format the end time
+            const endTimeValue = `${String(endHour).padStart(2, '0')}:${String(endMinute).padStart(2, '0')}`;
+
+            // Update the value of the end time input field
+            endTimeInput.value = endTimeValue;
+        });
+    </script>
 <?php
 } else if (isset($_GET['DelschedID'])) {
     $schedID = $_GET['DelschedID'];
