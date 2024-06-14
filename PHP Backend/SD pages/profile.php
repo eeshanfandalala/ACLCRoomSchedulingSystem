@@ -13,7 +13,7 @@ if (!isset($_SESSION['sd_id'])) {
     }
     while ($row = mysqli_fetch_array($sql)) {
         $sd_id = $row['SD_id'];
-        ?>
+?>
 
         <body>
             <main>
@@ -34,24 +34,20 @@ if (!isset($_SESSION['sd_id'])) {
                 <!-- FOR PROFILE UPDATE-->
                 <div class="profile-update">
                     <button id="edit_btn" value="editAccount">Edit Profile</button><br><br>
-                    <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data"
-                        class="form-profile">
+                    <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data" class="form-profile">
                         <div>
                             <label>First Name</label><br>
-                            <input type="text" name="SD_firstname" id="SD_firstname" value="<?php echo $row['SD_firstname']; ?>"
-                                disabled required><br>
+                            <input type="text" name="SD_firstname" id="SD_firstname" value="<?php echo $row['SD_firstname']; ?>" disabled required><br>
 
                             <label>Last Name</label><br>
-                            <input type="text" name="SD_lastname" id="SD_lastname" value="<?php echo $row['SD_lastname']; ?>"
-                                disabled required><br>
+                            <input type="text" name="SD_lastname" id="SD_lastname" value="<?php echo $row['SD_lastname']; ?>" disabled required><br>
 
                             <label>Email</label><br>
-                            <input type="email" name="SD_email" id="SD_email" value="<?php echo $row['SD_email']; ?>" disabled
-                                required><br>
+                            <input type="email" name="SD_email" id="SD_email" value="<?php echo $row['SD_email']; ?>" disabled required><br>
 
                             <label>Contact Number</label><br>
-                            <input type="tel" pattern="[0-9]{11}" name="SD_number" id="SD_number" value="<?php echo $row['SD_number']; ?>"
-                                disabled><br>
+                            <input type="tel" pattern="[0-9]{11}" name="SD_number" id="SD_number" value="<?php echo $row['SD_number']; ?>" disabled><br>
+                            <p class="instructions">Enter your 11-digit phone number (e.g., 09123456789).</p>
 
                             <button type="submit" name="update_btn" id="update_btn" style="display: none;">Save Changes</button>
                         </div>
@@ -60,7 +56,7 @@ if (!isset($_SESSION['sd_id'])) {
                         <div class="profile-picture-container">
                             <div class="file-input-wrapper">
                                 <img src="./profile_pictures/<?php echo $row['SD_pic'];
-                                $profpic = $row['SD_pic']; ?>" alt="profile picture"><br>
+                                                                $profpic = $row['SD_pic']; ?>" alt="profile picture"><br>
                                 <input type="file" name="profile_pic" id="profile_pic" disabled>
                                 <label for="profile_pic" class="custom-file-input">Change Photo</label>
                             </div>
@@ -71,22 +67,20 @@ if (!isset($_SESSION['sd_id'])) {
         </body>
 
         <script>
-            document.getElementById('edit_btn').addEventListener('click', function () {
+            document.getElementById('edit_btn').addEventListener('click', function() {
                 var inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="password"], input[type="file"]');
                 var updateBtn = document.getElementById('update_btn');
                 for (var i = 0; i < inputs.length; i++) {
                     inputs[i].disabled = !inputs[i].disabled;
                 }
-                // Check if any input is disabled
-                var anyInputDisabled = Array.from(inputs).some(function (input) {
+                var anyInputDisabled = Array.from(inputs).some(function(input) {
                     return input.disabled;
                 });
 
-                // Toggle visibility of the update button
                 updateBtn.style.display = anyInputDisabled ? 'none' : 'block';
             });
         </script>
-        <?php
+<?php
     }
 }
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
@@ -98,7 +92,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
             move_uploaded_file($template, $folder);
         } else {
-            // If no new picture uploaded, fetch the existing picture name
             $profile_pic = $profpic;
         }
 

@@ -48,6 +48,13 @@ main {
 label {
     font-size: 12px;
 }
+
+.instructions {
+    color: lightgray;
+    margin-top: 5px;
+    font-size: 10px;
+}
+
 select,
 input[type="text"],
 input[type="email"],
@@ -57,7 +64,6 @@ input[type="password"] {
     color: white;
     width: 100%;
     padding: 10px;
-    margin-bottom: 10px;
     border: none;
     border-radius: 10px;
     box-sizing: border;

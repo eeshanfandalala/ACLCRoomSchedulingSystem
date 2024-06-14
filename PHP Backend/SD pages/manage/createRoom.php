@@ -58,7 +58,6 @@ if (isset($_GET['del'])) {
                     <option value="5">5</option>
                     <option value="6">6</option>
                 </select>
-                <!-- <input type="text" name="RoomFloor" id=""> -->
             </div>
 
             <div>
@@ -67,7 +66,6 @@ if (isset($_GET['del'])) {
                     <option value="A">A</option>
                     <option value="B">B</option>
                 </select>
-                <!-- <input type="text" name="RoomBuilding" id=""> -->
                 <input type="submit" name="sub" value="Add" class="submit-room">
             </div>
         </form>
@@ -78,6 +76,8 @@ if (isset($_GET['del'])) {
             <span>Room List</span>
         </div>
         <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for rooms..">
+        <p class="guide">Please double-click on any cell to make edits.</p>
+
         <table id="roomTable">
             <thead>
                 <tr>
@@ -91,7 +91,6 @@ if (isset($_GET['del'])) {
             </thead>
             <tbody>
                 <?php
-                // include('../../config.php');
                 $getRooms = $con->query("SELECT * FROM room_tb");
                 $i = 1;
                 while ($row = $getRooms->fetch_assoc()) {
@@ -203,7 +202,6 @@ if (isset($_GET['del'])) {
                                             cell.textContent = newValue;
                                         } else {
                                             cell.textContent = originalValue;
-                                            // alert('Update failed');
                                             cell.textContent = newValue;
 
                                         }

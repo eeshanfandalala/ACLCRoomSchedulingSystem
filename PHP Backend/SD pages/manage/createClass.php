@@ -55,7 +55,6 @@ if (isset($_GET['del'])) {
             <form action="" method="post" class="side-by-side">
                 <div>
                     <input type="hidden" name="standing" id="" value="<?php echo $_POST['standing'] ?>">
-                    <!-- <label>Course / Strand</label><br> -->
                     <label><?php echo isset($_POST['standing']) && $_POST['standing'] == 'College' ? 'Program' : 'Strand'; ?></label><br>
 
                     <input type="text" name="CorS" id="" list="classes-list" required value="<?php if (isset($_POST['CorS']))
@@ -154,6 +153,8 @@ if (isset($_GET['del'])) {
             <span>Class List</span>
         </div>
         <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for classes...">
+        <p class="guide">Please double-click on any cell to make edits.</p>
+
         <table id="roomTable">
             <thead>
                 <tr>

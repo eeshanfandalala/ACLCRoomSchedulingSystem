@@ -125,7 +125,7 @@ include 'config.php';
                 $resultcountTeacherWithSubjects = $countTeacherWithSubjects->get_result();
                 while ($row = $resultcountTeacherWithSubjects->fetch_assoc()) {
                 ?>
-                    <div class="card">
+                    <div class="card side-by-side">
                         <div>
                             <h2><?php echo htmlspecialchars($row['teacher_name']); ?></h2>
                             <p>Total Classes: <?php echo htmlspecialchars($row['total_classes_taught']); ?></p>
@@ -163,9 +163,9 @@ include 'config.php';
                     foreach ($rooms as $room) {
                         echo '<div class="card">';
                         echo '<h2>' . htmlspecialchars($room['room_name']) . '</h2>';
-                        echo '<p><strong>Room Type:</strong> ' . htmlspecialchars($room['room_type']) . '</p>';
-                        echo '<p><strong>Floor:</strong> ' . htmlspecialchars($room['room_floor']) . '</p>';
-                        echo '<p><strong>Building:</strong> ' . htmlspecialchars($room['room_building']) . '</p>';
+                        echo '<p>Room Type: ' . htmlspecialchars($room['room_type']) . '</p>';
+                        echo '<p>Floor: ' . htmlspecialchars($room['room_floor']) . '</p>';
+                        echo '<p>Building: ' . htmlspecialchars($room['room_building']) . '</p>';
 
                         $scheduleSQL = $con->prepare("SELECT * FROM schedule_tb WHERE room_id = ? AND schedule_SY = ? AND schedule_semester = ?");
                         $scheduleSQL->bind_param("iss", $room['room_id'], $_POST['AY'], $_POST['SetSem']);
@@ -218,7 +218,7 @@ include 'config.php';
 
                         foreach ($vacantTimes as $day => $times) {
                             echo "<h3>$day</h3>";
-                            echo "<p>" . implode(", ", $times) . "</p>";
+                            echo "<p>" . implode(" | ", $times) . "</p>";
                         }
                         echo "</div>";
                     }

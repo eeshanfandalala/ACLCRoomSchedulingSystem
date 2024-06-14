@@ -109,6 +109,12 @@ label {
     font-size: 12px;
 }
 
+.guide {
+    color: lightgray;
+    margin-bottom: 5px;
+    font-size: 10px;
+}
+
 input[type="text"],
 input[type="number"] {
     background-color: #5c6295;

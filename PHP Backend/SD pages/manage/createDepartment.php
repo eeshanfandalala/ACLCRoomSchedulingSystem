@@ -18,7 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userid']) && isset($_P
 }
 
 if (isset($_GET['del'])) {
-    // echo 'hi';
     $id = $_GET['del'];
     $stmt = $con->prepare("DELETE FROM department_tb WHERE department_id = ?");
     $stmt->bind_param("i", $id);
@@ -46,7 +45,10 @@ if (isset($_GET['del'])) {
         <div class="text">
             <span>Department List</span>
         </div>
+
         <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for department...">
+        <p class="guide">Please double-click on any cell to make edits.</p>
+        
         <table id="roomTable">
             <thead>
                 <tr>
@@ -57,8 +59,6 @@ if (isset($_GET['del'])) {
             </thead>
             <tbody>
                 <?php
-                // include('../../config.php');
-
                 $getDepartment = $con->query("SELECT * FROM department_tb");
                 $i = 1;
                 while ($row = $getDepartment->fetch_assoc()) {
@@ -135,7 +135,6 @@ if (isset($_GET['del'])) {
 if (isset($_GET['action']) && $_GET['action'] == 'createDepartment') {
     $deptName = $_POST['deptName'];
 
-    // Prepare a statement to check if the department already exists
     $checkIfExist = $con->prepare("SELECT * FROM department_tb WHERE department_name = ?");
     $checkIfExist->bind_param("s", $deptName);
     $checkIfExist->execute();
@@ -144,7 +143,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'createDepartment') {
     if ($resultDept->num_rows > 0) {
         echo "<script>alert('This department already exists');</script>";
     } else {
-        // Prepare a statement to insert the new department
         $insertDept = $con->prepare("INSERT INTO department_tb(department_name) VALUES (?)");
         $insertDept->bind_param("s", $deptName);
         if ($insertDept->execute()) {

@@ -95,6 +95,12 @@ label {
     font-size: 12px;
 }
 
+.guide {
+    color: lightgray;
+    margin-bottom: 5px;
+    font-size: 10px;
+}
+
 .create-new-room div select,
 .create-new-room div input[type="text"] {
     background-color: #5c6295;
@@ -123,4 +129,9 @@ button {
 button:hover,
 input[type="submit"]:hover {
     background-color: #0056b3;
+}
+
+.editable input {
+    width: 100%;
+    box-sizing: border-box;
 }
