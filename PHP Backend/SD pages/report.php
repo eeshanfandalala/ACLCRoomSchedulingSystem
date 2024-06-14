@@ -54,7 +54,9 @@ include 'config.php';
             <input type="text" id="searchBar" placeholder="Search for classes...">
             <div class="container" id="classContainer">
                 <?php
-                $countClassWithSubjects = $con->prepare("SELECT
+                if (isset($_POST['AY']) && isset($_POST['SetSem'])) {
+
+                    $countClassWithSubjects = $con->prepare("SELECT
                 c.class_id,
                 c.class_courseStrand,
                 c.class_year,
@@ -76,20 +78,21 @@ include 'config.php';
                 c.class_department,
                 c.class_standing;");
 
-                $countClassWithSubjects->bind_param("ss", $_POST['AY'], $_POST['SetSem']);
-                $countClassWithSubjects->execute();
-                $resultcountClassWithSubjects = $countClassWithSubjects->get_result();
-                while ($row = $resultcountClassWithSubjects->fetch_assoc()) {
+                    $countClassWithSubjects->bind_param("ss", $_POST['AY'], $_POST['SetSem']);
+                    $countClassWithSubjects->execute();
+                    $resultcountClassWithSubjects = $countClassWithSubjects->get_result();
+                    while ($row = $resultcountClassWithSubjects->fetch_assoc()) {
 
                 ?>
-                    <div class="card">
-                        <h2><?php echo htmlspecialchars($row['class_courseStrand']) . " " . htmlspecialchars($row['class_year']) . "-" . htmlspecialchars($row['class_section']); ?>
-                        </h2>
-                        <p>Department: <?php echo htmlspecialchars($row['class_department']); ?></p>
-                        <p>Standing: <?php echo htmlspecialchars($row['class_standing']); ?></p>
-                        <p>Total Subjects: <?php echo htmlspecialchars($row['num_subjects']); ?></p>
-                    </div>
+                        <div class="card">
+                            <h2><?php echo htmlspecialchars($row['class_courseStrand']) . " " . htmlspecialchars($row['class_year']) . "-" . htmlspecialchars($row['class_section']); ?>
+                            </h2>
+                            <p>Department: <?php echo htmlspecialchars($row['class_department']); ?></p>
+                            <p>Standing: <?php echo htmlspecialchars($row['class_standing']); ?></p>
+                            <p>Total Subjects: <?php echo htmlspecialchars($row['num_subjects']); ?></p>
+                        </div>
                 <?php
+                    }
                 }
                 ?>
             </div>
@@ -103,7 +106,9 @@ include 'config.php';
             <input type="text" id="teacherSearchBar" placeholder="Search for teachers...">
             <div class="container" id="teacherContainer">
                 <?php
-                $countTeacherWithSubjects = $con->prepare("SELECT
+                if (isset($_POST['AY']) && isset($_POST['SetSem'])) {
+
+                    $countTeacherWithSubjects = $con->prepare("SELECT
                 t.`teacher_pic`,
                 `t`.`status`,
                 t.teacher_id,
@@ -120,27 +125,28 @@ include 'config.php';
                 t.teacher_id,
                 t.teacher_name;");
 
-                $countTeacherWithSubjects->bind_param("ss", $_POST['AY'], $_POST['SetSem']);
-                $countTeacherWithSubjects->execute();
-                $resultcountTeacherWithSubjects = $countTeacherWithSubjects->get_result();
-                while ($row = $resultcountTeacherWithSubjects->fetch_assoc()) {
+                    $countTeacherWithSubjects->bind_param("ss", $_POST['AY'], $_POST['SetSem']);
+                    $countTeacherWithSubjects->execute();
+                    $resultcountTeacherWithSubjects = $countTeacherWithSubjects->get_result();
+                    while ($row = $resultcountTeacherWithSubjects->fetch_assoc()) {
                 ?>
-                    <div class="card">
-                        <div>
-                            <h2><?php echo htmlspecialchars($row['teacher_name']); ?></h2>
-                            <p>Total Classes: <?php echo htmlspecialchars($row['total_classes_taught']); ?></p>
-                            <p>Total Subjects: <?php echo htmlspecialchars($row['total_subjects_taught']); ?></p>
-                            <p>Is Active: <?php echo htmlspecialchars($row['status']) == 1 ? 'Yes' : 'No'; ?></p>
-                        </div>
+                        <div class="card">
+                            <div>
+                                <h2><?php echo htmlspecialchars($row['teacher_name']); ?></h2>
+                                <p>Total Classes: <?php echo htmlspecialchars($row['total_classes_taught']); ?></p>
+                                <p>Total Subjects: <?php echo htmlspecialchars($row['total_subjects_taught']); ?></p>
+                                <p>Is Active: <?php echo htmlspecialchars($row['status']) == 1 ? 'Yes' : 'No'; ?></p>
+                            </div>
 
-                        <div class="profile-picture-container">
-                            <div class="file-input-wrapper">
-                                <img src="./profile_pictures/<?php echo $row['teacher_pic'];
-                                                                $profpic = $row['teacher_pic']; ?>" alt="profile picture" style="width: 100px;">
+                            <div class="profile-picture-container">
+                                <div class="file-input-wrapper">
+                                    <img src="./profile_pictures/<?php echo $row['teacher_pic'];
+                                                                    $profpic = $row['teacher_pic']; ?>" alt="profile picture" style="width: 100px;">
+                                </div>
                             </div>
                         </div>
-                    </div>
                 <?php
+                    }
                 }
                 ?>
             </div>

@@ -65,7 +65,7 @@ if (isset($_POST['subNewPass'])) {
                 if ($updatePassword->execute()) {
                     echo "<script>alert('Password Updated Successfully!');</script>";
                     $_SESSION['page'] = 'off'; // Update the session to include profile page
-                    echo "<script>window.location.replace('admin-manage-account.php');</script>"; // Redirect to admin-manage-account.php
+                    echo "<script>window.location.replace('user-manage-account.php');</script>"; // Redirect to admin-manage-account.php
                     exit; // Ensure no further code is executed
                 } else {
                     echo "<script>alert('Error updating password. Please try again.')</script>";

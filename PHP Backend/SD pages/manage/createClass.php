@@ -27,6 +27,14 @@ if (isset($_GET['del'])) {
         echo "<script>alert('Something went wrong!');</script>";
     }
 }
+
+// Fetch distinct department options from the database
+$departments = [];
+
+$fetchDepartments = $con->query("SELECT DISTINCT department_name FROM department_tb");
+while ($row = $fetchDepartments->fetch_assoc()) {
+    $departments[] = $row['department_name'];
+}
 ?>
 <div class="main">
     <div class="top" class="side-by-side">
@@ -161,6 +169,8 @@ if (isset($_GET['del'])) {
                     <th>Program</th>
                     <th>Year level</th>
                     <th>Section</th>
+                    <th>Department</th>
+                    <th>Standing</th>
                     <th></th>
                 </tr>
             </thead>
@@ -175,6 +185,8 @@ if (isset($_GET['del'])) {
                         <td class="editable" data-userid="<?php echo $row['class_id']; ?>" data-field="class_courseStrand"><?php echo $row['class_courseStrand'] ?></td>
                         <td class="editable-dropdown" data-userid="<?php echo $row['class_id']; ?>" data-field="class_year" data-standing="<?php echo $row['class_standing']; ?>"><?php echo $row['class_year'] ?></td>
                         <td class="editable-dropdown" data-userid="<?php echo $row['class_id']; ?>" data-field="class_section"><?php echo $row['class_section'] ?></td>
+                        <td class="editable-dropdown" data-userid="<?php echo $row['class_id']; ?>" data-field="class_department"><?php echo $row['class_department'] ?></td>
+                        <td class="editable-dropdown" data-userid="<?php echo $row['class_id']; ?>" data-field="class_standing"><?php echo $row['class_standing'] ?></td>
                         <td><a href="?del=<?php echo $row['class_id']; ?>" onclick="return confirm('Are you sure you want to delete this item?')"><button>Delete</button></a></td>
                     </tr>
                 <?php
@@ -190,12 +202,13 @@ if (isset($_GET['del'])) {
 <script src="searchtable.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const standingOptions = {
+        const yearLvlOptions = {
             'College': ['1', '2', '3', '4'],
             'SHS': ['11', '12']
         };
-
-        const sectionOptions = ['A', 'B', 'C', 'D', 'E', 'F', 'G']; // Example section options
+        const sectionOptions = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+        const departmentOptions = <?php echo json_encode($departments); ?>;
+        const standingOptions = ['College', 'SHS'];
 
         document.querySelectorAll('.editable').forEach(cell => {
             cell.addEventListener('dblclick', function() {
@@ -244,7 +257,16 @@ if (isset($_GET['del'])) {
                     let standing = this.getAttribute('data-standing');
                     let select = document.createElement('select');
 
-                    let options = field === 'class_year' ? (standingOptions[standing] || []) : sectionOptions;
+                    let options;
+                    if (field === 'class_year') {
+                        options = yearLvlOptions[standing] || [];
+                    } else if (field === 'class_section') {
+                        options = sectionOptions;
+                    } else if (field === 'class_department') {
+                        options = departmentOptions;
+                    } else if (field === 'class_standing') {
+                        options = standingOptions;
+                    }
 
                     options.forEach(optionValue => {
                         let option = document.createElement('option');
@@ -275,9 +297,8 @@ if (isset($_GET['del'])) {
                                     cell.textContent = newValue;
                                 } else {
                                     cell.textContent = originalValue;
-                                    // alert('Update failed');
                                     cell.textContent = newValue;
-
+                                    // alert('Update failed');
                                 }
                             }
                         };
