@@ -76,10 +76,10 @@ if (!isset($_SESSION['sd_id'])) {
                     <li>
                         <a href="admin-report.php">
                             <i class='bx bxs-report'></i>
-                            <span class="link-name">Report</span>
+                            <span class="link-name">Reports</span>
                         </a>
                         <ul class="sub-menu blank">
-                            <li><a class="link-name" href="admin-report.php">Report</a></li>
+                            <li><a class="link-name" href="admin-report.php">Reports</a></li>
                         </ul>
                     </li>
                     <li>

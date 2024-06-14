@@ -99,3 +99,69 @@ tbody tr:nth-child(even) {
 tr:nth-child(even) {
     background-color: #f2f2f2;
 }
+
+/* For print function */
+.print-only {
+    display: none;
+}
+
+@media print {
+    @page {
+        margin: 0;
+    }
+
+    .home-section * {
+        color: black !important;
+        background: white !important;
+    }
+
+    .sidebar,
+    .home-content i,
+    .home-content .text,
+    .filter-container,
+    .print {
+        display: none;
+    }
+
+    .home-section {
+        background: white;
+        color: black;
+        width: 100%;
+        margin-left: 0;
+    }
+
+    main {
+        padding: 0;
+    }
+
+    .schedule-container {
+        width: 100%;
+    }
+
+    .print-only {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 18px;
+        font-weight: bold;
+        display: block;
+    }
+
+    .print-only strong {
+        margin-bottom: 10px;
+    }
+
+    table {
+        background: white;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th,
+    td {
+        background: white;
+        color: black;
+        padding: 8px;
+        border: 1px solid black;
+        text-align: center;
+    }
+}
