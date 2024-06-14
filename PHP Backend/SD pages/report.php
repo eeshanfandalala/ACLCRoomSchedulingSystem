@@ -207,8 +207,8 @@ include 'config.php';
                                 $occupiedTimeStart = strtotime($row['schedule_time_start']);
                                 $occupiedTimeEnd = strtotime($row['schedule_time_end']);
                                 if (strpos($row['schedule_day'], $day) !== false) {
-                                    $startIndex = array_search(date('H:i:s', $occupiedTimeStart), $times);
-                                    $endIndex = array_search(date('H:i:s', $occupiedTimeEnd), $times);
+                                    $startIndex = array_search(date('H:i', $occupiedTimeStart), $times);
+                                    $endIndex = array_search(date('H:i', $occupiedTimeEnd), $times);
                                     for ($i = $startIndex; $i < $endIndex; $i++) {
                                         $occupiedTimes[$i] = true;
                                     }
