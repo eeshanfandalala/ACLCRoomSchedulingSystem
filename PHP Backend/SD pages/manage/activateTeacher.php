@@ -16,7 +16,6 @@
                     <th>Number</th>
                     <th>Department</th>
                     <th>Proficency</th>
-                    <th>Availability</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -42,7 +41,6 @@
                         <td><?php echo htmlspecialchars($row['teacher_number']); ?></td>
                         <td><?php echo htmlspecialchars($row['teacher_department']); ?></td>
                         <td><?php echo htmlspecialchars($row['teacher_proficency']); ?></td>
-                        <td><?php echo htmlspecialchars($row['teacher_daysAvailable']); ?></td>
                         <td>
                             <form action="" method="post">
                                 <input type="hidden" name="teacher_id" value="<?php echo htmlspecialchars($row['teacher_id']); ?>">
