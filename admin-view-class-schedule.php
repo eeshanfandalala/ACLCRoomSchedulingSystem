@@ -59,7 +59,8 @@ if (!isset($_SESSION['sd_id'])) {
                         <ul class="sub-menu">
                             <li><a class="link-name">Schedule</a></li>
                             <li><a href="admin-create-class-schedule.php">Create</a></li>
-                            <li><a href="admin-view-class-schedule.php">View</a></li>
+                            <li><a href="admin-view-room-schedule.php">View by Room</a></li>
+                            <li><a href="admin-view-class-schedule.php">View by Class</a></li>
                         </ul>
                     </li>
                     <li>

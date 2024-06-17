@@ -31,9 +31,9 @@ if (isset($_GET['del'])) {
 // Fetch distinct department options from the database
 $departments = [];
 
-$fetchDepartments = $con->query("SELECT DISTINCT department_name FROM department_tb");
+$fetchDepartments = $con->query("SELECT department_id, department_name FROM department_tb");
 while ($row = $fetchDepartments->fetch_assoc()) {
-    $departments[] = $row['department_name'];
+    $departments[] = $row;
 }
 ?>
 <div class="main">
@@ -135,38 +135,40 @@ while ($row = $fetchDepartments->fetch_assoc()) {
                 <input type="hidden" name="YrLvl" id="" value="<?php echo $_POST['YrLvl']; ?>">
                 <div>
                     <label>Section</label><br>
-                    <input type="text" name="section" id="" list="section-list" required><br>
-                    <datalist id="section-list">
-                        <?php
-                        $fetchclasses = $con->query("SELECT DISTINCT class_section FROM class_tb WHERE class_standing = '$standing'");
-                        while ($row = $fetchclasses->fetch_assoc()) {
-                        ?>
-                            <option value="<?php echo $row['class_section'] ?>"></option>
-                        <?php
-                        }
-                        $fetchclasses->free_result();
-                        ?>
-                    </datalist>
+
+                    <select name="section" id="" required>
+                        <option value="" disabled selected></option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                    </select>
                 </div>
 
                 <div>
-                    <label>Department</label>
-                    <datalist id="department-list">
+                    <label>Department</label><br>
+                    <select name="SubDept" id="" required>
+                        <option value="" disabled selected></option>
+
                         <?php
                         // $fetchdept = $con->prepare("SELECT DISTINCT `class_department` FROM `class_tb` WHERE class_standing = '$standing'");
-                        $fetchdept = $con->prepare("SELECT DISTINCT `department_name` FROM `department_tb`");
+                        $fetchdept = $con->prepare("SELECT DISTINCT `department_name`, `department_id` FROM `department_tb`");
                         $fetchdept->execute();
                         $result = $fetchdept->get_result();
                         while ($row = $result->fetch_assoc()) {
                         ?>
-                            <option value="<?php echo $row['department_name'] ?>">
+                            <option value="<?php echo $row['department_id'] ?>">
+                                <?php echo $row['department_name'] ?>
                             </option>
                         <?php
                         }
                         $fetchdept->free_result();
                         ?>
-                    </datalist><br>
-                    <input type="text" name="SubDept" id="department-list" list="department-list" required>
+                    </select>
+
 
                     <button type="submit" name="sub2">Add</button>
                 </div>
@@ -199,7 +201,20 @@ while ($row = $fetchDepartments->fetch_assoc()) {
             </thead>
             <tbody>
                 <?php
-                $getClasses = $con->query("SELECT * FROM `class_tb`;");
+                $getClasses = $con->query("SELECT 
+                                    c.class_id, 
+                                    c.class_courseStrand, 
+                                    c.class_year, 
+                                    c.class_section, 
+                                    c.class_department, 
+                                    d.department_name, 
+                                    c.class_standing
+                                FROM 
+                                    class_tb c
+                                JOIN 
+                                    department_tb d
+                                ON 
+                                    c.class_department = d.department_id;");
                 $i = 1;
                 while ($row = $getClasses->fetch_assoc()) {
                 ?>
@@ -208,9 +223,9 @@ while ($row = $fetchDepartments->fetch_assoc()) {
                         <td class="editable" data-userid="<?php echo $row['class_id']; ?>" data-field="class_courseStrand"><?php echo $row['class_courseStrand'] ?></td>
                         <td class="editable-dropdown" data-userid="<?php echo $row['class_id']; ?>" data-field="class_year" data-standing="<?php echo $row['class_standing']; ?>"><?php echo $row['class_year'] ?></td>
                         <td class="editable-dropdown" data-userid="<?php echo $row['class_id']; ?>" data-field="class_section"><?php echo $row['class_section'] ?></td>
-                        <td class="editable-dropdown" data-userid="<?php echo $row['class_id']; ?>" data-field="class_department"><?php echo $row['class_department'] ?></td>
+                        <td class="editable-dropdown" data-userid="<?php echo $row['class_id']; ?>" data-field="class_department"><?php echo $row['department_name'] ?></td>
                         <td class="editable-dropdown" data-userid="<?php echo $row['class_id']; ?>" data-field="class_standing"><?php echo $row['class_standing'] ?></td>
-                        <td><a href="?del=<?php echo $row['class_id']; ?>" onclick="return confirm('Are you sure you want to delete this item?')"><button>Delete</button></a></td>
+                        <td><a href="?del=<?php echo $row['class_id']; ?>" onclick="return confirm('Are you sure you want to delete this item?')"><button class="delete">Delete</button></a></td>
                     </tr>
                 <?php
                     $i++;
@@ -286,16 +301,27 @@ while ($row = $fetchDepartments->fetch_assoc()) {
                     } else if (field === 'class_section') {
                         options = sectionOptions;
                     } else if (field === 'class_department') {
-                        options = departmentOptions;
+                        options = departmentOptions.map(department => {
+                            return {
+                                value: department.department_id,
+                                text: department.department_name
+                            };
+                        });
                     } else if (field === 'class_standing') {
                         options = standingOptions;
                     }
 
                     options.forEach(optionValue => {
                         let option = document.createElement('option');
-                        option.value = optionValue;
-                        option.text = optionValue;
-                        option.selected = optionValue === originalValue;
+                        if (field === 'class_department') {
+                            option.value = optionValue.value;
+                            option.text = optionValue.text;
+                            option.selected = optionValue.text === originalValue;
+                        } else {
+                            option.value = optionValue;
+                            option.text = optionValue;
+                            option.selected = optionValue === originalValue;
+                        }
                         select.appendChild(option);
                     });
 
@@ -317,10 +343,10 @@ while ($row = $fetchDepartments->fetch_assoc()) {
                         xhr.onreadystatechange = function() {
                             if (xhr.readyState === 4 && xhr.status === 200) {
                                 if (xhr.responseText.trim() === 'success') {
-                                    cell.textContent = newValue;
+                                    cell.textContent = select.options[select.selectedIndex].text;
                                 } else {
-                                    cell.textContent = originalValue;
-                                    cell.textContent = newValue;
+                                    // cell.textContent = originalValue;
+                                    cell.textContent = select.options[select.selectedIndex].text;
                                     // alert('Update failed');
                                 }
                             }
@@ -335,14 +361,14 @@ while ($row = $fetchDepartments->fetch_assoc()) {
 
 <?php
 if (isset($_GET['action']) && $_GET['action'] == 'createClass') {
-    $CorS = $_POST['CorS'];
+    $CorS = strtoupper($_POST['CorS']);
     $year = $_POST['YrLvl'];
     $section = $_POST['section'];
     $SubDept = $_POST['SubDept'];
     $standing = $_POST['standing'];
 
     $validateInput = $con->prepare("SELECT * FROM class_tb WHERE `class_courseStrand` = ? AND `class_year`= ? AND `class_section`= ? AND `class_department`= ? AND `class_standing` = ?");
-    $validateInput->bind_param("sssss", $CorS, $year, $section, $SubDept, $standing);
+    $validateInput->bind_param("sssis", $CorS, $year, $section, $SubDept, $standing);
     $validateInput->execute();
     $result = $validateInput->get_result();
     if ($result->num_rows > 0) {

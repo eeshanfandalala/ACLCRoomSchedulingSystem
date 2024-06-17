@@ -49,26 +49,30 @@ include 'config.php';
                 if (isset($_POST['AY']) && isset($_POST['SetSem'])) {
 
                     $countClassWithSubjects = $con->prepare("SELECT
-                        c.class_id,
-                        c.class_courseStrand,
-                        c.class_year,
-                        c.class_section,
-                        c.class_department,
-                        c.class_standing,
-                        COUNT(DISTINCT s.subject_id) AS num_subjects
-                    FROM
-                        class_tb c
-                    LEFT JOIN
-                        schedule_tb s ON c.class_id = s.class_id
-                                    AND s.schedule_SY = ?
-                                    AND s.schedule_semester = ?
-                    GROUP BY
-                        c.class_id,
-                        c.class_courseStrand,
-                        c.class_year,
-                        c.class_section,
-                        c.class_department,
-                        c.class_standing");
+                    c.class_id,
+                    c.class_courseStrand,
+                    c.class_year,
+                    c.class_section,
+                    c.class_department,
+                    d.department_name,
+                    c.class_standing,
+                    COUNT(DISTINCT s.subject_id) AS num_subjects
+                FROM
+                    class_tb c
+                LEFT JOIN
+                    schedule_tb s ON c.class_id = s.class_id
+                                  AND s.schedule_SY = ?
+                                  AND s.schedule_semester = ?
+                LEFT JOIN
+                    department_tb d ON c.class_department = d.department_id
+                GROUP BY
+                    c.class_id,
+                    c.class_courseStrand,
+                    c.class_year,
+                    c.class_section,
+                    c.class_department,
+                    d.department_name,
+                    c.class_standing");
 
                     $countClassWithSubjects->bind_param("ss", $_POST['AY'], $_POST['SetSem']);
                     $countClassWithSubjects->execute();
@@ -77,7 +81,7 @@ include 'config.php';
                 ?>
                         <div class="card">
                             <h2><?php echo htmlspecialchars($row['class_courseStrand']) . " " . htmlspecialchars($row['class_year']) . "-" . htmlspecialchars($row['class_section']); ?></h2>
-                            <p>Department: <?php echo htmlspecialchars($row['class_department']); ?></p>
+                            <p>Department: <?php echo htmlspecialchars($row['department_name']); ?></p>
                             <p>Standing: <?php echo htmlspecialchars($row['class_standing']); ?></p>
                             <p>Total Subjects: <?php echo htmlspecialchars($row['num_subjects']); ?></p>
                         </div>
@@ -222,11 +226,12 @@ include 'config.php';
                 }
                 ?>
             </div>
-            <p id="roomContainer-not-found" class="not-found-message" Zzstyle="display: none;">Not Found</p>
+            <p id="roomContainer-not-found" class="not-found-message" style="display: none;">Not Found</p>
             <a id="toggleRoomBtn" class="see-more" data-target="roomContainer" style="display: none;">See More</a>
         </section>
     </div>
 </div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const toggleButtons = document.querySelectorAll('.see-more');

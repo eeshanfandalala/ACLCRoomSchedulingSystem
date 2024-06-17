@@ -8,15 +8,6 @@ if (!isset($_SESSION['sd_id'])) {
 } else {
     $user_id = $_SESSION['sd_id'];
 
-    if (isset($_POST['changepasspage'])) {
-        $_SESSION['page'] = $_POST['changepasspage'];
-    }
-
-    // Set default page state
-    if (!isset($_SESSION['page'])) {
-        $_SESSION['page'] = 'off';
-    }
-
     $sql = mysqli_query($con, "SELECT * FROM `sd_tb` WHERE `SD_id` = '$user_id'");
     while ($row = mysqli_fetch_array($sql)) {
         $SD_name = $row['SD_firstname'] . " " . $row['SD_lastname'];
@@ -28,13 +19,10 @@ if (!isset($_SESSION['sd_id'])) {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Manage Account</title>
+            <title>View Room Schedule</title>
             <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
             <link rel="stylesheet" href="css/SD/sidebar.css">
-            <link rel="stylesheet" href="css/nav-container.css">
-            <link rel="stylesheet" href="css/manage-account.css">
-            <link rel="stylesheet" href="css/change-password.css">
-
+            <link rel="stylesheet" href="css/SD/view-room-schedule.css">
         </head>
 
         <body>
@@ -115,16 +103,9 @@ if (!isset($_SESSION['sd_id'])) {
             <section class="home-section">
                 <div class="home-content">
                     <i class='bx bx-menu'></i> <!-- button -->
-                    <span class="text">Manage Account</span>
+                    <span class="text">View Room Schedule</span>
                 </div>
-
-                <?php
-                if ($_SESSION['page'] === 'on') {
-                    include './PHP Backend/SD pages/changePassword.php';
-                } else {
-                    include './PHP Backend/SD pages/profile.php';
-                }
-                ?>
+                <?php include './PHP Backend/SD pages/view-room-schedule.php' ?>
             </section>
         </body>
 <?php

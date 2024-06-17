@@ -148,6 +148,12 @@ input[type="submit"] {
     white-space: nowrap;
 }
 
+.delete{
+    background-color: #ff0000;
+}
+.delete:hover{
+    background-color: #ff0000b6;
+}
 
 button:hover,
 input[type="submit"]:hover {

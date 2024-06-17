@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <body>
     <div class="main">
         <div class="top" class="side-by-side">
@@ -132,7 +133,7 @@
                                 $findsubjects->free_result();
                                 ?>
                             </datalist>
-                            <input type="text" name="subject" id="selected-subject" list="subject-list" value="<?php if (isset($_POST['sub3'])) :
+                            <input type="text" name="subject" id="selected-subject" list="subject-list" value="<?php if (isset($_POST['sub3']) || isset($_POST['sub4'])) :
                                                                                                                     echo $_POST['subject'];
                                                                                                                 endif; ?>" required>
                         </div>
@@ -265,7 +266,8 @@
                             $submittedTimeEnd = strtotime(htmlspecialchars($_POST['schedule_time']['end']));
                             $submittedDays = isset($_POST['days']) && is_array($_POST['days']) ? $_POST['days'] : [];
 
-                            $isConflict = false;
+                            $isConflictRoom = false;
+                            $isConflictDay = '';
 
                             while ($rowfindOccupiedRoom = $resultfindOccupiedRoom->fetch_assoc()) {
                                 $occupiedRoomTimeStart = strtotime($rowfindOccupiedRoom['schedule_time_start']);
@@ -274,7 +276,8 @@
 
                                 if (in_array($occupiedRoomDay, $submittedDays)) {
                                     if (($submittedTimeStart < $occupiedRoomTimeEnd) && ($submittedTimeEnd > $occupiedRoomTimeStart)) {
-                                        $isConflict = true;
+                                        $isConflictRoom = true;
+                                        $isConflictDay = $occupiedRoomDay;
                                         break;
                                     }
                                 }
@@ -290,6 +293,8 @@
                             $findConflictSchedule->execute();
                             $resultfindConflictSchedule = $findConflictSchedule->get_result();
 
+                            $isConflictClass = false;
+
                             while ($rowfindConflictSchedule = $resultfindConflictSchedule->fetch_assoc()) {
                                 $occupiedClassTimeStart = strtotime($rowfindConflictSchedule['schedule_time_start']);
                                 $occupiedClassTimeEnd = strtotime($rowfindConflictSchedule['schedule_time_end']);
@@ -297,21 +302,46 @@
 
                                 if (in_array($occupiedClassDay, $submittedDays)) {
                                     if (($submittedTimeStart < $occupiedClassTimeEnd) && ($submittedTimeEnd > $occupiedClassTimeStart)) {
-                                        $isConflict = true;
+                                        $isConflictClass = true;
+                                        $isConflictDay = $occupiedClassDay;
                                         break;
                                     }
                                 }
                             }
 
-                            if ($isConflict) {
-                                echo "<script>alert('The submitted schedule conflicts with an existing schedule.');</script>";
+                            $teacherID_name = htmlspecialchars($_POST['teacher']);
+                            list($teacherID, $teacherName) = explode('|', $teacherID_name);
+                            $teacherID = htmlspecialchars($teacherID);
+                            $teacherName = htmlspecialchars($teacherName);
+
+                            $findTeacherOccupancy = $con->prepare("SELECT * FROM schedule_tb WHERE teacher_id = ? AND schedule_SY = ? AND schedule_semester = ?");
+                            $findTeacherOccupancy->bind_param("iss", $teacherID, $_POST['AY'], $_POST['SetSem']);
+                            $findTeacherOccupancy->execute();
+                            $resultfindTeacherOccupancy = $findTeacherOccupancy->get_result();
+
+                            $isConflictTeacher = false;
+
+                            while ($rowresultfindTeacherOccupancy = $resultfindTeacherOccupancy->fetch_assoc()) {
+                                $occupiedClassTimeStart = strtotime($rowresultfindTeacherOccupancy['schedule_time_start']);
+                                $occupiedClassTimeEnd = strtotime($rowresultfindTeacherOccupancy['schedule_time_end']);
+                                $occupiedClassDay = $rowresultfindTeacherOccupancy['schedule_day'];
+
+                                if (in_array($occupiedClassDay, $submittedDays)) {
+                                    if (($submittedTimeStart < $occupiedClassTimeEnd) && ($submittedTimeEnd > $occupiedClassTimeStart)) {
+                                        $isConflictTeacher = true;
+                                        $isConflictDay = $occupiedClassDay;
+                                        break;
+                                    }
+                                }
+                            }
+                            // date('h:i A', $newTimeEnd) 
+                            if ($isConflictRoom) {
+                                echo "<script>alert('Room $roomName is already occupied on $isConflictDay from" . $_POST['schedule_time']['start'] . "-" . $_POST['schedule_time']['end'] . ".');</script>";
+                            } else if ($isConflictClass) {
+                                echo "<script>alert('Class $className is already occupied on $isConflictDay from" . $_POST['schedule_time']['start'] . "-" . $_POST['schedule_time']['end'] . ".');</script>";
+                            } else if ($isConflictTeacher) {
+                                echo "<script>alert('Teacher $teacherName is already occupied on $isConflictDay from" . $_POST['schedule_time']['start'] . "-" . $_POST['schedule_time']['end'] . ".');</script>";
                             } else {
-
-                                $teacherID_name = htmlspecialchars($_POST['teacher']);
-                                list($teacherID, $teacherName) = explode('|', $teacherID_name);
-                                $teacherID = htmlspecialchars($teacherID);
-                                $teacherName = htmlspecialchars($teacherName);
-
                                 $subjectID_name = htmlspecialchars($_POST['subject']);
                                 list($subjectID, $subjectName) = explode('|', $subjectID_name);
                                 $subjectID = htmlspecialchars($subjectID);

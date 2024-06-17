@@ -41,7 +41,7 @@ if (!isset($_SESSION['teacher_id'])) {
                                 $fetchdepts = mysqli_query($con, "SELECT department_name FROM department_tb");
                                 while ($rowdept = mysqli_fetch_array($fetchdepts)) {
                                 ?>
-                                    <option value="<?php echo $rowdept['department_name']; ?>" <?php echo $rowdept['department_name'] == $row['teacher_department'] ? 'selected' : ''; ?>><?php echo $rowdept['department_name']; ?></option>
+                                    <option value="<?php echo $rowdept['department_id']; ?>" <?php echo $rowdept['department_name'] == $row['teacher_department'] ? 'selected' : ''; ?>><?php echo $rowdept['department_name']; ?></option>
                                 <?php
                                 }
                                 ?>
@@ -108,7 +108,7 @@ if (isset($_POST['update_btn'])) {
     }
 
     $sql = $con->prepare("UPDATE teacher_tb SET teacher_pic = ?, teacher_name = ?, teacher_department=?, teacher_proficency = ?, teacher_email= ?, teacher_number = ? WHERE teacher_id='$user_id'");
-    $sql->bind_param("ssssss", $profile_pic, $teacher_name, $teacher_dept, $teacher_prof, $teacher_email, $teacher_number);
+    $sql->bind_param("ssisss", $profile_pic, $teacher_name, $teacher_dept, $teacher_prof, $teacher_email, $teacher_number);
     if ($sql->execute()) {
         echo "<script>alert('Profile updated successfully');
                 window.location.replace('user-manage-account.php');</script>";

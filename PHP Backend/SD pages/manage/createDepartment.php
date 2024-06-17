@@ -1,20 +1,29 @@
-
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userid']) && isset($_POST['field']) && isset($_POST['value'])) {
     $userid = $_POST['userid'];
     $field = $_POST['field'];
     $value = $_POST['value'];
 
-    $stmt = $con->prepare("UPDATE department_tb SET $field = ? WHERE department_id = ?");
-    $stmt->bind_param("si", $value, $userid);
-    if ($stmt->execute()) {
-        echo 'Updated success';
-    } else {
-        echo 'error';
-    }
+    $checkIfExist = $con->prepare("SELECT * FROM department_tb WHERE department_name = ?");
+    $checkIfExist->bind_param("s", $value);
+    $checkIfExist->execute();
+    $resultDept = $checkIfExist->get_result();
 
-    $stmt->close();
+
+    if ($resultDept->num_rows > 0) {
+        echo "<script>alert('This department already exists');</script>";
+    } else {
+        $stmt = $con->prepare("UPDATE department_tb SET $field = ? WHERE department_id = ?");
+        $stmt->bind_param("si", $value, $userid);
+        if ($stmt->execute()) {
+            echo 'Updated success';
+        } else {
+            echo 'error';
+        }
+        $stmt->close();
+    }
     exit;
+
 }
 
 if (isset($_GET['del'])) {
@@ -48,7 +57,7 @@ if (isset($_GET['del'])) {
 
         <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for department...">
         <p class="guide">Please double-click on any cell to make edits.</p>
-        
+
         <table id="roomTable">
             <thead>
                 <tr>

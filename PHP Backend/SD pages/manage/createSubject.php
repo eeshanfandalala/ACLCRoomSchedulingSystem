@@ -27,10 +27,12 @@ if (isset($_GET['del'])) {
     exit;
 }
 
+// Fetch distinct department options from the database
 $departments = [];
-$fetchDepartments = $con->query("SELECT DISTINCT department_name FROM department_tb");
+
+$fetchDepartments = $con->query("SELECT department_id, department_name FROM department_tb");
 while ($row = $fetchDepartments->fetch_assoc()) {
-    $departments[] = $row['department_name'];
+    $departments[] = $row;
 }
 ?>
 <div class="main">
@@ -46,7 +48,8 @@ while ($row = $fetchDepartments->fetch_assoc()) {
 
             <div>
                 <label>Subject Department</label><br>
-                <select name="SubDept">
+                <select name="SubDept" required>
+                    <option value="" disabled selected></option>
                     <?php
                     $fetchdept = mysqli_query($con, "SELECT department_name FROM department_tb");
                     while ($row = mysqli_fetch_array($fetchdept)) {
@@ -60,7 +63,9 @@ while ($row = $fetchDepartments->fetch_assoc()) {
 
             <div>
                 <label>Room Type</label><br>
-                <select name="roomType">
+                <select name="roomType" required>
+                <option value="" disabled selected></option>
+
                     <option value="Lecture">Lecture</option>
                     <option value="Laboratory">Laboratory</option>
                 </select>
@@ -75,7 +80,7 @@ while ($row = $fetchDepartments->fetch_assoc()) {
         </div>
         <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search for subject..">
         <p class="guide">Please double-click on any cell to make edits.</p>
-        
+
         <table id="roomTable">
             <thead>
                 <tr>
@@ -90,15 +95,28 @@ while ($row = $fetchDepartments->fetch_assoc()) {
                 <?php
                 // include('../../config.php');
 
-                $getSubjects = $con->query("SELECT * FROM subject_tb");
+                $getSubjects = $con->query("SELECT 
+                s.subject_id, 
+                s.subject_name, 
+                s.subject_units, 
+                s.subject_description, 
+                s.subject_department, 
+                d.department_name, 
+                s.subject_type
+            FROM 
+                subject_tb s
+            JOIN 
+                department_tb d
+            ON 
+                s.subject_department = d.department_id;");
                 $i = 1;
                 while ($row = $getSubjects->fetch_assoc()) {
                 ?>
                     <tr>
                         <td><?php echo $i; ?></td>
                         <td class="editable" data-userid="<?php echo $row['subject_id']; ?>" data-field="subject_name"><?php echo $row['subject_name']; ?></td>
-                        <td class="editable" data-userid="<?php echo $row['subject_id']; ?>" data-field="subject_department"><?php echo $row['subject_department']; ?></td>
-                        <td class="editable" data-userid="<?php echo $row['subject_id']; ?>" data-field="subject_type"><?php echo $row['subject_type']; ?></td>
+                        <td class="editable-dropdown" data-userid="<?php echo $row['subject_id']; ?>" data-field="subject_department"><?php echo $row['department_name']; ?></td>
+                        <td class="editable-dropdown" data-userid="<?php echo $row['subject_id']; ?>" data-field="subject_type"><?php echo $row['subject_type']; ?></td>
                         <td><a href="?del=<?php echo $row['subject_id']; ?>" onclick="return confirm('Are you sure you want to delete this item?')"><button>Delete</button></a></td>
                     </tr>
                 <?php
@@ -118,38 +136,19 @@ while ($row = $fetchDepartments->fetch_assoc()) {
 
         document.querySelectorAll('.editable').forEach(cell => {
             cell.addEventListener('dblclick', function() {
-                if (!this.querySelector('input') && !this.querySelector('select')) {
-                    let originalValue = this.textContent;
-                    let userId = this.getAttribute('data-userid');
-                    let field = this.getAttribute('data-field');
-                    let inputElement;
-
-                    if (field === 'subject_name') {
-                        inputElement = document.createElement('input');
-                        inputElement.type = 'text';
-                        inputElement.value = originalValue;
-                    } else {
-                        inputElement = document.createElement('select');
-                        let options = field === 'subject_department' ? departmentOptions : typeOptions;
-                        options.forEach(optionValue => {
-                            let option = document.createElement('option');
-                            option.value = optionValue;
-                            option.text = optionValue;
-                            option.selected = optionValue === originalValue;
-                            inputElement.appendChild(option);
-                        });
-                    }
-
+                if (!this.querySelector('input')) {
+                    let originalValue = this.textContent.trim();
+                    let input = document.createElement('input');
+                    input.type = 'text';
+                    input.value = originalValue;
                     this.textContent = '';
-                    this.appendChild(inputElement);
-                    inputElement.focus();
+                    this.appendChild(input);
+                    input.focus();
 
-                    inputElement.addEventListener('blur', function() {
-                        cell.textContent = originalValue;
-                    });
-
-                    inputElement.addEventListener('change', function() {
-                        let newValue = this.value;
+                    input.addEventListener('blur', function() {
+                        let newValue = this.value.trim();
+                        let userId = cell.getAttribute('data-userid');
+                        let field = cell.getAttribute('data-field');
 
                         // Make an AJAX request to update the database
                         let xhr = new XMLHttpRequest();
@@ -163,6 +162,73 @@ while ($row = $fetchDepartments->fetch_assoc()) {
                                     cell.textContent = originalValue;
                                     cell.textContent = newValue;
 
+                                    // alert('Update failed');
+                                }
+                            }
+                        };
+                        xhr.send(`userid=${userId}&field=${field}&value=${newValue}`);
+                    });
+                }
+            });
+        });
+
+        document.querySelectorAll('.editable-dropdown').forEach(cell => {
+            cell.addEventListener('dblclick', function() {
+                if (!this.querySelector('select')) {
+                    let originalValue = this.textContent.trim();
+                    let userId = this.getAttribute('data-userid');
+                    let field = this.getAttribute('data-field');
+                    let standing = this.getAttribute('data-standing');
+                    let select = document.createElement('select');
+
+                    let options;
+                    if (field === 'subject_type') {
+                        options = typeOptions;
+                    } else if (field === 'subject_department') {
+                        options = departmentOptions.map(department => {
+                            return {
+                                value: department.department_id,
+                                text: department.department_name
+                            };
+                        });
+                    }
+
+                    options.forEach(optionValue => {
+                        let option = document.createElement('option');
+                        if (field === 'subject_department') {
+                            option.value = optionValue.value;
+                            option.text = optionValue.text;
+                            option.selected = optionValue.text === originalValue;
+                        } else {
+                            option.value = optionValue;
+                            option.text = optionValue;
+                            option.selected = optionValue === originalValue;
+                        }
+                        select.appendChild(option);
+                    });
+
+                    this.textContent = '';
+                    this.appendChild(select);
+                    select.focus();
+
+                    select.addEventListener('blur', function() {
+                        cell.textContent = originalValue;
+                    });
+
+                    select.addEventListener('change', function() {
+                        let newValue = this.value.trim();
+
+                        // Make an AJAX request to update the database
+                        let xhr = new XMLHttpRequest();
+                        xhr.open('POST', '', true);
+                        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === 4 && xhr.status === 200) {
+                                if (xhr.responseText.trim() === 'success') {
+                                    cell.textContent = select.options[select.selectedIndex].text;
+                                } else {
+                                    // cell.textContent = originalValue;
+                                    cell.textContent = select.options[select.selectedIndex].text;
                                     // alert('Update failed');
                                 }
                             }

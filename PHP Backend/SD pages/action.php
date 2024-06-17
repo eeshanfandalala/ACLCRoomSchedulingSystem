@@ -1,16 +1,17 @@
 <?php
 include '../../config.php';
 
+
 if (isset($_GET['EditschedID'])) {
 
     $schedID = $_GET['EditschedID'];
     $roomType = $_GET['roomType'];
 
-    $fetchSched = $con->prepare("SELECT schedule_time_start, schedule_time_end, schedule_day, teacher_id, class_id, subject_id, room_id FROM schedule_tb WHERE schedule_id = ?");
+    $fetchSched = $con->prepare("SELECT schedule_time_start, schedule_time_end, schedule_day, teacher_id, class_id, subject_id, room_id, schedule_semester, schedule_SY FROM schedule_tb WHERE schedule_id = ?");
     $fetchSched->bind_param("i", $schedID);
     $fetchSched->execute();
     $fetchSched->store_result();
-    $fetchSched->bind_result($schedule_time_start, $schedule_time_end, $schedule_day, $teacher_id, $class_id, $subject_id, $room_id);
+    $fetchSched->bind_result($schedule_time_start, $schedule_time_end, $schedule_day, $teacher_id, $class_id, $subject_id, $room_id, $schedule_semester, $schedule_SY);
     $fetchSched->fetch();
 
     // Fetch the data for Teacher
@@ -38,6 +39,17 @@ if (isset($_GET['EditschedID'])) {
     $fetchSubject->store_result();
     $fetchSubject->bind_result($subject_name, $subject_description);
     $fetchSubject->fetch();
+
+    // Fetch the data from Rooms
+    $fetchRoom = $con->prepare("SELECT room_name FROM room_tb WHERE room_id = ?");
+    $fetchRoom->bind_param("i", $room_id);
+    $fetchRoom->execute();
+    $fetchRoom->store_result();
+    $fetchRoom->bind_result($room_name);
+    $fetchRoom->fetch();
+
+
+
 ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -78,7 +90,7 @@ if (isset($_GET['EditschedID'])) {
             }
 
             .form-container h2 {
-                margin-bottom: 20px;
+                margin-bottom: 0px;
                 text-align: center;
             }
 
@@ -103,7 +115,8 @@ if (isset($_GET['EditschedID'])) {
                 transition: all .5s ease;
             }
 
-            .form-group input[type="submit"] {
+            .form-group input[type="submit"],
+            a {
                 background-color: #0679E2;
                 color: white;
                 margin: 0 auto;
@@ -113,6 +126,7 @@ if (isset($_GET['EditschedID'])) {
                 display: block;
                 cursor: pointer;
                 transition: all .5s ease;
+                /* width: fit-content; */
             }
 
             .form-group input[type="submit"]:hover {
@@ -123,9 +137,15 @@ if (isset($_GET['EditschedID'])) {
 
     <body>
         <div class="form-container">
-            <h2>Edit Schedule</h2>
+            <h2>Edit Schedule in <?php echo $room_name; ?></h2>
+            <h3><?php echo "($schedule_day)"; ?></h3>
+
             <form action="" method="post">
                 <input type="hidden" name="schedID" value="<?php echo $_GET['EditschedID']; ?>">
+                <input type="hidden" name="schedule_day" id="" value="<?php echo $schedule_day; ?>">
+                <input type="hidden" name="schedule_SY" id="" value="<?php echo $schedule_SY; ?>">
+                <input type="hidden" name="schedule_semester" id="" value="<?php echo $schedule_semester; ?>">
+                <input type="hidden" name="room_id" id="" value="<?php echo $room_id; ?>">
                 <input type="hidden" name="selected-room" id="selected-room" class="<?php echo htmlspecialchars($roomType); ?>">
 
                 <div class="form-group">
@@ -158,7 +178,7 @@ if (isset($_GET['EditschedID'])) {
                     <label for="subjectID">Subject</label><br>
                     <select name="subjectID" id="subjectID">
                         <?php
-                        $fetchSubjects = $con->query("SELECT * FROM subject_tb");
+                        $fetchSubjects = $con->query("SELECT * FROM subject_tb WHERE subject_type = '$roomType'");
                         while ($row = $fetchSubjects->fetch_assoc()) {
                         ?>
                             <option value="<?php echo $row['subject_id']; ?>" <?php echo $subject_name == $row['subject_name'] ? 'selected' : ''; ?>>
@@ -184,9 +204,13 @@ if (isset($_GET['EditschedID'])) {
                     </select>
                 </div>
 
+
                 <div class="form-group">
                     <input type="submit" name="update" value="Update">
+                    <a href="../../admin-view-room-schedule.php">Back</a>
                 </div>
+
+
             </form>
         </div>
     </body>
@@ -260,14 +284,115 @@ if (isset($_GET['EditschedID'])) {
 }
 
 if (isset($_POST['update'])) {
-    $schedID = $_POST['schedID'];
-    $new_time_start = $_POST['new-time-start'];
-    $new_time_end = $_POST['new-time-end'];
-    $classID = $_POST['classID'];
-    $teacherID = $_POST['teacherID'];
-    $subjectID = $_POST['subjectID'];
-    $updateSched = $con->prepare("UPDATE schedule_tb SET schedule_time_start =?, schedule_time_end=? , teacher_id=?, class_id=?, subject_id=? WHERE schedule_id = ?");
-    $updateSched->bind_param("ssiiii", $new_time_start, $new_time_end, $teacherID, $classID, $subjectID, $schedID);
-    $updateSched->execute();
-    echo "<script>alert('Updated Successfully'); window.location.href = '../../admin-view-class-schedule.php';</script>";
+    $new_time_start = htmlspecialchars($_POST['new-time-start']);
+    $new_time_end = htmlspecialchars($_POST['new-time-end']);
+    $schedule_SY = htmlspecialchars($_POST['schedule_SY']);
+    $schedule_semester = htmlspecialchars($_POST['schedule_semester']);
+    $roomID = intval($_POST['roomID']);
+    $schedID = intval($_POST['schedID']);
+    $classID = intval($_POST['classID']);
+    $teacherID = intval($_POST['teacherID']);
+    $subjectID = intval($_POST['subjectID']);
+    $submittedDay = htmlspecialchars($_POST['schedule_day']);
+
+    // Convert new start and end times to a format suitable for comparison
+    $newTimeStart = strtotime($new_time_start);
+    $newTimeEnd = strtotime($new_time_end);
+
+
+    //get Name Values
+    // $getTeacherName = $con->prepare("SELECT teacher_name FROM teacher_tb WHERE teacher_id = ?");
+    // $getTeacherName->bind_param("i", $teacherID);
+    // $getTeacherName->execute();
+    // $getTeacherName->store_result();
+    // $getTeacherName->bind_result($teacherName);
+
+    // $getClassName = $con->prepare("SELECT class_courseStrand, class_year, class_section FROM class_tb WHERE class_id = ?");
+    // $getClassName->bind_param("i", $classID);
+    // $getClassName->execute();
+    // $getClassName->store_result();
+    // $getClassName->bind_result($$class_courseStrand, $class_year, $class_section);
+
+    // Check if the room is occupied within the submitted time
+    $findConflictTime = $con->prepare("SELECT r.room_name, s.schedule_time_start, s.schedule_time_end 
+                                        FROM room_tb r
+                                        JOIN schedule_tb s ON r.room_id = s.room_id
+                                        WHERE s.room_id = ? AND s.schedule_SY = ? AND s.schedule_semester = ? AND s.schedule_day = ?");
+    $findConflictTime->bind_param("isss", $roomID, $schedule_SY, $schedule_semester, $submittedDay);
+    $findConflictTime->execute();
+    $resultFindConflictTime = $findConflictTime->get_result();
+    $roomName = '';
+    $isConflictTime = false;
+
+    while ($row = $resultFindConflictTime->fetch_assoc()) {
+        $occupiedTimeStart = strtotime($row['schedule_time_start']);
+        $occupiedTimeEnd = strtotime($row['schedule_time_end']);
+
+        if (($newTimeStart < $occupiedTimeEnd) && ($newTimeEnd > $occupiedTimeStart)) {
+            $isConflictTime = true;
+            $roomName = htmlspecialchars($row['room_name']);
+            break;
+        }
+    }
+
+    // Check if the Class is occupied within the submitted time
+    $findConflictClass = $con->prepare("SELECT c.class_courseStrand, c.class_year, c.class_section, s.schedule_time_start, s.schedule_time_end 
+                                        FROM class_tb c
+                                        JOIN schedule_tb s ON c.class_id = s.class_id
+                                        WHERE s.class_id = ? AND s.schedule_SY = ? AND s.schedule_semester = ? AND s.schedule_day = ?");
+    $findConflictClass->bind_param("isss", $classID, $schedule_SY, $schedule_semester, $submittedDay);
+    $findConflictClass->execute();
+    $resultfindConflictClass = $findConflictClass->get_result();
+    $className = '';
+    $isConflictClass = false;
+
+
+    while ($row = $resultfindConflictClass->fetch_assoc()) {
+        $occupiedTimeStart = strtotime($row['schedule_time_start']);
+        $occupiedTimeEnd = strtotime($row['schedule_time_end']);
+
+        if (($newTimeStart < $occupiedTimeEnd) && ($newTimeEnd > $occupiedTimeStart)) {
+            $isConflictClass = true;
+            $className =  $row['class_courseStrand'] . ' ' . $row['class_year'] . ' - ' . $row['class_section'];
+            break;
+        }
+    }
+
+    // Check if the Teacher is occupied within the submitted time
+    $findConflictTeacher = $con->prepare("SELECT t.teacher_name, s.schedule_time_start, s.schedule_time_end 
+                                            FROM teacher_tb t
+                                            JOIN schedule_tb s ON t.teacher_id = s.teacher_id
+                                            WHERE s.teacher_id = ? AND s.schedule_SY = ? AND s.schedule_semester = ? AND s.schedule_day = ?");
+    $findConflictTeacher->bind_param("isss", $teacherID, $schedule_SY, $schedule_semester, $submittedDay);
+    $findConflictTeacher->execute();
+    $resultfindConflictTeacher = $findConflictTeacher->get_result();
+    $teacherName = '';
+    $isConflictTeacher = false;
+
+
+    while ($row = $resultfindConflictTeacher->fetch_assoc()) {
+        $occupiedTimeStart = strtotime($row['schedule_time_start']);
+        $occupiedTimeEnd = strtotime($row['schedule_time_end']);
+
+        if (($newTimeStart < $occupiedTimeEnd) && ($newTimeEnd > $occupiedTimeStart)) {
+            $isConflictTeacher = true;
+            $teacherName = $row['teacher_name'];
+            break;
+        }
+    }
+
+
+    if ($isConflictTime) {
+        // echo "<script>alert('The submitted schedule conflicts with an existing schedule.');</script>";
+        echo "<script>alert('Room $roomName is already occupied on $isConflictDay from $newTimeStart - $newTimeEnd by $className.');</script>";
+    } else if ($isConflictClass) {
+        echo "<script>alert('Class $className is already scheduled  on $isConflictDay from $newTimeStart - $newTimeEnd in $roomName.');</script>";
+    } else if ($isConflictClass) {
+        echo "<script>alert('Teacher $teacherName is already scheduled  on $isConflictDay from $newTimeStart - $newTimeEnd in $roomName with $className.');</script>";
+    } else {
+        $updateSched = $con->prepare("UPDATE schedule_tb SET schedule_time_start =?, schedule_time_end=? , teacher_id=?, class_id=?, subject_id=? WHERE schedule_id = ?");
+        $updateSched->bind_param("ssiiii", $new_time_start, $new_time_end, $teacherID, $classID, $subjectID, $schedID);
+        $updateSched->execute();
+        echo "<script>alert('Updated Successfully'); window.location.href = '../../admin-view-room-schedule.php';</script>";
+    }
 }
