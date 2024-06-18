@@ -84,7 +84,7 @@ if (isset($_GET['EditschedID'])) {
                 max-width: 500px;
                 margin: 0 auto;
                 padding: 20px;
-                border-radius: 8px;
+                border-radius: 10px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -119,20 +119,19 @@ if (isset($_GET['EditschedID'])) {
                 transition: all .5s ease;
             }
 
-            .form-group input[type="submit"] {
+            input[type="submit"] {
                 background-color: #0679E2;
                 color: white;
                 margin: 0 auto;
-                padding: 15px 20px;
+                padding: 10px;
                 border: none;
                 border-radius: 10px;
                 display: block;
                 cursor: pointer;
                 transition: all .5s ease;
-                /* width: fit-content; */
             }
 
-            .form-group input[type="submit"]:hover {
+            input[type="submit"]:hover {
                 background-color: #0056b3;
             }
 
@@ -163,7 +162,7 @@ if (isset($_GET['EditschedID'])) {
                 <a href="../../admin-view-room-schedule.php" class="back"><i class='bx bx-chevron-left'></i>Back</a>
 
                 <h2>Edit Schedule</h2>
-                <h4>Room: <?php echo $room_name; ?> <?php echo "($schedule_day)"; ?></h4>
+                <h4>Room: <?php echo $room_name; ?> <?php echo "($schedule_day)"; ?></h4><br>
 
                 <form action="" method="post">
                     <input type="hidden" name="schedID" value="<?php echo $_GET['EditschedID']; ?>">
@@ -229,9 +228,7 @@ if (isset($_GET['EditschedID'])) {
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <input type="submit" name="update" value="Update">
-                    </div>
+                    <input type="submit" name="update" value="Update">
             </div>
             </form>
         </main>
