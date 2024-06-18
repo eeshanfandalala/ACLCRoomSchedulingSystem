@@ -244,7 +244,7 @@ include 'config.php';
 
             function toggleSeeMoreButton() {
                 const visibleCards = Array.from(cards).filter(card => card.style.display !== 'none');
-                if (visibleCards.length > 3 && notFoundMessage.style.display === 'none') {
+                if (visibleCards.length > 3) {
                     button.style.display = 'inline-block';
                 } else {
                     button.style.display = 'none';
@@ -252,7 +252,8 @@ include 'config.php';
             }
 
             toggleSeeMoreButton();
-            for (let i = 3; i < cards.length; i++) {
+
+            for (let i = 0; i < cards.length; i++) {
                 if (i >= 3) {
                     cards[i].style.display = 'none';
                 }
@@ -260,12 +261,23 @@ include 'config.php';
 
             button.addEventListener('click', function() {
                 const isExpanded = this.getAttribute('data-expanded') === 'true';
-                for (let i = 3; i < cards.length; i++) {
-                    cards[i].style.display = isExpanded ? 'none' : 'block';
+
+                if (isExpanded) {
+                    for (let i = 0; i < cards.length; i++) {
+                        if (i >= 3) {
+                            cards[i].style.display = 'none';
+                        }
+                    }
+                    this.textContent = 'See More';
+                    button.style.display = 'inline-block';
+                } else {
+                    for (let i = 0; i < cards.length; i++) {
+                        cards[i].style.display = 'block';
+                    }
+                    this.textContent = 'See Less';
                 }
-                this.textContent = isExpanded ? 'See More' : 'See Less';
+
                 this.setAttribute('data-expanded', !isExpanded);
-                toggleSeeMoreButton();
             });
         });
 
@@ -290,11 +302,11 @@ include 'config.php';
 
                 if (!foundResults) {
                     notFoundElement.style.display = 'block';
-                    document.querySelector(`#${containerId} .see-more`).style.display = 'none';
                 } else {
                     notFoundElement.style.display = 'none';
-                    toggleSeeMoreButton();
                 }
+
+                toggleSeeMoreButton();
             });
         }
 
