@@ -58,6 +58,8 @@ if (isset($_GET['EditschedID'])) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Edit Schedule</title>
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
@@ -74,7 +76,7 @@ if (isset($_GET['EditschedID'])) {
                 box-sizing: border-box;
             }
 
-            .form-container {
+            main {
                 background: linear-gradient(to bottom right, #3d4479, #172278);
                 color: white;
                 max-width: 500px;
@@ -85,13 +87,13 @@ if (isset($_GET['EditschedID'])) {
                 justify-content: center;
                 align-items: center;
                 flex-direction: column;
-                text-align: left;
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             }
 
-            .form-container h2 {
-                margin-bottom: 0px;
+            h2,
+            h4 {
                 text-align: center;
+                margin: 0;
             }
 
             .form-group {
@@ -115,8 +117,7 @@ if (isset($_GET['EditschedID'])) {
                 transition: all .5s ease;
             }
 
-            .form-group input[type="submit"],
-            a {
+            .form-group input[type="submit"] {
                 background-color: #0679E2;
                 color: white;
                 margin: 0 auto;
@@ -132,87 +133,106 @@ if (isset($_GET['EditschedID'])) {
             .form-group input[type="submit"]:hover {
                 background-color: #0056b3;
             }
+
+            .back {
+                color: white;
+                padding: 5px 10px 5px 5px;
+                border-radius: 5px;
+                text-decoration: none;
+                display: inline-flex;
+                align-items: center;
+                transition: all 0.3s ease;
+            }
+
+            .back:hover {
+                background-color: #5c6295b3;
+            }
+
+            .back i {
+                margin-right: 5px;
+                font-size: 20px;
+            }
         </style>
     </head>
 
     <body>
-        <div class="form-container">
-            <h2>Edit Schedule in <?php echo $room_name; ?></h2>
-            <h3><?php echo "($schedule_day)"; ?></h3>
+        <main>
+            <div class="form-container">
+                <a href="../../admin-view-room-schedule.php" class="back"><i class='bx bx-chevron-left'></i>Back</a>
 
-            <form action="" method="post">
-                <input type="hidden" name="schedID" value="<?php echo $_GET['EditschedID']; ?>">
-                <input type="hidden" name="schedule_day" id="" value="<?php echo $schedule_day; ?>">
-                <input type="hidden" name="schedule_SY" id="" value="<?php echo $schedule_SY; ?>">
-                <input type="hidden" name="schedule_semester" id="" value="<?php echo $schedule_semester; ?>">
-                <input type="hidden" name="room_id" id="" value="<?php echo $room_id; ?>">
-                <input type="hidden" name="selected-room" id="selected-room" class="<?php echo htmlspecialchars($roomType); ?>">
+                <h2>Edit Schedule</h2>
+                <h4>Room: <?php echo $room_name; ?> <?php echo "($schedule_day)"; ?></h4>
 
-                <div class="form-group">
-                    <label>Time</label><br>
-                    <div>
-                        <label for="startTime">From</label>
-                        <input type="time" name="new-time-start" id="startTime" min="07:00" max="22:00" step="1800" value="<?php echo $schedule_time_start; ?>">
-                        <label for="endTime">to</label>
-                        <input type="time" name="new-time-end" id="endTime" min="07:00" max="22:00" step="1800" value="<?php echo $schedule_time_end; ?>">
+                <form action="" method="post">
+                    <input type="hidden" name="schedID" value="<?php echo $_GET['EditschedID']; ?>">
+                    <input type="hidden" name="schedule_day" id="" value="<?php echo $schedule_day; ?>">
+                    <input type="hidden" name="schedule_SY" id="" value="<?php echo $schedule_SY; ?>">
+                    <input type="hidden" name="schedule_semester" id="" value="<?php echo $schedule_semester; ?>">
+                    <input type="hidden" name="room_id" id="" value="<?php echo $room_id; ?>">
+                    <input type="hidden" name="selected-room" id="selected-room" class="<?php echo htmlspecialchars($roomType); ?>">
+
+                    <div class="form-group">
+                        <label>Time</label><br>
+                        <div>
+                            <label for="startTime">From</label>
+                            <input type="time" name="new-time-start" id="startTime" min="07:00" max="22:00" step="1800" value="<?php echo $schedule_time_start; ?>">
+                            <label for="endTime">to</label>
+                            <input type="time" name="new-time-end" id="endTime" min="07:00" max="22:00" step="1800" value="<?php echo $schedule_time_end; ?>">
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="classID">Program</label><br>
-                    <select name="classID" id="classID">
-                        <?php
-                        $fetchclasses = $con->query("SELECT * FROM class_tb");
-                        while ($row = $fetchclasses->fetch_assoc()) {
-                            $nameFetchClassResults = $row['class_courseStrand'] . ' ' . $row['class_year'] . ' - ' . $row['class_section'];
-                        ?>
-                            <option value="<?php echo $row['class_id'] ?>" <?php echo $nameFetchClassResult == $nameFetchClassResults ? 'selected' : ''; ?>>
-                                <?php echo $nameFetchClassResults ?></option>
-                        <?php
-                        }
-                        ?>
-                    </select>
-                </div>
+                    <div class="form-group">
+                        <label for="classID">Program</label><br>
+                        <select name="classID" id="classID">
+                            <?php
+                            $fetchclasses = $con->query("SELECT * FROM class_tb");
+                            while ($row = $fetchclasses->fetch_assoc()) {
+                                $nameFetchClassResults = $row['class_courseStrand'] . ' ' . $row['class_year'] . ' - ' . $row['class_section'];
+                            ?>
+                                <option value="<?php echo $row['class_id'] ?>" <?php echo $nameFetchClassResult == $nameFetchClassResults ? 'selected' : ''; ?>>
+                                    <?php echo $nameFetchClassResults ?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label for="subjectID">Subject</label><br>
-                    <select name="subjectID" id="subjectID">
-                        <?php
-                        $fetchSubjects = $con->query("SELECT * FROM subject_tb WHERE subject_type = '$roomType'");
-                        while ($row = $fetchSubjects->fetch_assoc()) {
-                        ?>
-                            <option value="<?php echo $row['subject_id']; ?>" <?php echo $subject_name == $row['subject_name'] ? 'selected' : ''; ?>>
-                                <?php echo $row['subject_name']; ?></option>
-                        <?php
-                        }
-                        ?>
-                    </select>
-                </div>
+                    <div class="form-group">
+                        <label for="subjectID">Subject</label><br>
+                        <select name="subjectID" id="subjectID">
+                            <?php
+                            $fetchSubjects = $con->query("SELECT * FROM subject_tb WHERE subject_type = '$roomType'");
+                            while ($row = $fetchSubjects->fetch_assoc()) {
+                            ?>
+                                <option value="<?php echo $row['subject_id']; ?>" <?php echo $subject_name == $row['subject_name'] ? 'selected' : ''; ?>>
+                                    <?php echo $row['subject_name']; ?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label for="teacherID">Teacher</label><br>
-                    <select name="teacherID" id="teacherID">
-                        <?php
-                        $fetchTeachers = $con->query("SELECT * FROM teacher_tb WHERE `status` = 1");
-                        while ($row = $fetchTeachers->fetch_assoc()) {
-                        ?>
-                            <option value="<?php echo $row['teacher_id'] ?>" <?php echo $teacher_name == $row['teacher_name'] ? 'selected' : ''; ?>>
-                                <?php echo $row['teacher_name'] ?></option>
-                        <?php
-                        }
-                        ?>
-                    </select>
-                </div>
+                    <div class="form-group">
+                        <label for="teacherID">Teacher</label><br>
+                        <select name="teacherID" id="teacherID">
+                            <?php
+                            $fetchTeachers = $con->query("SELECT * FROM teacher_tb WHERE `status` = 1");
+                            while ($row = $fetchTeachers->fetch_assoc()) {
+                            ?>
+                                <option value="<?php echo $row['teacher_id'] ?>" <?php echo $teacher_name == $row['teacher_name'] ? 'selected' : ''; ?>>
+                                    <?php echo $row['teacher_name'] ?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
 
-
-                <div class="form-group">
-                    <input type="submit" name="update" value="Update">
-                    <a href="../../admin-view-room-schedule.php">Back</a>
-                </div>
-
-
+                    <div class="form-group">
+                        <input type="submit" name="update" value="Update">
+                    </div>
+            </div>
             </form>
-        </div>
+        </main>
     </body>
 
     </html>
