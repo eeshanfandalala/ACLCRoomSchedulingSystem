@@ -1,37 +1,12 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userid']) && isset($_POST['field']) && isset($_POST['value'])) {
-    $userid = $_POST['userid'];
-    $field = $_POST['field'];
-    $value = $_POST['value'];
 
-    $checkIfExist = $con->prepare("SELECT * FROM department_tb WHERE department_name = ?");
-    $checkIfExist->bind_param("s", $value);
-    $checkIfExist->execute();
-    $resultDept = $checkIfExist->get_result();
-
-
-    if ($resultDept->num_rows > 0) {
-        echo "<script>alert('This department already exists');</script>";
-    } else {
-        $stmt = $con->prepare("UPDATE department_tb SET $field = ? WHERE department_id = ?");
-        $stmt->bind_param("si", $value, $userid);
-        if ($stmt->execute()) {
-            echo 'Updated success';
-        } else {
-            echo 'error';
-        }
-        $stmt->close();
-    }
-    exit;
-
-}
 
 if (isset($_GET['del'])) {
     $id = $_GET['del'];
     $stmt = $con->prepare("DELETE FROM department_tb WHERE department_id = ?");
     $stmt->bind_param("i", $id);
     if ($stmt->execute()) {
-        echo "<script>alert('Item deleted successfully!');</script>";
+        echo "<script>alert('Item deleted successfully!'); window.location.href = ../../../admin-manage-department-list.php;</script>";
     } else {
         echo "<script>alert('Something went wrong!');</script>";
     }
@@ -113,20 +88,21 @@ if (isset($_GET['del'])) {
 
                             // Make an AJAX request to update the database
                             let xhr = new XMLHttpRequest();
-                            xhr.open("POST", "", true);
+                            xhr.open("POST", './PHP Backend/SD pages/manage/actionUpdateDepartment.php', true);
                             xhr.setRequestHeader(
                                 "Content-Type",
                                 "application/x-www-form-urlencoded"
                             );
                             xhr.onreadystatechange = function() {
                                 if (xhr.readyState === 4 && xhr.status === 200) {
-                                    if (xhr.responseText.trim() == "Updated success") {
+                                    let response = xhr.responseText.trim();
+                                    if (response === "Updated success") {
                                         cell.textContent = newValue;
                                     } else {
                                         cell.textContent = originalValue;
-                                        cell.textContent = newValue;
+                                        // cell.textContent = newValue;
 
-                                        // alert('Update failed');
+                                        alert(response);
                                     }
                                 }
                             };

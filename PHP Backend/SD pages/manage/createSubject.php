@@ -1,26 +1,11 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userid']) && isset($_POST['field']) && isset($_POST['value'])) {
-    $userid = $_POST['userid'];
-    $field = $_POST['field'];
-    $value = $_POST['value'];
 
-    $stmt = $con->prepare("UPDATE subject_tb SET $field = ? WHERE subject_id = ?");
-    $stmt->bind_param("si", $value, $userid);
-    if ($stmt->execute()) {
-        echo 'Updated success';
-    } else {
-        echo 'error';
-    }
-
-    $stmt->close();
-    exit;
-}
 if (isset($_GET['del'])) {
     $id = $_GET['del'];
     $stmt = $con->prepare("DELETE FROM subject_tb WHERE subject_id = ?");
     $stmt->bind_param("i", $id);
     if ($stmt->execute()) {
-        echo "<script>alert('Item deleted successfully!');</script>";
+        echo "<script>alert('Item deleted successfully!');window.location.href = ../../../admin-manage-subject-list.php;</script>";
     } else {
         echo "<script>alert('Something went wrong!');</script>";
     }
@@ -35,6 +20,7 @@ while ($row = $fetchDepartments->fetch_assoc()) {
     $departments[] = $row;
 }
 ?>
+
 <div class="main">
     <div class="create-new-room">
         <div class="text">
@@ -105,7 +91,7 @@ while ($row = $fetchDepartments->fetch_assoc()) {
                 s.subject_type
             FROM 
                 subject_tb s
-            JOIN 
+            LEFT JOIN 
                 department_tb d
             ON 
                 s.subject_department = d.department_id;");
@@ -152,17 +138,18 @@ while ($row = $fetchDepartments->fetch_assoc()) {
 
                         // Make an AJAX request to update the database
                         let xhr = new XMLHttpRequest();
-                        xhr.open('POST', '', true);
+                        xhr.open('POST', './PHP Backend/SD pages/manage/actionUpdateSubject.php', true);
                         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                         xhr.onreadystatechange = function() {
                             if (xhr.readyState === 4 && xhr.status === 200) {
-                                if (xhr.responseText.trim() === 'success') {
+                                let response = xhr.responseText.trim();
+                                if (response === 'success') {
                                     cell.textContent = newValue;
                                 } else {
                                     cell.textContent = originalValue;
-                                    cell.textContent = newValue;
+                                    // cell.textContent = newValue;
 
-                                    // alert('Update failed');
+                                    alert(response);
                                 }
                             }
                         };
@@ -220,16 +207,17 @@ while ($row = $fetchDepartments->fetch_assoc()) {
 
                         // Make an AJAX request to update the database
                         let xhr = new XMLHttpRequest();
-                        xhr.open('POST', '', true);
+                        xhr.open('POST', './PHP Backend/SD pages/manage/actionUpdateSubject.php', true);
                         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                         xhr.onreadystatechange = function() {
                             if (xhr.readyState === 4 && xhr.status === 200) {
-                                if (xhr.responseText.trim() === 'success') {
+                                let response = xhr.responseText.trim();
+                                if (response === 'success') {
                                     cell.textContent = select.options[select.selectedIndex].text;
                                 } else {
-                                    // cell.textContent = originalValue;
-                                    cell.textContent = select.options[select.selectedIndex].text;
-                                    // alert('Update failed');
+                                    cell.textContent = originalValue;
+                                    // cell.textContent = select.options[select.selectedIndex].text;
+                                    alert(response);
                                 }
                             }
                         };

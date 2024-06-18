@@ -278,7 +278,7 @@ if (isset($_GET['EditschedID'])) {
     $delSched = $con->prepare("DELETE FROM schedule_tb WHERE schedule_id = ?");
     $delSched->bind_param("i", $schedID);
     if ($delSched->execute()) {
-        echo "<script>alert('Deleted Successfully'); window.location.href = '../../admin-view-class-schedule.php';</script>";
+        echo "<script>alert('Deleted Successfully'); window.location.href = '../../admin-view-room-schedule.php';</script>";
         exit;
     }
 }
@@ -317,8 +317,8 @@ if (isset($_POST['update'])) {
     $findConflictTime = $con->prepare("SELECT r.room_name, s.schedule_time_start, s.schedule_time_end 
                                         FROM room_tb r
                                         JOIN schedule_tb s ON r.room_id = s.room_id
-                                        WHERE s.room_id = ? AND s.schedule_SY = ? AND s.schedule_semester = ? AND s.schedule_day = ?");
-    $findConflictTime->bind_param("isss", $roomID, $schedule_SY, $schedule_semester, $submittedDay);
+                                        WHERE s.room_id = ? AND s.schedule_SY = ? AND s.schedule_semester = ? AND s.schedule_day = ? AND s.schedule_id = ?");
+    $findConflictTime->bind_param("isssi", $roomID, $schedule_SY, $schedule_semester, $submittedDay, $schedID);
     $findConflictTime->execute();
     $resultFindConflictTime = $findConflictTime->get_result();
     $roomName = '';
@@ -387,7 +387,7 @@ if (isset($_POST['update'])) {
         echo "<script>alert('Room $roomName is already occupied on $isConflictDay from $newTimeStart - $newTimeEnd by $className.');</script>";
     } else if ($isConflictClass) {
         echo "<script>alert('Class $className is already scheduled  on $isConflictDay from $newTimeStart - $newTimeEnd in $roomName.');</script>";
-    } else if ($isConflictClass) {
+    } else if ($isConflictTeacher) {
         echo "<script>alert('Teacher $teacherName is already scheduled  on $isConflictDay from $newTimeStart - $newTimeEnd in $roomName with $className.');</script>";
     } else {
         $updateSched = $con->prepare("UPDATE schedule_tb SET schedule_time_start =?, schedule_time_end=? , teacher_id=?, class_id=?, subject_id=? WHERE schedule_id = ?");

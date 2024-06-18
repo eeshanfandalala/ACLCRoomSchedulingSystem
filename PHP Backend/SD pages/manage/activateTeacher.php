@@ -15,7 +15,7 @@
                     <th>Email</th>
                     <th>Number</th>
                     <th>Department</th>
-                    <th>Proficency</th>
+                    <th>Proficiency</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -31,7 +31,23 @@
                     $updateStatus->execute();
                 }
 
-                $viewTeach = mysqli_query($con, "SELECT * FROM teacher_tb");
+                $viewTeach = mysqli_query($con, "SELECT 
+                t.teacher_id, 
+                t.teacher_name, 
+                t.teacher_email, 
+                t.teacher_password, 
+                t.teacher_number, 
+                t.teacher_department, 
+                d.department_name,  -- From department_tb
+                t.teacher_proficency, 
+                t.status, 
+                t.teacher_pic, 
+                t.SD_id
+            FROM 
+                teacher_tb t
+            LEFT JOIN 
+                department_tb d ON t.teacher_department = d.department_id;
+            ");
                 while ($row = mysqli_fetch_array($viewTeach)) {
                     $statusText = ($row['status'] == 0) ? "Not Active" : "Active";
                 ?>
@@ -39,7 +55,7 @@
                         <td><?php echo htmlspecialchars($row['teacher_name']); ?></td>
                         <td><?php echo htmlspecialchars($row['teacher_email']); ?></td>
                         <td><?php echo htmlspecialchars($row['teacher_number']); ?></td>
-                        <td><?php echo htmlspecialchars($row['teacher_department']); ?></td>
+                        <td><?php echo htmlspecialchars($row['department_name']); ?></td>
                         <td><?php echo htmlspecialchars($row['teacher_proficency']); ?></td>
                         <td>
                             <form action="" method="post">

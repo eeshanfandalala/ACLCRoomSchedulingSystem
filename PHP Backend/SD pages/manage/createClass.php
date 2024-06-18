@@ -1,28 +1,11 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['userid']) && isset($_POST['field']) && isset($_POST['value'])) {
-    $userid = $_POST['userid'];
-    $field = $_POST['field'];
-    $value = $_POST['value'];
-
-    $stmt = $con->prepare("UPDATE class_tb SET $field = ? WHERE class_id = ?");
-    $stmt->bind_param('si', $value, $userid);
-
-    if ($stmt->execute()) {
-        echo 'success';
-    } else {
-        echo 'error';
-    }
-
-    $stmt->close();
-    exit;
-}
 
 if (isset($_GET['del'])) {
     $id = $_GET['del'];
     $stmt = $con->prepare("DELETE FROM class_tb WHERE class_id = ?");
     $stmt->bind_param("i", $id);
     if ($stmt->execute()) {
-        echo "<script>alert('Item deleted successfully!');</script>";
+        echo "<script>alert('Item deleted successfully!'); window.location.href = ../../../admin-manage-class-list.php;</script>";
     } else {
         echo "<script>alert('Something went wrong!');</script>";
     }
@@ -211,7 +194,7 @@ while ($row = $fetchDepartments->fetch_assoc()) {
                                     c.class_standing
                                 FROM 
                                     class_tb c
-                                JOIN 
+                                LEFT JOIN 
                                     department_tb d
                                 ON 
                                     c.class_department = d.department_id;");
@@ -266,17 +249,17 @@ while ($row = $fetchDepartments->fetch_assoc()) {
 
                         // Make an AJAX request to update the database
                         let xhr = new XMLHttpRequest();
-                        xhr.open('POST', '', true);
+                        xhr.open('POST', './PHP Backend/SD pages/manage/actionUpdateClass.php', true);
                         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                         xhr.onreadystatechange = function() {
                             if (xhr.readyState === 4 && xhr.status === 200) {
-                                if (xhr.responseText.trim() === 'success') {
+                                let response = xhr.responseText.trim();
+                                if (response === 'success') {
                                     cell.textContent = newValue;
                                 } else {
                                     cell.textContent = originalValue;
-                                    cell.textContent = newValue;
-
-                                    // alert('Update failed');
+                                    // cell.textContent = newValue;
+                                    alert(response);
                                 }
                             }
                         };
@@ -338,16 +321,17 @@ while ($row = $fetchDepartments->fetch_assoc()) {
 
                         // Make an AJAX request to update the database
                         let xhr = new XMLHttpRequest();
-                        xhr.open('POST', '', true);
+                        xhr.open('POST', './PHP Backend/SD pages/manage/actionUpdateClass.php', true);
                         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                         xhr.onreadystatechange = function() {
                             if (xhr.readyState === 4 && xhr.status === 200) {
-                                if (xhr.responseText.trim() === 'success') {
-                                    cell.textContent = select.options[select.selectedIndex].text;
+                                let response = xhr.responseText.trim();
+                                if (response === 'success') {
+                                    cell.textContent = newValue;
                                 } else {
-                                    // cell.textContent = originalValue;
-                                    cell.textContent = select.options[select.selectedIndex].text;
-                                    // alert('Update failed');
+                                    cell.textContent = originalValue;
+                                    // cell.textContent = newValue;
+                                    alert(response);
                                 }
                             }
                         };
