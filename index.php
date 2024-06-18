@@ -69,7 +69,10 @@
 </body>
 
 </html>-->
+<?php
+session_start();
 
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -86,7 +89,7 @@
             <form action="fuse.php" method="post">
                 <p class="title">CLASSROOM SCHEDULING SYSTEM</p>
                 <div>
-                    <input id="email_login" name="email_login" type="email" placeholder="Email" required>
+                    <input id="email_login" name="email_login" type="email" placeholder="Email" required value="<?php echo isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : ''; ?>">
                     <!-- <span id="password_login_error" name="password_login_error" class="error"></span> -->
                 </div>
                 <div>
@@ -103,21 +106,21 @@
             <form action="fuse.php" method="post">
                 <p class="title">CLASSROOM SCHEDULING SYSTEM</p>
 
-                <input name="username" type="text" placeholder="Name" required>
+                <input name="username" type="text" placeholder="Name" required value="<?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : ''; ?>">
                 <div>
-                    <input id="email_signup" name="email_signup" type="email" placeholder="Email" required>
+                    <input id="email_signup" name="email_signup" type="email" placeholder="Email" required value="<?php echo isset($_SESSION['email_signup']) ? htmlspecialchars($_SESSION['email_signup']) : ''; ?>">
                     <!-- <span id="username_error" class="error"></span> -->
                 </div>
                 <div>
                     <input id="password_signup" name="password_signup" type="password" placeholder="Password"
                         title="Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character (!@#$%^&*). Minimum length: 8 characters"
-                        required>
+                        required value="<?php echo isset($_SESSION['password_signup']) ? htmlspecialchars($_SESSION['password_signup']) : ''; ?>">
                     <!-- <span id="password_error" class="error"></span> -->
 
                 </div>
                 <div>
                     <input name="confirm_password" id="confirm_password" type="password" placeholder="Confirm Password"
-                        required>
+                        required value="<?php echo isset($_SESSION['confirm_password']) ? htmlspecialchars($_SESSION['confirm_password']) : ''; ?>">
                     <!-- <span id="confirm_password_error" class="error"></span> -->
                 </div>
 
