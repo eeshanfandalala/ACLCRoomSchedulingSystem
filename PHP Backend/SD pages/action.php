@@ -1,7 +1,7 @@
 <?php
 include '../../config.php';
 
-
+$day = '';
 if (isset($_GET['EditschedID'])) {
 
     $schedID = $_GET['EditschedID'];
@@ -13,6 +13,8 @@ if (isset($_GET['EditschedID'])) {
     $fetchSched->store_result();
     $fetchSched->bind_result($schedule_time_start, $schedule_time_end, $schedule_day, $teacher_id, $class_id, $subject_id, $room_id, $schedule_semester, $schedule_SY);
     $fetchSched->fetch();
+
+    $day = $schedule_day;
 
     // Fetch the data for Teacher
     $fetchTeacher = $con->prepare("SELECT teacher_name FROM teacher_tb WHERE teacher_id = ?");
@@ -308,7 +310,7 @@ if (isset($_POST['update'])) {
     $new_time_end = htmlspecialchars($_POST['new-time-end']);
     $schedule_SY = htmlspecialchars($_POST['schedule_SY']);
     $schedule_semester = htmlspecialchars($_POST['schedule_semester']);
-    $roomID = intval($_POST['roomID']);
+    $roomID = intval($_POST['room_id']);
     $schedID = intval($_POST['schedID']);
     $classID = intval($_POST['classID']);
     $teacherID = intval($_POST['teacherID']);
@@ -337,7 +339,7 @@ if (isset($_POST['update'])) {
     $findConflictTime = $con->prepare("SELECT r.room_name, s.schedule_time_start, s.schedule_time_end 
                                         FROM room_tb r
                                         JOIN schedule_tb s ON r.room_id = s.room_id
-                                        WHERE s.room_id = ? AND s.schedule_SY = ? AND s.schedule_semester = ? AND s.schedule_day = ? AND s.schedule_id = ?");
+                                        WHERE s.room_id = ? AND s.schedule_SY = ? AND s.schedule_semester = ? AND s.schedule_day = ? AND s.schedule_id != ?");
     $findConflictTime->bind_param("isssi", $roomID, $schedule_SY, $schedule_semester, $submittedDay, $schedID);
     $findConflictTime->execute();
     $resultFindConflictTime = $findConflictTime->get_result();
@@ -359,8 +361,8 @@ if (isset($_POST['update'])) {
     $findConflictClass = $con->prepare("SELECT c.class_courseStrand, c.class_year, c.class_section, s.schedule_time_start, s.schedule_time_end 
                                         FROM class_tb c
                                         JOIN schedule_tb s ON c.class_id = s.class_id
-                                        WHERE s.class_id = ? AND s.schedule_SY = ? AND s.schedule_semester = ? AND s.schedule_day = ?");
-    $findConflictClass->bind_param("isss", $classID, $schedule_SY, $schedule_semester, $submittedDay);
+                                        WHERE s.class_id = ? AND s.schedule_SY = ? AND s.schedule_semester = ? AND s.schedule_day = ? AND s.schedule_id != ?");
+    $findConflictClass->bind_param("isssi", $classID, $schedule_SY, $schedule_semester, $submittedDay, $schedID);
     $findConflictClass->execute();
     $resultfindConflictClass = $findConflictClass->get_result();
     $className = '';
@@ -382,8 +384,9 @@ if (isset($_POST['update'])) {
     $findConflictTeacher = $con->prepare("SELECT t.teacher_name, s.schedule_time_start, s.schedule_time_end 
                                             FROM teacher_tb t
                                             JOIN schedule_tb s ON t.teacher_id = s.teacher_id
-                                            WHERE s.teacher_id = ? AND s.schedule_SY = ? AND s.schedule_semester = ? AND s.schedule_day = ?");
-    $findConflictTeacher->bind_param("isss", $teacherID, $schedule_SY, $schedule_semester, $submittedDay);
+                                            WHERE s.teacher_id = ? AND s.schedule_SY = ? AND s.schedule_semester = ? AND s.schedule_day = ? AND s.schedule_id != ?");
+
+    $findConflictTeacher->bind_param("isssi", $teacherID, $schedule_SY, $schedule_semester, $submittedDay, $schedID);
     $findConflictTeacher->execute();
     $resultfindConflictTeacher = $findConflictTeacher->get_result();
     $teacherName = '';
@@ -404,11 +407,11 @@ if (isset($_POST['update'])) {
 
     if ($isConflictTime) {
         // echo "<script>alert('The submitted schedule conflicts with an existing schedule.');</script>";
-        echo "<script>alert('Room $roomName is already occupied on $isConflictDay from $newTimeStart - $newTimeEnd by $className.');</script>";
+        echo "<script>alert('Room $roomName is already occupied on $day from " . date('h:i A', $newTimeStart) . " - " . date('h:i A', $newTimeEnd) . " by $className.');</script>";
     } else if ($isConflictClass) {
-        echo "<script>alert('Class $className is already scheduled  on $isConflictDay from $newTimeStart - $newTimeEnd in $roomName.');</script>";
+        echo "<script>alert('Class $className is already scheduled  on $day from " . date('h:i A', $newTimeStart) . " - " . date('h:i A', $newTimeEnd) . " in $roomName.');</script>";
     } else if ($isConflictTeacher) {
-        echo "<script>alert('Teacher $teacherName is already scheduled  on $isConflictDay from $newTimeStart - $newTimeEnd in $roomName with $className.');</script>";
+        echo "<script>alert('Teacher $teacherName is already scheduled  on $day from " . date('h:i A', $newTimeStart) . " - " . date('h:i A', $newTimeEnd) . " in $roomName with $className.');</script>";
     } else {
         $updateSched = $con->prepare("UPDATE schedule_tb SET schedule_time_start =?, schedule_time_end=? , teacher_id=?, class_id=?, subject_id=? WHERE schedule_id = ?");
         $updateSched->bind_param("ssiiii", $new_time_start, $new_time_end, $teacherID, $classID, $subjectID, $schedID);
