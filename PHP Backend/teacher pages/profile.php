@@ -34,14 +34,14 @@ if (!isset($_SESSION['teacher_id'])) {
                             <input type="text" name="teacher_name" id="teacher_name" value="<?php echo $row['teacher_name']; ?>" disabled required><br>
 
                             <label>Department</label><br>
-                            <select name="teacher_dept" id="" required>
+                            <select name="teacher_dept" id="" required disabled>
                                 <option value="" disabled selected>Select a Department</option>
 
                                 <?php
-                                $fetchdepts = mysqli_query($con, "SELECT department_name FROM department_tb");
+                                $fetchdepts = mysqli_query($con, "SELECT * FROM department_tb");
                                 while ($rowdept = mysqli_fetch_array($fetchdepts)) {
                                 ?>
-                                    <option value="<?php echo $rowdept['department_id']; ?>" <?php echo $rowdept['department_name'] == $row['teacher_department'] ? 'selected' : ''; ?>><?php echo $rowdept['department_name']; ?></option>
+                                    <option value="<?php echo $rowdept['department_id']; ?>" <?php echo $rowdept['department_id'] == $row['teacher_department'] ? 'selected' : ''; ?>><?php echo $rowdept['department_name']; ?></option>
                                 <?php
                                 }
                                 ?>
@@ -74,7 +74,7 @@ if (!isset($_SESSION['teacher_id'])) {
 
         <script>
             document.getElementById('edit_btn').addEventListener('click', function() {
-                var inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="password"], input[type="file"]');
+                var inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="password"], input[type="file"], select');
                 var updateBtn = document.getElementById('update_btn');
                 for (var i = 0; i < inputs.length; i++) {
                     inputs[i].disabled = !inputs[i].disabled;
@@ -92,7 +92,7 @@ if (!isset($_SESSION['teacher_id'])) {
 
 if (isset($_POST['update_btn'])) {
     $teacher_name = $_POST['teacher_name'];
-    $teacher_dept = $_POST['teacher_dept'];
+    $teacher_dept = intval($_POST['teacher_dept']);
     $teacher_prof = $_POST['teacher_prof'];
     $teacher_email = $_POST['teacher_email'];
     $teacher_number = $_POST['teacher_number'];
