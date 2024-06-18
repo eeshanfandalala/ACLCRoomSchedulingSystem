@@ -77,14 +77,18 @@ function loginValidation()
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['signup_submit'])) {
+        $_SESSION['confirm_password'] = $_POST['confirm_password'];
+        $_SESSION['username'] = $_POST['username'];
+        $_SESSION['password_signup'] = $_POST['password_signup'];
+        $_SESSION['email_signup'] = $_POST['email_signup'];
+
         $signup_result = signupValidation();
         if (!$signup_result['isValid']) {
-            echo "<script>alert('" . $signup_result['username_error'], $signup_result['password_error'] . "!'); window.location.href = 'index.html?register';</script>";
+            echo "<script>alert('" . $signup_result['username_error'], $signup_result['password_error'] . "!'); window.location.href = 'index.php?register';</script>";
             exit();
             // echo $signup_result['username_error'], $signup_result['password_error'], $signup_result['confirm_password_error'];
-        }else if(!$signup_result['isValidConfirm']){
-            echo "<script>alert('" . $signup_result['confirm_password_error'] . "!'); window.location.href = 'index.html?register';</script>";
-
+        } else if (!$signup_result['isValidConfirm']) {
+            echo "<script>alert('" . $signup_result['confirm_password_error'] . "!'); window.location.href = 'index.php?register';</script>";
         } else {
             $name = $_POST['username'];
             $password = $_POST['password_signup'];
@@ -99,7 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sql->store_result();
 
             if ($sql->num_rows > 0) {
-                echo "<script>alert('Email already exists!'); window.location.href = 'index.html?register';</script>";
+                echo "<script>alert('Email already exists!'); window.location.href = 'index.php?register';</script>";
             } else {
                 $sd_id_query = mysqli_query($con, "SELECT `SD_id` FROM `sd_tb`");
                 $row = mysqli_fetch_assoc($sd_id_query);
@@ -107,8 +111,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $sqlInsert = $con->prepare("INSERT INTO `teacher_tb`(`teacher_name`, `teacher_password`, `teacher_email`, `teacher_pic`, `status`,`SD_id`, `teacher_department`) VALUES (?,?,?,?, 0,$sd_id, 1)");
                 $sqlInsert->bind_param("ssss", $name, $password, $email, $deafaultPic);
                 $sqlInsert->execute();
+                unset($_SESSION['confirm_password']);
+                unset($_SESSION['username']);
+                unset($_SESSION['password_signup']);
+                unset($_SESSION['email_signup']);
+                
                 echo "<script>alert('Success')</script>";
-                echo "<script>window.location.href = 'index.html';</script>";
+                echo "<script>window.location.href = 'index.php';</script>";
                 $sqlInsert->close();
             }
             $sql->close();
@@ -123,6 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
                 $email = $_POST['email_login'];
+                $_SESSION['email'] = $email;
                 $pass = $_POST['password_login'];
 
                 $sql = $con->prepare("SELECT 'teacher' AS user_type, `teacher_id`, `status`, `teacher_password` 
@@ -138,20 +148,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         if ($status == 1) {
                             if (password_verify($pass, $password)) {
                                 if ($user_type === 'teacher') {
+                                    unset($_SESSION['email']);
                                     $_SESSION['teacher_id'] = $user_id;
                                     header('Location: user-manage-account.php');
                                     exit; // Always exit after a header redirect
                                 } else {
-                                    echo "<script>alert('Invalid User Type!'); window.location.href = 'index.html';</script>"; // Change location
+                                    echo "<script>alert('Invalid User Type!'); window.location.href = 'index.php';</script>"; // Change location
                                 }
                             } else {
-                                echo "<script>alert('Incorrect Password!'); window.location.href = 'index.html';</script>"; // Change location
+
+                                echo "<script>alert('Incorrect Password!'); window.location.href = 'index.php';</script>"; // Change location
                             }
                         } else {
-                            echo "<script>alert('Account is pending for validation!'); window.location.href = 'index.html';</script>"; // Change location
+                            echo "<script>alert('Account is pending for validation!'); window.location.href = 'index.php';</script>"; // Change location
                         }
                     } else {
-                        echo "<script>alert('Incorrect Email!'); window.location.href = 'index.html';</script>"; // Change location
+                        echo "<script>alert('Incorrect Email!'); window.location.href = 'index.php';</script>"; // Change location
                     }
                 } else {
                     // If user is not found in teacher roles, check SD role
@@ -171,11 +183,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 header('Location: admin-manage-account.php');
                                 exit; // Always exit after a header redirect
                             } else {
-                                echo "<script>alert('Incorrect Password!'); window.location.href = 'index.html';</script>"; // Change location
+                                echo "<script>alert('Incorrect Password!'); window.location.href = 'index.php';</script>"; // Change location
                             }
                         }
                     } else {
-                        echo "<script>alert('Incorrect Email!'); window.location.href = 'index.html';</script>"; // Change location
+                        echo "<script>alert('Incorrect Email!'); window.location.href = 'index.php';</script>"; // Change location
                     }
                 }
             }
