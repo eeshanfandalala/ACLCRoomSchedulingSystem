@@ -208,7 +208,7 @@ while ($row = $fetchDepartments->fetch_assoc()) {
                         <td class="editable-dropdown" data-userid="<?php echo $row['class_id']; ?>" data-field="class_section"><?php echo $row['class_section'] ?></td>
                         <td class="editable-dropdown" data-userid="<?php echo $row['class_id']; ?>" data-field="class_department"><?php echo $row['department_name'] ?></td>
                         <td class="editable-dropdown" data-userid="<?php echo $row['class_id']; ?>" data-field="class_standing"><?php echo $row['class_standing'] ?></td>
-                        <td><a href="?del=<?php echo $row['class_id']; ?>" onclick="return confirm('Are you sure you want to delete this item?')"><button class="delete">Delete</button></a></td>
+                        <td><a href="?del=<?php echo $row['class_id']; ?>" onclick="return confirm('Are you sure you want to delete this item?')"><button>Delete</button></a></td>
                     </tr>
                 <?php
                     $i++;

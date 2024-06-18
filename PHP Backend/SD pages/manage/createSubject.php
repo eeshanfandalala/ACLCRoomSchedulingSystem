@@ -74,7 +74,7 @@ while ($row = $fetchDepartments->fetch_assoc()) {
                     <th>Subject Name</th>
                     <th>Department</th>
                     <th>Type</th>
-                    <th>Action</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
