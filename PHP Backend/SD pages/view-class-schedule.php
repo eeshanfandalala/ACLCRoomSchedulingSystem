@@ -33,14 +33,14 @@
 
                 <div>
                     <label>Semester</label><br>
-                    <input type="radio" name="SetSem" id="firstSemester" value="1st" style="margin-top: 10px" onchange="this.form.submit()" <?php if (isset($_GET['selectedRoom'])) {
+                    <input type="radio" name="SetSem" id="firstSemester" value="1st" style="margin-top: 10px" onchange="this.form.submit()" <?php if (isset($_POST['SetSem'])) {
                                                                                                                                                 echo ($_POST['SetSem'] == '1st') ? "checked" : "";
                                                                                                                                             } else {
                                                                                                                                                 echo "checked"; // checked by default
                                                                                                                                             } ?> required>
 
                     <label>1st</label>
-                    <input type="radio" name="SetSem" id="secondSemester" value="2nd" onchange="this.form.submit()" <?php if (isset($_GET['selectedRoom'])) {
+                    <input type="radio" name="SetSem" id="secondSemester" value="2nd" onchange="this.form.submit()" <?php if (isset($_POST['SetSem'])) {
                                                                                                                         echo ($_POST['SetSem'] == '2nd') ? "checked" : "";
                                                                                                                     } ?> required>
                     <label>2nd</label>
