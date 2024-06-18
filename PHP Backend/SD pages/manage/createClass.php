@@ -327,7 +327,9 @@ while ($row = $fetchDepartments->fetch_assoc()) {
                             if (xhr.readyState === 4 && xhr.status === 200) {
                                 let response = xhr.responseText.trim();
                                 if (response === 'success') {
-                                    cell.textContent = newValue;
+                                    // cell.textContent = newValue;
+                                    cell.textContent = select.options[select.selectedIndex].text;
+
                                 } else {
                                     cell.textContent = originalValue;
                                     // cell.textContent = newValue;
