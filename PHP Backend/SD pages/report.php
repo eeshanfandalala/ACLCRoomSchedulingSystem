@@ -163,7 +163,7 @@ include 'config.php';
                         echo '<p>Room Type: ' . htmlspecialchars($room['room_type']) . '</p>';
                         echo '<p>Floor: ' . htmlspecialchars($room['room_floor']) . '</p>';
                         echo '<p>Building: ' . htmlspecialchars($room['room_building']) . '</p>';
-                        echo '<h3>Available Time Slots</h3>';
+                        echo '<br><h3>Available Time Slots</h3>';
 
                         $scheduleSQL = $con->prepare("SELECT * FROM schedule_tb WHERE room_id = ? AND schedule_SY = ? AND schedule_semester = ?");
                         $scheduleSQL->bind_param("iss", $room['room_id'], $_POST['AY'], $_POST['SetSem']);
