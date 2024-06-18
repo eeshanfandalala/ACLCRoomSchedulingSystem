@@ -79,10 +79,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['signup_submit'])) {
         $signup_result = signupValidation();
         if (!$signup_result['isValid']) {
-            echo "<script>alert('" . $signup_result['username_error'], $signup_result['password_error'] . "!'); window.location.href = 'index.html';</script>";
+            echo "<script>alert('" . $signup_result['username_error'], $signup_result['password_error'] . "!'); window.location.href = 'index.html?register';</script>";
+            exit();
             // echo $signup_result['username_error'], $signup_result['password_error'], $signup_result['confirm_password_error'];
         }else if(!$signup_result['isValidConfirm']){
-            echo "<script>alert('" . $signup_result['confirm_password_error'] . "!'); window.location.href = 'index.html';</script>";
+            echo "<script>alert('" . $signup_result['confirm_password_error'] . "!'); window.location.href = 'index.html?register';</script>";
 
         } else {
             $name = $_POST['username'];
@@ -98,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sql->store_result();
 
             if ($sql->num_rows > 0) {
-                echo "<script>alert('Email already exists!'); window.location.href = 'index.html';</script>";
+                echo "<script>alert('Email already exists!'); window.location.href = 'index.html?register';</script>";
             } else {
                 $sd_id_query = mysqli_query($con, "SELECT `SD_id` FROM `sd_tb`");
                 $row = mysqli_fetch_assoc($sd_id_query);
