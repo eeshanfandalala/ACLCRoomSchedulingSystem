@@ -9,5 +9,5 @@ if (isset($_SESSION['sd_id'])) {
 ?>
 
 <script>
-    window.location.href = 'index.html';
+    window.location.href = 'index.php';
 </script>

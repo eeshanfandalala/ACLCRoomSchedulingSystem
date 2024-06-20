@@ -2,7 +2,7 @@
 include 'config.php';
 // $teacher_id = 1;
 if (!isset($_SESSION['teacher_id'])) {
-    header("Location: ../index.html");
+    header("Location: ../index.php");
     exit;
 } else {
     $teacher_id = $_SESSION['teacher_id'];

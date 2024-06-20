@@ -3,7 +3,7 @@
 include 'config.php';
 
 if (!isset($_SESSION['sd_id'])) {
-    header("Location: ../index.html");
+    header("Location: ../index.php");
     exit;
 } else {
     $user_id = $_SESSION['sd_id'];
@@ -136,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                     echo "<script>alert('Account has been changed to default successfully you will be logged out!')</script>";
                     if (isset($_SESSION['sd_id'])) {
                         unset($_SESSION['sd_id']);
-                        echo "<script>window.location.href = 'index.html'; </script>";
+                        echo "<script>window.location.href = 'index.php'; </script>";
                     }
                 } else {
                     echo "<script>alert('Failed to insert default SD values')</script>";

@@ -3,7 +3,7 @@ session_start();
 include 'config.php';
 
 if (!isset($_SESSION['sd_id'])) {
-    header("Location: index.html");
+    header("Location: index.php");
     exit;
 } else {
     $user_id = $_SESSION['sd_id'];
