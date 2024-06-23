@@ -115,37 +115,45 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     } elseif (isset($_POST['btnsub'])) {
         // echo 'hi';
         $deafaultSDValues = array(
-            "SD_lastname" => "",
-            "Lastname" => "",
-            "SD_number" => "",
+            "SD_firstname" => null,
+            "SD_lastname" => null,
+            "SD_number" => null,
             "SD_pic" => "user.png",
             "Email" => "aclcormocadmin@gmail.com",
             "Password" => "Komong2x!",
         );
 
-        $sqlTurncate = $con->prepare("TRUNCATE TABLE sd_tb");
-        $sqlTurncate->execute();
+        // $sqlTurncate = $con->prepare("TRUNCATE TABLE sd_tb");
+        // $sqlTurncate->execute();
 
-        if ($sqlTurncate) {
-            $insertDefaultSDVal = $con->prepare("INSERT INTO sd_tb(SD_email, SD_password, SD_pic) VALUES (?,?,?)");
-            if ($insertDefaultSDVal) {
-                $hashedpassword = password_hash($deafaultSDValues['Password'], PASSWORD_DEFAULT);
-                $insertDefaultSDVal->bind_param("sss", $deafaultSDValues['Email'], $hashedpassword, $deafaultSDValues['SD_pic']);
-                $insertDefaultSDVal->execute();
-                if ($insertDefaultSDVal->affected_rows > 0) {
-                    echo "<script>alert('Account has been changed to default successfully you will be logged out!')</script>";
-                    if (isset($_SESSION['sd_id'])) {
-                        unset($_SESSION['sd_id']);
-                        echo "<script>window.location.href = 'index.php'; </script>";
-                    }
-                } else {
-                    echo "<script>alert('Failed to insert default SD values')</script>";
-                }
-            } else {
-                echo "<script>alert('Failed to prepare statement for inserting default SD values')</script>";
-            }
-        } else {
-            echo "<script>alert('Failed to truncate SD Details')</script>";
+        $slqReset = $con->prepare("UPDATE sd_tb SET `SD_firstname`=?,`SD_lastname`=?,`SD_email`=?,`SD_password`=?,`SD_number`=?,`SD_pic`=?");
+        $slqReset->bind_param("ssssss", $deafaultSDValues['SD_firstname'], $deafaultSDValues['SD_lastname'], $deafaultSDValues['Email'], $deafaultSDValues['Password'], $deafaultSDValues['SD_number'], $deafaultSDValues['SD_pic']);
+        if ($slqReset->execute()) {
+            echo "<script>alert('Default values restored successfully');
+            window.location.replace('admin-manage-account.php');</script>";
+        }else{
+            echo "<script>alert('Failed to restore default values');";
         }
+        // if ($sqlTurncate) {
+        //     $insertDefaultSDVal = $con->prepare("INSERT INTO sd_tb(SD_email, SD_password, SD_pic) VALUES (?,?,?)");
+        //     if ($insertDefaultSDVal) {
+        //         $hashedpassword = password_hash($deafaultSDValues['Password'], PASSWORD_DEFAULT);
+        //         $insertDefaultSDVal->bind_param("sss", $deafaultSDValues['Email'], $hashedpassword, $deafaultSDValues['SD_pic']);
+        //         $insertDefaultSDVal->execute();
+        //         if ($insertDefaultSDVal->affected_rows > 0) {
+        //             echo "<script>alert('Account has been changed to default successfully you will be logged out!')</script>";
+        //             if (isset($_SESSION['sd_id'])) {
+        //                 unset($_SESSION['sd_id']);
+        //                 echo "<script>window.location.href = 'index.php'; </script>";
+        //             }
+        //         } else {
+        //             echo "<script>alert('Failed to insert default SD values')</script>";
+        //         }
+        //     } else {
+        //         echo "<script>alert('Failed to prepare statement for inserting default SD values')</script>";
+        //     }
+        // } else {
+        //     echo "<script>alert('Failed to truncate SD Details')</script>";
+        // }
     }
 }

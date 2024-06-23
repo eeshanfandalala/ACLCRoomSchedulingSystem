@@ -37,10 +37,10 @@ while ($row = $fetchDepartments->fetch_assoc()) {
                 <select name="SubDept" required>
                     <option value="" disabled selected></option>
                     <?php
-                    $fetchdept = mysqli_query($con, "SELECT department_name FROM department_tb");
+                    $fetchdept = mysqli_query($con, "SELECT * FROM department_tb");
                     while ($row = mysqli_fetch_array($fetchdept)) {
                     ?>
-                        <option value="<?php echo $row['department_name'] ?>"><?php echo $row['department_name'] ?></option>
+                        <option value="<?php echo $row['department_id'] ?>"><?php echo $row['department_name'] ?></option>
                     <?php
                     }
                     ?>
