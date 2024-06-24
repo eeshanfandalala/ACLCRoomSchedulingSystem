@@ -6,6 +6,39 @@ if (!isset($_SESSION['teacher_id'])) {
     exit;
 } else {
     $teacher_id = $_SESSION['teacher_id'];
+
+    $result = $con->query("SELECT 
+                                t.teacher_id, 
+                                t.teacher_name, 
+                                t.teacher_email, 
+                                t.teacher_password, 
+                                t.teacher_number, 
+                                t.teacher_department, 
+         
+                                t.status, 
+                                t.teacher_pic, 
+                                t.SD_id,
+                                sd.SD_firstname, 
+                                sd.SD_lastname, 
+                                sd.SD_email, 
+                                sd.SD_password, 
+                                sd.SD_number, 
+                                sd.SD_pic,
+                                d.department_id,
+                                d.department_name
+                            FROM 
+                                teacher_tb t
+                            JOIN 
+                                sd_tb sd ON t.SD_id = sd.SD_id
+                            JOIN 
+                                department_tb d ON t.teacher_department = d.department_id
+                            WHERE 
+                                t.teacher_id = '$teacher_id'");
+    $teacherData = array();
+    while ($row = $result->fetch_assoc()) {
+        $teacherData[] = $row;
+    }
+    $teacher = $teacherData[0];
 ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -52,11 +85,16 @@ if (!isset($_SESSION['teacher_id'])) {
                     <button type="button" onclick="window.print()" class="print">Print</button>
                 </div>
             </form>
+            <!-- <a href="./PHP Backend/teacher pages/print-my-schedule.php" target="_blank">Print</a> -->
 
             <?php
             if (isset($_POST['AY']) && isset($_POST['SetSem'])) {
+
                 $AY = $_POST['AY'];
                 $SetSem = $_POST['SetSem'];
+
+                $_SESSION['SetSem'] = $_POST['SetSem'];
+                $_SESSION['AY'] = $_POST['AY'];
 
                 // display during print
                 echo "<div class='print-only'>
@@ -64,8 +102,8 @@ if (!isset($_SESSION['teacher_id'])) {
                         <p class='header'>ACLC College of Ormoc City, Inc.</p>
                         <p class='header'>Lilia Avenue, Brgy. Cogon, Ormoc City</p><br><br>
                         <div class='print-details'>
-                            <strong>Instuctor: </strong><br>
-                            <strong>Department: </strong><br>
+                            <strong>Instuctor: " . $teacher['teacher_name'] . "</strong><br>
+                            <strong>Department: " . $teacher['department_name'] . "</strong><br>
                             <strong>School Year: $AY</strong><br>
                             <strong>Semester: $SetSem</strong>
                         </div>
@@ -80,11 +118,8 @@ if (!isset($_SESSION['teacher_id'])) {
                     $cellValue = $nameFetchClassResult . "<br>" . $subject_name . "<br>" . $room_name . "<br>";
                     return $cellValue;
                 }
-                
-                echo "<div class='print-only'>
-                        <p class='footer'>Prepared by: Name of instructor</p><br>
-                        <p class='footer'>Noted by: Name of school director</p>
-                    </div>"
+
+
             ?>
                 <div class="schedule-container">
                     <table>
@@ -174,6 +209,11 @@ if (!isset($_SESSION['teacher_id'])) {
                             ?>
                         </tbody>
                     </table>
+                    <div class='print-only'>
+                        <p class='footer'>Prepared by: <?= $teacher['teacher_name'] ?></p><br>
+                        <p class='footer'>Noted by: <?= $teacher['SD_firstname'] . ' ' . $teacher['SD_lastname'] ?></p>
+
+                    </div>
                 </div>
         </main>
 <?php
