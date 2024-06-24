@@ -126,8 +126,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         // $sqlTurncate = $con->prepare("TRUNCATE TABLE sd_tb");
         // $sqlTurncate->execute();
 
+        $hashedpassword = password_hash($deafaultSDValues['Password'], PASSWORD_DEFAULT);
+
         $slqReset = $con->prepare("UPDATE sd_tb SET `SD_firstname`=?,`SD_lastname`=?,`SD_email`=?,`SD_password`=?,`SD_number`=?,`SD_pic`=?");
-        $slqReset->bind_param("ssssss", $deafaultSDValues['SD_firstname'], $deafaultSDValues['SD_lastname'], $deafaultSDValues['Email'], $deafaultSDValues['Password'], $deafaultSDValues['SD_number'], $deafaultSDValues['SD_pic']);
+        $slqReset->bind_param("ssssss", $deafaultSDValues['SD_firstname'], $deafaultSDValues['SD_lastname'], $deafaultSDValues['Email'], $hashedpassword, $deafaultSDValues['SD_number'], $deafaultSDValues['SD_pic']);
         if ($slqReset->execute()) {
             echo "<script>alert('Default values restored successfully');
             window.location.replace('admin-manage-account.php');</script>";
