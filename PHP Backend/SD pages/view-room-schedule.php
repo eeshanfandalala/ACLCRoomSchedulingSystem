@@ -70,6 +70,24 @@
             </div>
         </div>
 
+        <!-- for printing -->
+        <div class="print-info">
+            <p>School Year: <span id="printAY"><?php echo isset($_POST['AY']) ? $_POST['AY'] : ''; ?></span></p>
+            <p>Semester: <span id="printSem"><?php echo isset($_POST['SetSem']) ? $_POST['SetSem'] : ''; ?></span></p>
+            <p>Room: <span id="printRoom"><?php
+                                            if (isset($_POST['room'])) {
+                                                $roomID = $_POST['room'];
+                                                $getRoomName = $con->prepare("SELECT room_name FROM room_tb WHERE room_id = ?");
+                                                $getRoomName->bind_param("i", $roomID);
+                                                $getRoomName->execute();
+                                                $getRoomName->bind_result($roomName);
+                                                $getRoomName->fetch();
+                                                $getRoomName->close();
+                                                echo $roomName;
+                                            }
+                                            ?></span></p>
+        </div>
+
 
         <div class="list">
             <?php
@@ -194,7 +212,7 @@
                 if (enable) {
                     // Enable the link for editing
                     link.classList.remove('disabled-link');
-                    link.href = './PHP Backend/SD pages/action.php?EditschedID=' + link.getAttribute('data-schedid') + '&roomType=' +  link.getAttribute('data-roomID');
+                    link.href = './PHP Backend/SD pages/action.php?EditschedID=' + link.getAttribute('data-schedid') + '&roomType=' + link.getAttribute('data-roomID');
                 } else {
                     // Disable the link
                     link.classList.add('disabled-link');

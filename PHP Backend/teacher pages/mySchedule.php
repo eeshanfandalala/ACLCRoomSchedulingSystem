@@ -104,7 +104,7 @@ if (!isset($_SESSION['teacher_id'])) {
                         <div class='print-details'>
                             <strong>Instuctor: " . $teacher['teacher_name'] . "</strong><br>
                             <strong>Department: " . $teacher['department_name'] . "</strong><br>
-                            <strong>School Year: $AY</strong><br>
+                            <strong>S.Y.: $AY</strong><br>
                             <strong>Semester: $SetSem</strong>
                         </div>
                     </div>";
@@ -209,10 +209,13 @@ if (!isset($_SESSION['teacher_id'])) {
                             ?>
                         </tbody>
                     </table>
-                    <div class='print-only'>
-                        <p class='footer'>Prepared by: <?= $teacher['teacher_name'] ?></p><br>
-                        <p class='footer'>Noted by: <?= $teacher['SD_firstname'] . ' ' . $teacher['SD_lastname'] ?></p>
 
+                    <div class='footer-container'>
+                        <p class='footer'>Prepared by:</p><br>
+                        <p class='name'><?= $teacher['teacher_name'] ?></p><br><br>
+
+                        <p class='footer'>Noted by:</p><br>
+                        <p class='name'><?= $teacher['SD_firstname'] . ' ' . $teacher['SD_lastname'] ?></p>
                     </div>
                 </div>
         </main>

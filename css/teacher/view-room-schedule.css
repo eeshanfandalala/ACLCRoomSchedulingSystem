@@ -75,6 +75,7 @@ th,
 td {
     padding: 12px;
     border: 1px solid transparent;
+    font-size: 12px;
     text-align: center;
     border-left: 1px solid #7d84b9;
     border-right: 1px solid #7d84b9;

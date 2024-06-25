@@ -102,7 +102,8 @@ tr:nth-child(even) {
 }
 
 /* For print function */
-.print-only {
+.print-only,
+.footer-container {
     display: none;
 }
 
@@ -148,22 +149,18 @@ tr:nth-child(even) {
     }
 
     .print-only strong {
-        margin-right: 30px;
+        margin-right: 15px;
     }
 
-    img{
+    img {
         width: 70px;
     }
 
-    .header{
+    .header {
         text-align: center;
     }
 
-    .footer{
-        text-align: left;
-    }
-
-    .print-details{
+    .print-details {
         display: flex;
     }
 
@@ -171,6 +168,7 @@ tr:nth-child(even) {
         background: white;
         border-collapse: collapse;
         width: 100%;
+        font-size: 10px;
     }
 
     th,
@@ -179,6 +177,18 @@ tr:nth-child(even) {
         color: black;
         padding: 8px;
         border: 1px solid black;
+        line-height: 13px;
+        text-align: center;
+    }
+
+    .footer-container {
+        margin: 50px 0 0 400px;
+        font-size: 10px;
+        font-weight: bold;
+        display: block !important;
+    }
+
+    .footer-container .name{
         text-align: center;
     }
 
