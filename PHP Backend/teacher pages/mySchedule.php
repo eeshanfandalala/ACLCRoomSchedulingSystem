@@ -100,7 +100,7 @@ if (!isset($_SESSION['teacher_id'])) {
                 echo "<div class='print-only'>
                         <img src='media/ACLC-logo.png'><br>
                         <p class='header'>ACLC College of Ormoc City, Inc.</p>
-                        <p class='header'>Lilia Avenue, Brgy. Cogon, Ormoc City</p><br><br>
+                        <p class='header'>Lilia Avenue, Brgy. Cogon, Ormoc City</p><br>
                         <div class='print-details'>
                             <strong>Instuctor: " . $teacher['teacher_name'] . "</strong><br>
                             <strong>Department: " . $teacher['department_name'] . "</strong><br>

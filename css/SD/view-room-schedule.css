@@ -178,11 +178,12 @@ input[type="submit"]:hover {
             background: white;
             border-collapse: collapse;
             width: 115vw;
-            margin-left: -15vw;
+            margin-left: -19vw;
             margin-top: -10vh;
             transform: scale(.8);
         }
-        th:first-child{
+
+        th:first-child {
             width: 10vw;
         }
 

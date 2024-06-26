@@ -168,11 +168,12 @@ tr:nth-child(even) {
         background: white;
         border-collapse: collapse;
         width: 115vw;
-        margin-left: -14vw;
+        margin-left: -16vw;
         margin-top: -10vh;
         transform: scale(.8);
     }
-    th:first-child{
+
+    th:first-child {
         width: 10vw;
     }
 
@@ -187,13 +188,13 @@ tr:nth-child(even) {
     }
 
     .footer-container {
-        margin: 50px 0 0 400px;
+        margin: 0 0 0 400px;
         font-size: 10px;
         font-weight: bold;
         display: block !important;
     }
 
-    .footer-container .name{
+    .footer-container .name {
         text-align: center;
     }
 

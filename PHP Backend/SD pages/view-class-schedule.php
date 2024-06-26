@@ -79,7 +79,7 @@
         <div class="print-info">
             <img src='media/ACLC-logo.png'><br>
             <p class='header'>ACLC College of Ormoc City, Inc.</p>
-            <p class='header'>Lilia Avenue, Brgy. Cogon, Ormoc City</p><br><br>
+            <p class='header'>Lilia Avenue, Brgy. Cogon, Ormoc City</p><br>
             <div class="print-details">
                 <strong>Semester: <span id="printSem"><?php echo isset($_POST['SetSem']) ? $_POST['SetSem'] : ''; ?></span></strong>
                 <strong>School Year: <span id="printAY"><?php echo isset($_POST['AY']) ? $_POST['AY'] : ''; ?></span></strong>
