@@ -77,20 +77,25 @@
 
         <!-- for printing -->
         <div class="print-info">
-            <p>School Year: <span id="printAY"><?php echo isset($_POST['AY']) ? $_POST['AY'] : ''; ?></span></p>
-            <p>Semester: <span id="printSem"><?php echo isset($_POST['SetSem']) ? $_POST['SetSem'] : ''; ?></span></p>
-            <p>Class: <span id="printClass"><?php
-                                            if (isset($_POST['class'])) {
-                                                $classId = $_POST['class'];
-                                                $getClass = $con->prepare("SELECT class_courseStrand, class_year, class_section FROM class_tb WHERE class_id = ?");
-                                                $getClass->bind_param("i", $classId);
-                                                $getClass->execute();
-                                                $getClass->store_result();
-                                                $getClass->bind_result($class_courseStrand, $class_year, $class_section);
-                                                $getClass->fetch();
-                                                echo $class_courseStrand . ' ' . $class_year . ' - ' . $class_section;
-                                            }
-                                            ?></span></p>
+            <img src='media/ACLC-logo.png'><br>
+            <p class='header'>ACLC College of Ormoc City, Inc.</p>
+            <p class='header'>Lilia Avenue, Brgy. Cogon, Ormoc City</p><br><br>
+            <div class="print-details">
+                <strong>Semester: <span id="printSem"><?php echo isset($_POST['SetSem']) ? $_POST['SetSem'] : ''; ?></span></strong>
+                <strong>School Year: <span id="printAY"><?php echo isset($_POST['AY']) ? $_POST['AY'] : ''; ?></span></strong>
+                <strong>Class: <span id="printClass"><?php
+                                                        if (isset($_POST['class'])) {
+                                                            $classId = $_POST['class'];
+                                                            $getClass = $con->prepare("SELECT class_courseStrand, class_year, class_section FROM class_tb WHERE class_id = ?");
+                                                            $getClass->bind_param("i", $classId);
+                                                            $getClass->execute();
+                                                            $getClass->store_result();
+                                                            $getClass->bind_result($class_courseStrand, $class_year, $class_section);
+                                                            $getClass->fetch();
+                                                            echo $class_courseStrand . ' ' . $class_year . ' - ' . $class_section;
+                                                        }
+                                                        ?></span></strong>
+            </div>
         </div>
 
         <div class="list">

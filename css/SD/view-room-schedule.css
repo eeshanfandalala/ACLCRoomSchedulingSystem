@@ -150,12 +150,28 @@ input[type="submit"]:hover {
             padding: 0;
         }
 
+        img {
+            width: 70px;
+        }
+
+        .header {
+            text-align: center;
+        }
+
         .print-info {
             text-align: center;
             margin-bottom: 20px;
-            font-size: 18px;
+            font-size: 10px;
             font-weight: bold;
-            display: block;
+            display: block !important;
+        }
+
+        .print-details {
+            display: flex;
+        }
+
+        strong {
+            margin-right: 15px;
         }
 
         table {
