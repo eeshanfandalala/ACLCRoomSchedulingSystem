@@ -167,8 +167,13 @@ tr:nth-child(even) {
     table {
         background: white;
         border-collapse: collapse;
-        width: 100%;
-        font-size: 10px;
+        width: 115vw;
+        margin-left: -14vw;
+        margin-top: -10vh;
+        transform: scale(.8);
+    }
+    th:first-child{
+        width: 10vw;
     }
 
     th,

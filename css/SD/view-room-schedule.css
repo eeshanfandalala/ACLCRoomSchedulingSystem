@@ -177,7 +177,13 @@ input[type="submit"]:hover {
         table {
             background: white;
             border-collapse: collapse;
-            width: 100%;
+            width: 115vw;
+            margin-left: -15vw;
+            margin-top: -10vh;
+            transform: scale(.8);
+        }
+        th:first-child{
+            width: 10vw;
         }
 
         th,
