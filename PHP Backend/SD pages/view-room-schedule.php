@@ -155,8 +155,15 @@
                             $time_start = date('h:i A', $i);
                             $time_end = date('h:i A', $i + 1800);
 
+                            $hasSchedule = false;
+                            foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] as $day) {
+                                if (isset($scheduleData[$day][$time_start])) {
+                                    $hasSchedule = true;
+                                    break;
+                                }
+                            }
                         ?>
-                            <tr>
+                            <tr class="<?php echo $hasSchedule ? '' : 'no-schedule'; ?>">
                                 <td><?php echo $time_start . ' - ' . $time_end; ?></td>
                                 <?php
                                 foreach (['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] as $day) {

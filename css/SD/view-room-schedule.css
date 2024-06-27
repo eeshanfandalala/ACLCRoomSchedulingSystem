@@ -195,5 +195,9 @@ input[type="submit"]:hover {
             border: 1px solid black;
             text-align: center;
         }
+    
+        .no-schedule {
+            display: none;
+        }
     }
 }
